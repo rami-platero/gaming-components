@@ -1,14 +1,21 @@
-import express from 'express'
-import morgan from 'morgan'
-import cors from 'cors'
+import "reflect-metadata"
+import app from "./app";
+import { AppDataSource } from "./Database/database";
+import * as dotenv from "dotenv";
+dotenv.config();
 
-const app = express()
-app.use(morgan("dev"))
-app.use(cors())
-app.use(express.json())
+async function main(){
+  try {
+    await AppDataSource.initialize()
+    console.log("connected to db")
+    app.listen(process.env.PORT, () => {
+      console.log("listening on port", process.env.PORT);
+    });    
+  } catch (error) {
+    console.log("Unable to connect to database",error)
+  }
+}
 
-app.listen(4000, ()=>{
-    console.log("listening on port 4000")
-})
+main()
 
 
