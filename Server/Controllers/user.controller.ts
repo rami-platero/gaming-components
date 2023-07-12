@@ -15,5 +15,6 @@ export const signUp = async (req: Request, res: Response) => {
     if(error instanceof Error){
         return res.status(500).json({ error: error.message });
     }
+    return 
   }
 };
