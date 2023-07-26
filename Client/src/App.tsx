@@ -1,13 +1,16 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
-import axios from "axios";
+import Profile from "./pages/Profile/Profile";
+import ProtectedRoutes from "./components/ProtectedRoutes";
 
 const App = () => {
-  axios.defaults.baseURL = `http://localhost:4000`;
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<HomePage />} path="/" />
+        <Route element={<ProtectedRoutes />}>
+          <Route element={<Profile />} path="/profile" />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

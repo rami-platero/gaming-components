@@ -5,10 +5,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   BaseEntity,
+  OneToMany,
 } from "typeorm";
 
 import bcrypt from "bcrypt";
 import validator from "validator";
+import { Comment } from "./Comment";
 
 export interface IUser {
   id: number;
@@ -32,6 +34,9 @@ export class User extends BaseEntity implements IUser{
 
   @Column({nullable: true})
   password: string;
+
+  @OneToMany(() => Comment, (comment) => comment.product)
+  comments: Comment[];
 
   @CreateDateColumn()
   createdAt: Date;

@@ -7,19 +7,20 @@ import {
   UpdateDateColumn,
   BaseEntity,
   OneToMany,
+  JoinColumn,
 } from "typeorm";
+import {Comment} from './Comment'
 
 export enum Category {
-  GPU="Graphics Card",
-  CPU="CPU",
-  Monitor="Monitor"
+  GPU = "Graphics Card",
+  CPU = "CPU",
+  Monitor = "Monitor",
 }
 
-export interface ProductImage{
-  thumbnail: string
-  xl: string
+export interface ProductImage {
+  thumbnail: string;
+  xl: string;
 }
-
 
 @Entity()
 export class Product extends BaseEntity {
@@ -27,18 +28,32 @@ export class Product extends BaseEntity {
   id: number;
 
   @Column()
-  category: Category
+  name: string
 
   @Column()
-  description: string
+  category: Category;
 
   @Column()
-  price: number
+  description: string;
 
   @Column()
-  main_image: ProductImage 
+  price: number;
 
-  @Column({type: "simple-array", nullable: true})
-  images: ProductImage[]
+  @Column()
+  stock: number;
 
+  @Column('jsonb', { nullable: true })
+  main_image: ProductImage;
+
+  @Column("simple-array",{ nullable: true })
+  images: ProductImage[];
+
+  @OneToMany(() => Comment, (comment) => comment.product)
+  comments: Comment[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

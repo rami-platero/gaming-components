@@ -31,3 +31,9 @@ export interface Name {
 export interface Photo {
     value: string;
 }
+
+export interface DecodedToken {
+    id: number;
+    iat: number;
+    exp: number;
+  }
