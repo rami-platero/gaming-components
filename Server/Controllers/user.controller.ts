@@ -20,7 +20,7 @@ export const signUp = async (req: Request, res: Response) => {
     if (error instanceof Error) {
       return res.status(500).json({ error: error.message });
     }
-    return;
+    return res.status(400).json({ error });
   }
 };
 
@@ -35,14 +35,22 @@ export const login = async (req: Request, res: Response) => {
     if (error instanceof Error) {
       return res.status(500).json({ error: error.message });
     }
-    return;
+    return res.status(400).json({ error });
   }
+};
+
+export const loginWithGoogle = async (req: Request, res: Response) => {
+  if (req.user && req.user instanceof User) {
+    const token = createToken(req.user.id);
+    res.cookie("token", token);
+  }
+  return res.redirect("http://localhost:5173");
 };
 
 export const getUser = async (req: Request, res: Response) => {
   try {
     const { token } = req.cookies;
-    if(token){
+    if (token) {
       const decodedToken = jwt.verify(
         token,
         process.env.JWT_SECRET!
@@ -50,13 +58,13 @@ export const getUser = async (req: Request, res: Response) => {
       const user = await User.findOne({ where: { id: decodedToken.id } });
       return res.status(200).json({ ...user });
     } else {
-      return res.status(204)
+      return res.status(204);
     }
   } catch (error) {
     if (error instanceof Error) {
       return res.status(500).json({ error: "Error" });
     }
-    return;
+    return res.status(400).json({ error });
   }
 };
 
@@ -71,7 +79,25 @@ export const deleteUser = async (req: Request, res: Response) => {
     if (error instanceof Error) {
       return res.status(500).json({ error: error.message });
     }
-    return;
+    return res.status(400).json({ error });
+  }
+};
+
+export const updateUser = async (req: Request, res: Response) => {
+  try {
+    const updatedUser = await User.createQueryBuilder()
+      .update(User)
+      .set(req.body)
+      .where("id =:id", { id: req.params.id })
+      .returning("*")
+      .execute()
+    
+    return res.status(200).json({message: "success", updatedUser})
+  } catch (error) {
+    if (error instanceof Error) {
+      return res.status(500).json({ error: error.message });
+    }
+    return res.status(400).json({ error });
   }
 };
 
@@ -83,6 +109,6 @@ export const viewProfile = async (req: Request, res: Response) => {
     if (error instanceof Error) {
       return res.status(500).json({ error: error.message });
     }
-    return;
+    return res.status(400).json({ error });
   }
 };

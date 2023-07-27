@@ -7,6 +7,7 @@ import {
   BaseEntity,
   ManyToOne,
   JoinColumn,
+  BeforeInsert,
 } from "typeorm";
 import { Product } from "./Product";
 import { User } from "./User";
@@ -19,11 +20,14 @@ export class Comment extends BaseEntity {
   @Column({ type: "varchar", length: 255 })
   body: string;
 
+  @Column({ nullable:false, default: false })
+  edited: boolean;
+
   @ManyToOne(() => Product, (product) => product.comments)
   @JoinColumn({ name: "product_id" })
   product: Product;
 
-  @ManyToOne(() => User, (user) => user.comments,{
+  @ManyToOne(() => User, (user) => user.comments, {
     onDelete: "SET NULL",
   })
   @JoinColumn({ name: "user_id" })

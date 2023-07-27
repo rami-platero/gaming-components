@@ -20,7 +20,7 @@ export const isAuthorized = async (
     if (!decodedUser) return res.status(401).json({ error: "Not authorized" });
     const user = await User.findOne({ where: { id: decodedUser.id } });
     if (!user) return res.status(401).json({ error: "Not authorized" });
-    req.user=user
+    req.user=user as User
     return next();
   } catch (error: any) {
     console.log(error);

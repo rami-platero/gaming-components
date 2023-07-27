@@ -1,5 +1,19 @@
-/* import { Request, Response } from "express";
+import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
+import { AppError } from "../helpers/AppError";
 
-export const errorHandler = (req:Request, res: Response)=>{
+interface MyParams {
+  error: AppError | Error;
+}
 
-} */
+export const errorHandler = (
+  error: unknown,
+  _req: Request<MyParams>,
+  res: Response,
+  _next: NextFunction
+) => {
+  /* const {error} = req */
+  if (error instanceof AppError) {
+    return res.status(error.statusCode).json(JSON.parse(error.message));
+  }
+  return res.status(500).json({ error });
+};

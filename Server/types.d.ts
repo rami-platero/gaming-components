@@ -36,4 +36,21 @@ export interface DecodedToken {
     id: number;
     iat: number;
     exp: number;
+}
+
+interface IUser {
+    id: number;
+    username: string;
+    email: string;
+    password: string;
+    createdAt: Date,
+    updatedAt: Date
   }
+
+declare global {
+    namespace Express {
+      interface Request {
+        user?: IUser 
+      }
+    }
+}
