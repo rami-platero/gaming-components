@@ -1,6 +1,5 @@
 import { Router } from "express";
 import {
-  createToken,
   deleteUser,
   getUser,
   login,
@@ -16,7 +15,6 @@ const router = Router();
 
 //auth routes
 
-router.get("/auth/getUser", getUser);
 router.post("/auth/signup", signUp);
 router.post("/auth/login", login);
 router.get(
@@ -31,6 +29,7 @@ router.get(
 
 //user routes
 
+router.get("/api/getUser", getUser);
 router.delete("/api/user/:id", deleteUser);
 router.put("/api/user/:id", updateUser)
 router.get("/profile", isAuthorized, viewProfile);
