@@ -1,0 +1,11 @@
+@import 'variables';
+
+@mixin navbarLink {
+  color: $navbar-link-primary;
+  transition: 0.2s ease-in-out;
+
+  &:hover {
+    color: white;
+    transition: 0.2s ease-in-out;
+  }
+}
