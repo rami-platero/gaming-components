@@ -1,7 +1,45 @@
+import { useContext } from "react";
 import styles from "./navigation.module.scss";
+import { Link } from "react-router-dom";
+import { authContext } from "../../context/AuthContext";
+import {AiOutlineShoppingCart} from 'react-icons/ai'
 
 const Navigation = () => {
-  return <div className={`${styles.container}`}>Navigation</div>;
+  const { isAuthenticated,logout } = useContext(authContext);
+  return (
+    <header className={`${styles.navigation}`}>
+      <nav>
+        <ul>
+          <li>
+            <Link to={"/"}>Home</Link>
+          </li>
+          <li>
+            <Link to={"/products"}>Products</Link>
+          </li>
+          <li>
+            <Link to={"/about"}>About us</Link>
+          </li>
+        </ul>
+        <ul>
+          <li><AiOutlineShoppingCart/></li>
+          {!isAuthenticated ? (
+            <>
+              <li>
+                <Link to={"/login"}>Login</Link>
+              </li>
+              <li>
+                <Link to={"/register"}>Get Started</Link>
+              </li>
+            </>
+          ) : (
+            <li>
+              <button onClick={logout}>Logout</button>
+            </li>
+          )}
+        </ul>
+      </nav>
+    </header>
+  );
 };
 
 export default Navigation;
