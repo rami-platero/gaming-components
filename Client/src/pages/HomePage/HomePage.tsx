@@ -1,10 +1,13 @@
-import { userContext } from "../../context/UserContext";
+import { authContext } from "../../context/AuthContext";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import axios from "../../libs/axios";
+import { useAppSelector } from "../../redux/hooks";
 
 const HomePage = () => {
-  const { user, logout } = useContext(userContext);
+  const { logout, isAuthenticated } = useContext(authContext);
+
+  const user = useAppSelector((state) => state.user);
 
   const login = () => {
     window.open("http://localhost:4000/auth/google", "_self");
@@ -17,11 +20,13 @@ const HomePage = () => {
 
   return (
     <div>
-      <button onClick={login}>Log In with Google</button>
-      {user && <h2>Logged in as {user.username}</h2>}
-      {user && <button onClick={logout}>Log out</button>}
+      {!isAuthenticated && <button onClick={login}>Log In with Google</button>}
+      {isAuthenticated && <h2>Logged in as {user.username}</h2>}
+      {isAuthenticated && <button onClick={logout}>Log out</button>}
       <Link to={"/profile"}>Profile</Link>
-      {user && <button onClick={deleteComment}>Delete Comment</button>}
+      {isAuthenticated && (
+        <button onClick={deleteComment}>Delete Comment</button>
+      )}
     </div>
   );
 };
