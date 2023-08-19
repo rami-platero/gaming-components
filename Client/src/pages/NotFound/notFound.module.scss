@@ -1,0 +1,37 @@
+@import '../../styles/mixins';
+
+.notFound{
+    @include centerFlex(column);
+    color: white;
+    flex-grow: 1;
+    min-height: 500px;
+    gap: .5rem;
+    padding: 1rem;
+    text-align: center;
+
+    h1{
+        font-size: 5rem;
+    }
+
+    p{
+        margin-bottom: 2rem;
+    }
+
+    a{
+        font-size: .9rem;
+        text-decoration: none;
+        cursor: pointer;
+        padding: .7rem;
+        background-color: transparent;
+        border: 1px solid #ea23f1;
+        color: #ea23f1;
+        font-weight: 500;
+        transition: 0.2s ease-in-out;
+
+        &:hover{
+            transition: 0.2s ease-in-out;
+            color: white;
+            background-color: #ea23f1;
+        }
+    }
+}
