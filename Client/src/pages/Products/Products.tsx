@@ -1,10 +1,13 @@
 import { useGetProductsQuery } from "../../redux/services/productsApi";
 import { useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import styles from "./products.module.scss";
+import ProductItem from "./ProductItem";
+import Search from "./Filters/Search";
+import SortBy from "./Filters/SortBy";
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [inputSearch, setInputSearch] = useState("");
 
   const search = searchParams.get("search") || "";
   const filter = searchParams.get("filter") || "";
@@ -18,30 +21,6 @@ const Products = () => {
     });
   }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputSearch(e.target.value);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (inputSearch) {
-      setSearchParams((prevSearchParams) => {
-        const newSearchParams = new URLSearchParams(prevSearchParams);
-        newSearchParams.set("search", inputSearch);
-        return newSearchParams;
-      });
-    }
-  };
-
-  const handleFilter = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
-    setSearchParams((prevSearchParams) => {
-      const newSearchParams = new URLSearchParams(prevSearchParams);
-      newSearchParams.set("filter", e.currentTarget.value);
-      return newSearchParams;
-    });
-  };
-
   const { data: products, isError } = useGetProductsQuery({
     search,
     filter,
@@ -49,42 +28,26 @@ const Products = () => {
   });
 
   return (
-    <div>
-      <h1>Products</h1>
-
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Search a product..."
-          onChange={handleInputChange}
-          value={inputSearch}
-        />
-        <button type="submit">Search</button>
-      </form>
-
-      <button value="name_asc" onClick={handleFilter}>
-        Product name A-Z
-      </button>
-      <button value="name_desc" onClick={handleFilter}>
-        Product name Z-A
-      </button>
-      <button value="price_desc" onClick={handleFilter}>
-        Price High to Low
-      </button>
-      <button value="price_asc" onClick={handleFilter}>
-        Price Low to High
-      </button>
-
-      {products &&
-        products.map((product) => {
-          return (
-            <>
-              <h3 key={product.id}>{product.name}</h3>;<p>{product.price}</p>
-            </>
-          );
-        })}
-      {isError && <p>Error: Couldn't fetch data</p>}
-    </div>
+    <main className={styles.products}>
+      <div className={styles.products__filters}>
+        <h2>Filters</h2>
+        <div className={styles.products__filters__wrapper}></div>
+      </div>
+      <div className={styles.products__content}>
+        <h1>Products</h1>
+        <div className={styles.products__content__mainFilters}>
+          <Search setSearchParams={setSearchParams}/>
+          <SortBy setSearchParams={setSearchParams}/>
+        </div>
+        <div className={styles.products__content__wrapper}>
+          {products &&
+            products.map((product) => {
+              return <ProductItem key={product.id} product={product} />;
+            })}
+          {isError && <p>Error: Couldn't fetch data</p>}
+        </div>
+      </div>
+    </main>
   );
 };
 
