@@ -1,1 +1,17 @@
 @import 'styles/reset';
+@import 'styles/typography';
+@import 'styles/variables';
+
+body{
+    background-color: $darkPrimary;
+
+    #root{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
+    main{
+        margin-top: 70px;
+    }
+    }
+}

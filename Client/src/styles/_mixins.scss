@@ -1,11 +1,40 @@
-@import 'variables';
+@import "variables";
 
-@mixin navbarLink {
+@mixin link ($hoverColor:white){
+  text-decoration: none;
   color: $navbar-link-primary;
   transition: 0.2s ease-in-out;
 
   &:hover {
-    color: white;
+    color: $hoverColor;
     transition: 0.2s ease-in-out;
+  }
+}
+
+@mixin centerFlex ($direction) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin text-divider ($gap) {
+  display: flex;
+  align-items: center;
+
+  &::before,
+  &::after {
+    content: "";
+    height: 1px;
+    background-color: silver;
+    flex-grow: 1;
+  }
+
+  &::before {
+    margin-right: $gap;
+  }
+
+  &::after {
+    margin-left: $gap;
   }
 }
