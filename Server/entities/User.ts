@@ -11,29 +11,39 @@ import {
 import bcrypt from "bcrypt";
 import validator from "validator";
 import { Comment } from "./Comment";
+import { AppError } from "../helpers/AppError";
+
+export enum Roles {
+  user = "User",
+  admin = "Admin",
+}
 
 export interface IUser {
   id: number;
   username: string;
   email: string;
   password: string;
-  createdAt: Date,
-  updatedAt: Date
+  roles: Roles[];
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 @Entity()
-export class User extends BaseEntity implements IUser{
+export class User extends BaseEntity implements IUser {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({unique: true})
+  @Column({ unique: true })
   username: string;
 
-  @Column({unique: true})
+  @Column({ unique: true })
   email: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   password: string;
+
+  @Column({ type: "enum", enum: Roles, array: true, default: [Roles.user] })
+  roles: Roles[];
 
   @OneToMany(() => Comment, (comment) => comment.product)
   comments: Comment[];
@@ -44,33 +54,42 @@ export class User extends BaseEntity implements IUser{
   @UpdateDateColumn()
   updatedAt: Date;
 
-  public static async signUp(username: string, email: string, password: string) {
+  public static async signUp(
+    username: string,
+    email: string,
+    password: string
+  ) {
     if (!email.trim() || !password.trim()) {
       throw Error("All fields must be filled");
     }
     const exists = await User.findOneBy({ email });
     if (exists) {
-      throw Error(JSON.stringify({ email: "Email already in use" }));
+      throw new AppError(
+        400,
+        JSON.stringify({ email: "Email already in use" })
+      );
     }
     const existsName = await User.findOneBy({ username });
     if (existsName) {
-      throw Error(JSON.stringify({ username: "Username already in use" }));
+      throw new AppError(
+        400,
+        JSON.stringify({ username: "Username already in use" })
+      );
     }
     if (!validator.isEmail(email)) {
-      throw Error(JSON.stringify({ email: "Email is not valid" }));
-    }
-    if (!validator.isStrongPassword(password)) {
-      throw Error(JSON.stringify({ password: "Password not strong enough" }));
+      throw new AppError(400, JSON.stringify({ email: "Email is not valid" }));
     }
     if (!validator.isAlphanumeric(username)) {
-      throw Error(
+      throw new AppError(
+        400,
         JSON.stringify({
           username: "Username can only contain letters and numbers",
         })
       );
     }
     if (!validator.isLength(username, { min: 3, max: 15 })) {
-      throw Error(
+      throw new AppError(
+        400,
         JSON.stringify({
           username: "Username must be between 3 and 15 characters",
         })
@@ -87,15 +106,27 @@ export class User extends BaseEntity implements IUser{
     return await user.save();
   }
 
-  public static async login(username: string, password: string) {
-    const user = await User.findOneBy({ username });
+  public static async login(email: string, password: string) {
+    const user = await User.findOneBy({ email });
     if (!user) {
-      throw Error(JSON.stringify({ username: "Username does not exist" }));
+      throw new AppError(
+        400,
+        JSON.stringify({ email: "Email address is not registered." })
+      );
     }
-    const match: boolean = await bcrypt.compare(password, user.password);
+    if (!user.password) {
+      throw new AppError(
+        403,
+        JSON.stringify({ message: "User is registered with a Google account." })
+      );
+    }
+    const match = await bcrypt.compare(password, user.password);
     if (!match) {
-      throw Error(JSON.stringify({ password: "Incorrect password" }));
+      throw new AppError(
+        401,
+        JSON.stringify({ password: "Password does not match!" })
+      );
     }
-    return user
+    return user;
   }
 }
