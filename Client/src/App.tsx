@@ -1,20 +1,43 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import HomePage from "./pages/HomePage/HomePage";
-import Profile from "./pages/Profile/Profile";
-import ProtectedRoutes from "./components/ProtectedRoutes";
+import Login from "./pages/auth/login";
+import Register from "./pages/auth/register";
+import AuthRoutes from "./components/auth-routes";
+import Layout from "./components/layout";
+import HomePage from "./pages/home-page/home-page";
 import Products from "./pages/Products/Products";
-import Navigation from "./components/Navigation/Navigation";
+import NotFound from "./pages/not-found/not-found";
+import ProtectedRoutes from "./components/protected-routes";
+import Profile from "./pages/Profile/Profile";
+import { Roles } from "./types.d";
 
 const App = () => {
   return (
     <BrowserRouter>
-      <Navigation />
       <Routes>
-        <Route element={<HomePage />} path="/" />
-        <Route element={<Products />} path="/products" />
-        <Route element={<ProtectedRoutes />}>
-          <Route element={<Profile />} path="/profile" />
+        {/* Layout */}
+        <Route element={<Layout />}>
+
+          <Route element={<HomePage />} path="/" />
+          <Route element={<Products />} path="/products" />
+          <Route element={<NotFound />} path="/*" />
+          <Route element={<Login />} path="/login" />
+          <Route element={<ProtectedRoutes allowedRoles={[Roles.user]}/>}>
+
+            <Route element={<Profile />} path="/profile" />
+          </Route>
         </Route>
+        {/* Layout */}
+
+        {/* Auth Routes */}
+        <Route element={<AuthRoutes />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Route>
+        {/* Auth Routes */}
+
+        {/* Admin Routes */}
+
+        {/* Admin Routes */}
       </Routes>
     </BrowserRouter>
   );
