@@ -1,0 +1,62 @@
+@import "../../styles/mixins";
+@import "../../styles/variables";
+
+.product {
+  box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 5px;
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    width: 100%;
+    h2 {
+      font-size: 1.1rem;
+    }
+    h3 {
+      font-size: 0.9rem;
+    }
+
+    &__category {
+      font-weight: 400;
+      opacity: 0.8;
+      margin-bottom: 1rem;
+    }
+    &__actions {
+      margin-top: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      gap: .5rem;
+
+      button {
+        padding: 0.3rem;
+        width: 100%;
+        background-color: transparent;
+        border: 1px solid white;
+        color: white;
+        border-radius: 0.5rem;
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &__imgContainer {
+    overflow: hidden;
+    width: 100%;
+    max-width: 270px;
+    max-height: 270px;
+    img {
+      width: 100%;
+      margin-bottom: 1rem;
+      aspect-ratio: 4/4;
+      transition: 0.2s ease-in-out;
+      &:hover {
+        transform: scale(1.1);
+        transition: 0.2s ease-in-out;
+      }
+    }
+  }
+}
