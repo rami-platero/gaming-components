@@ -11,7 +11,6 @@ export const errorHandler = (
   res: Response,
   _next: NextFunction
 ) => {
-  /* const {error} = req */
   if (error instanceof AppError) {
     return res.status(error.statusCode).json(JSON.parse(error.message));
   }
