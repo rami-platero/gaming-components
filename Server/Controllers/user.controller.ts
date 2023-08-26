@@ -9,33 +9,28 @@ export const createToken = (id: number): string => {
   return jwt.sign({ id }, process.env.JWT_SECRET!, { expiresIn: "10y" });
 };
 
-export const signUp = async (req: Request, res: Response) => {
+export const signUp = async (req: Request, res: Response, next: NextFunction) => {
   const { username, email, password } = req.body;
 
   try {
     const user = await User.signUp(username, email, password);
     const token = createToken(user.id);
-    return res.status(200).json({ user, token });
+    res.cookie("token", token);
+    return res.status(200).json(user);
   } catch (error) {
-    if (error instanceof Error) {
-      return res.status(500).json({ error: error.message });
-    }
-    return res.status(400).json({ error });
+    return next(error)
   }
 };
 
-export const login = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-
+export const login = async (req: Request, res: Response, next: NextFunction) => {
+  const { email, password } = req.body;
   try {
-    const user = await User.login(username, password);
+    const user = await User.login(email, password);
     const token = createToken(user.id);
-    return res.status(200).json({ user, token });
+    res.cookie("token", token);
+    return res.status(200).json(user);
   } catch (error) {
-    if (error instanceof Error) {
-      return res.status(500).json({ error: error.message });
-    }
-    return res.status(400).json({ error });
+    return next(error)
   }
 };
 
