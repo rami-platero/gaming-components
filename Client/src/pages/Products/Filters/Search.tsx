@@ -21,6 +21,7 @@ const Search = ({ setSearchParams }: Params) => {
       setSearchParams((prevSearchParams) => {
         const newSearchParams = new URLSearchParams(prevSearchParams);
         newSearchParams.set("search", inputSearch);
+        newSearchParams.set("page", "1");
         return newSearchParams;
       });
     }
