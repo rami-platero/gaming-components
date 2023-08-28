@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Product } from "../../types/products";
+import {  Products } from "../../types/products";
 
 export type Params = {
   search: string;
@@ -14,7 +14,7 @@ export const productsApi = createApi({
     credentials: "include",
   }),
   endpoints: (builder) => ({
-    getProducts: builder.query<Product[], Params>({
+    getProducts: builder.query<Products, Params>({
       query: (params) =>
         `products/?search=${params.search}&filter=${params.filter}&page=${params.page}`,
     }),

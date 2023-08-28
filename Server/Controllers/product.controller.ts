@@ -84,15 +84,17 @@ export const getProducts = async (
       }
     }
 
+    const pages_amount = Math.ceil(products.length/16)
+
     if (page) {
-      const postsPerPage = 15;
+      const postsPerPage = 16;
       products = products.slice(
         (parseInt(page) - 1) * postsPerPage,
         postsPerPage * parseInt(page)
       );
     }
 
-    return res.status(200).json(products);
+    return res.status(200).json({products, pages_amount});
   } catch (error) {
     return next(error);
   }

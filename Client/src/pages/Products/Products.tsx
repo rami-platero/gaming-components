@@ -5,6 +5,7 @@ import styles from "./products.module.scss";
 import ProductItem from "./ProductItem";
 import Search from "./Filters/Search";
 import SortBy from "./Filters/SortBy";
+import Pagination from "./Filters/Pagination";
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -21,7 +22,7 @@ const Products = () => {
     });
   }, []);
 
-  const { data: products, isError } = useGetProductsQuery({
+  const { data, isError } = useGetProductsQuery({
     search,
     filter,
     page,
@@ -35,17 +36,30 @@ const Products = () => {
       </div>
       <div className={styles.products__content}>
         <h1>Products</h1>
+
+        {/* Filters */}
         <div className={styles.products__content__mainFilters}>
-          <Search setSearchParams={setSearchParams}/>
-          <SortBy setSearchParams={setSearchParams}/>
+          <Search setSearchParams={setSearchParams} />
+          <SortBy setSearchParams={setSearchParams} filter={filter} />
         </div>
+
+        {/* Products */}
         <div className={styles.products__content__wrapper}>
-          {products &&
-            products.map((product) => {
+          {data &&
+            data.products.map((product) => {
               return <ProductItem key={product.id} product={product} />;
             })}
           {isError && <p>Error: Couldn't fetch data</p>}
         </div>
+
+        {/* Pagination */}
+        {data?.pages_amount && data.pages_amount>1 && (
+          <Pagination
+            pages_amount={data.pages_amount}
+            setSearchParams={setSearchParams}
+            currentPage={page}
+          />
+        )}
       </div>
     </main>
   );

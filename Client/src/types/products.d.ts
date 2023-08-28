@@ -24,11 +24,7 @@ export type Product = {
   updatedAt: Date;
 };
 
-//filters
-//Sort by options
-export enum SortByOptions {
-  PRICE_ASC = "price_asc",
-  PRICE_DESC = "price_desc",
-  NAME_ASC = "name_asc",
-  NAME_DESC = "name_desc",
+export type Products = {
+    products: Product[],
+    pages_amount: number
 }
