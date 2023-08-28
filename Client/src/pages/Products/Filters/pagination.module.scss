@@ -1,0 +1,29 @@
+.pagination{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+
+    &__current{
+        background-color: white !important;
+        pointer-events: none !important;
+        color: black !important;
+    }
+
+    button{
+        width: 30px;
+        height: 30px;
+        background-color: transparent;
+        color: white;
+        border: 1px solid white;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.2s ease-in-out;
+        &:hover{
+            background-color: white;
+            color: black;
+            transition: 0.2s ease-in-out;
+        }
+    }
+}
