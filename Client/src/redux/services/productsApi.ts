@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Product } from "../../types";
+import { Product } from "../../types/products";
 
 export type Params = {
   search: string;

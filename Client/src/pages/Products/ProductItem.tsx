@@ -1,7 +1,7 @@
-import { Product } from "../../types";
 import styles from "./productItem.module.scss";
 import RTXExampleIMG from "../../assets/rtx3070.png";
 import {AiOutlineShoppingCart} from 'react-icons/ai'
+import { Product } from "../../types/products";
 
 
 type Props = {

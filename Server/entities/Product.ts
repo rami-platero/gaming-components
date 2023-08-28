@@ -1,4 +1,3 @@
-import { type } from "os";
 import {
   Entity,
   Column,
@@ -7,7 +6,6 @@ import {
   UpdateDateColumn,
   BaseEntity,
   OneToMany,
-  JoinColumn,
 } from "typeorm";
 import {Comment} from './Comment'
 
