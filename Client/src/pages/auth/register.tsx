@@ -8,8 +8,9 @@ import { setCredentials } from "../../redux/features/user/userSlice";
 import { useAppDispatch } from "../../redux/hooks";
 import { useSignUpMutation } from "../../redux/services/userApi";
 import { authContext } from "../../context/AuthContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 
 const Register = () => {
   const { authenticate } = useContext(authContext);
@@ -22,9 +23,14 @@ const Register = () => {
   } = useForm<SignUpSchema>({
     resolver: zodResolver(signUpSchema),
   });
-
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const [passwordVisibility, setPasswordVisibility] = useState(false);
+
+  const handlePasswordVisibility = () => {
+    setPasswordVisibility((prev) => !prev);
+  };
 
   const notify = (message: string) => {
     toast.error(message, {
@@ -87,7 +93,6 @@ const Register = () => {
           />
           {errors.username && <p>{errors.username.message}</p>}
         </div>
-        {}
         <div className={styles.auth__form__inputBox}>
           <label htmlFor="email">Email</label>
           <input
@@ -107,10 +112,15 @@ const Register = () => {
             className={`${
               errors.password && styles.auth__form__inputBox__error
             }`}
-            type="password"
+            type={passwordVisibility? "text": "password"}
             placeholder=""
             autoComplete="off"
           />
+          {passwordVisibility ? (
+              <AiOutlineEye onClick={handlePasswordVisibility} />
+            ) : (
+              <AiOutlineEyeInvisible onClick={handlePasswordVisibility} />
+            )}
           {errors.password && <p>{errors.password.message}</p>}
         </div>
         <button type="submit" disabled={isSubmitting || isLoading}>

@@ -7,10 +7,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { setCredentials } from "../../redux/features/user/userSlice";
 import { useAppDispatch } from "../../redux/hooks";
 import { authContext } from "../../context/AuthContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useLoginMutation } from "../../redux/services/userApi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -24,6 +25,11 @@ const Login = () => {
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
   });
+  const [passwordVisibility, setPasswordVisibility] = useState(false);
+
+  const handlePasswordVisibility = () => {
+    setPasswordVisibility((prev) => !prev);
+  };
 
   const notify = (message: string) => {
     toast.error(message, {
@@ -84,9 +90,14 @@ const Login = () => {
             className={`${
               errors.password && styles.auth__form__inputBox__error
             }`}
-            type="password"
+            type={passwordVisibility? "text": "password"}
             placeholder=""
           />
+          {passwordVisibility ? (
+            <AiOutlineEye onClick={handlePasswordVisibility} />
+          ) : (
+            <AiOutlineEyeInvisible onClick={handlePasswordVisibility} />
+          )}
           {errors.password && <p>{errors.password.message}</p>}
         </div>
         <button disabled={isSubmitting || isLoading} type="submit">
