@@ -6,6 +6,7 @@ import ProductItem from "./ProductItem";
 import Search from "./Filters/Search";
 import SortBy from "./Filters/SortBy";
 import Pagination from "./Filters/Pagination";
+import { IoMdClose } from "react-icons/io";
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -13,6 +14,14 @@ const Products = () => {
   const search = searchParams.get("search") || "";
   const filter = searchParams.get("filter") || "";
   const page = searchParams.get("page") || "1";
+
+  const removeCurrentSearch = () => {
+    setSearchParams((prevSearchParams) => {
+      const newSearchParams = new URLSearchParams(prevSearchParams);
+      newSearchParams.delete("search");
+      return newSearchParams;
+    });
+  };
 
   useEffect(() => {
     setSearchParams((prevSearchParams) => {
@@ -38,22 +47,34 @@ const Products = () => {
         <h1>Products</h1>
 
         {/* Filters */}
-        <div className={styles.products__content__mainFilters}>
+        <section className={styles.products__content__mainFilters}>
           <Search setSearchParams={setSearchParams} />
           <SortBy setSearchParams={setSearchParams} filter={filter} />
-        </div>
+        </section>
+
+        {search && (
+          <div className={styles.products__content__currentFilter}>
+            <p>{search}</p>
+            <button>
+              <IoMdClose onClick={removeCurrentSearch} />
+            </button>
+          </div>
+        )}
 
         {/* Products */}
-        <div className={styles.products__content__wrapper}>
-          {data &&
+        <section className={styles.products__content__wrapper}>
+          {data?.products?.length ? (
             data.products.map((product) => {
               return <ProductItem key={product.id} product={product} />;
-            })}
+            })
+          ) : (
+            <h2>No data</h2>
+          )}
           {isError && <p>Error: Couldn't fetch data</p>}
-        </div>
+        </section>
 
         {/* Pagination */}
-        {data?.pages_amount && data.pages_amount>1 && (
+        {!!data?.pages_amount && data?.pages_amount > 1 && (
           <Pagination
             pages_amount={data.pages_amount}
             setSearchParams={setSearchParams}

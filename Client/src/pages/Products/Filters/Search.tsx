@@ -40,6 +40,7 @@ const Search = ({ setSearchParams }: Params) => {
           placeholder="Search a product..."
           onChange={handleInputChange}
           value={inputSearch}
+          spellCheck={false}
         />
         {inputSearch && <IoMdClose onClick={handleReset}/>}
       </div>

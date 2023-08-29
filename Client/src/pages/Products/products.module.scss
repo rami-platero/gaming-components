@@ -10,6 +10,7 @@
   padding: 1rem;
   gap: 2rem;
   color: white;
+  flex-grow: 1;
 
   &__filters {
     display: flex;
@@ -31,10 +32,39 @@
     gap: 1rem;
     width: 100%;
 
+    &__currentFilter {
+      display: flex;
+      align-items: center;
+      font-size: 0.8rem;
+      font-weight: 500;
+      gap: 0.3rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: 10px;
+      width: fit-content;
+      color: black;
+      background-color: white;
+
+      button{
+        display: flex;
+        align-items: center;
+        border: none;
+        background-color: transparent;
+        svg {
+          cursor: pointer;
+          transition: 0.2s ease-in-out;
+          &:hover {
+            transition: 0.2s ease-in-out;
+            opacity: 0.5;
+          }
+        }
+      }
+      
+    }
+
     &__mainFilters {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
+      gap: 1rem;
       flex-wrap: wrap;
     }
 
