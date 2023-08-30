@@ -48,7 +48,9 @@ export const getProducts = async (
 ) => {
   try {
     const { search, filter, page } = req.query as Params;
-    let products = await Product.find();
+    let products = await Product.createQueryBuilder("product")
+      .where("product.stock > :stock", { stock: 0 })
+      .getMany();
     if (!products) throw new AppError(404, "Products not found");
 
     if (search) {
@@ -84,7 +86,7 @@ export const getProducts = async (
       }
     }
 
-    const pages_amount = Math.ceil(products.length/16)
+    const pages_amount = Math.ceil(products.length / 16);
 
     if (page) {
       const postsPerPage = 16;
@@ -94,7 +96,7 @@ export const getProducts = async (
       );
     }
 
-    return res.status(200).json({products, pages_amount});
+    return res.status(200).json({ products, pages_amount });
   } catch (error) {
     return next(error);
   }
