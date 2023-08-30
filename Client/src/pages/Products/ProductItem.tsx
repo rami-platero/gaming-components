@@ -20,7 +20,7 @@ const ProductItem = ({ product }: Props) => {
       <h3>${product.price}.00</h3>
       <div className={styles.product__info__actions}>
         <button><AiOutlineShoppingCart/> Add to cart</button>
-        <button>Buy</button>
+        <button>Buy Now</button>
       </div>
       </div>
     </div>
