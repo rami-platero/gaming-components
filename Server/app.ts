@@ -1,9 +1,9 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-import router from "./Routes/user.routes";
-import productRouter from "./Routes/product.routes";
-import commentRouter from "./Routes/comment.routes";
+import router from "./routes/user.routes";
+import productRouter from "./routes/product.routes";
+import commentRouter from "./routes/comment.routes";
 import passport from "passport";
 import session from "express-session";
 import * as dotenv from "dotenv";

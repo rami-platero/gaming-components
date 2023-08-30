@@ -7,7 +7,7 @@ import {
   signUp,
   updateUser,
   viewProfile,
-} from "../Controllers/user.controller";
+} from "../controllers/user.controller";
 import passport from "passport";
 import { isAuthenticated } from "../middlewares/authentication";
 import { validateLogin, validateSignUp } from "../middlewares/validate";

@@ -5,7 +5,7 @@ import {
   editComment,
   getCommentsFromProduct,
   postComment,
-} from "../Controllers/comment.controller";
+} from "../controllers/comment.controller";
 
 const router = Router();
 

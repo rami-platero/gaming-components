@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import {  z } from "zod";
-import { loginSchema, signUpSchema } from "../Schemas/auth.schema";
+import { loginSchema, signUpSchema } from "../schemas/auth.schema";
 
 export const validate =
   (schema: z.AnyZodObject | z.ZodOptional<z.AnyZodObject>) =>

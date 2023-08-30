@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { isAuthenticated } from "../middlewares/authentication";
-import { createProduct, getProducts } from "../Controllers/product.controller";
+import { createProduct, getProducts } from "../controllers/product.controller";
 
 const router = Router();
 

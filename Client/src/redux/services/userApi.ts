@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { User } from "../../types";
-import { SignUpSchema } from "../../Schemas/SignUpSchema";
-import { LoginSchema } from "../../Schemas/LoginSchema";
+import { type SignUpSchema, type LoginSchema } from "../../schemas/auth.schema";
 import config from "../../config/config";
 
 export const userApi = createApi({
