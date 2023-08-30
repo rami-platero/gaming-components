@@ -9,7 +9,7 @@ import {
   viewProfile,
 } from "../Controllers/user.controller";
 import passport from "passport";
-import { isAuthorized } from "../middlewares/auth";
+import { isAuthenticated } from "../middlewares/authentication";
 import { validateLogin, validateSignUp } from "../middlewares/validate";
 
 const router = Router();
@@ -33,6 +33,6 @@ router.get(
 router.get("/api/auth/getUser", getUser);
 router.delete("/api/auth/user/:id", deleteUser);
 router.put("/api/auth/user/:id", updateUser);
-router.get("/profile", isAuthorized, viewProfile);
+router.get("/profile", isAuthenticated, viewProfile);
 
 export default router;
