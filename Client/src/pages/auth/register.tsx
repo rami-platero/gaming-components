@@ -3,7 +3,7 @@ import styles from "./auth.module.scss";
 import GoogleLoginButton from "../../components/google-login-button/google-login-button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SignUpSchema, signUpSchema } from "../../Schemas/SignUpSchema";
+import { type SignUpSchema, signUpSchema } from "../../schemas/auth.schema";
 import { setCredentials } from "../../redux/features/user/userSlice";
 import { useAppDispatch } from "../../redux/hooks";
 import { useSignUpMutation } from "../../redux/services/userApi";
@@ -33,7 +33,7 @@ const Register = () => {
     setPasswordVisibility((prev) => !prev);
   };
 
-  const {notifyError} = useToast()
+  const { notifyError } = useToast();
 
   const [signUp, { isLoading }] = useSignUpMutation();
 
@@ -44,8 +44,10 @@ const Register = () => {
       authenticate();
       navigate("/");
     } catch (error: any) {
-      if(error.status === "FETCH_ERROR"){
-        return notifyError("Oops! Something went wrong while fetching data. Please check your network connection and try again.");
+      if (error.status === "FETCH_ERROR") {
+        return notifyError(
+          "Oops! Something went wrong while fetching data. Please check your network connection and try again."
+        );
       }
       const errors = error;
       if (errors.data.username) {
@@ -65,7 +67,7 @@ const Register = () => {
       }
       // return if it's a validation error
       if (errors.data && !errors.data.message) return;
-      
+
       if (errors.data.message) {
         return notifyError(errors.data.message);
       } else {
@@ -76,7 +78,7 @@ const Register = () => {
 
   return (
     <main className={styles.auth}>
-      <ToastContainer limit={1}/>
+      <ToastContainer limit={1} />
       <h1>Get started</h1>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.auth__form}>
         <div className={styles.auth__form__inputBox}>
@@ -112,15 +114,15 @@ const Register = () => {
             className={`${
               errors.password && styles.auth__form__inputBox__error
             }`}
-            type={passwordVisibility? "text": "password"}
+            type={passwordVisibility ? "text" : "password"}
             placeholder=""
             autoComplete="off"
           />
           {passwordVisibility ? (
-              <AiOutlineEye onClick={handlePasswordVisibility} />
-            ) : (
-              <AiOutlineEyeInvisible onClick={handlePasswordVisibility} />
-            )}
+            <AiOutlineEye onClick={handlePasswordVisibility} />
+          ) : (
+            <AiOutlineEyeInvisible onClick={handlePasswordVisibility} />
+          )}
           {errors.password && <p>{errors.password.message}</p>}
         </div>
         <button type="submit" disabled={isSubmitting || isLoading}>

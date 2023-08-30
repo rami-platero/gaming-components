@@ -46,9 +46,10 @@ const Products = () => {
   },[isError])
 
   return (
-    <main className={styles.products}>
-      <div className={styles.products__filters}>
+    <>
       <ToastContainer limit={1}/>
+      <main className={styles.products}>
+      <div className={styles.products__filters}>
         <h2>Filters</h2>
         <div className={styles.products__filters__wrapper}></div>
       </div>
@@ -91,6 +92,8 @@ const Products = () => {
         )}
       </div>
     </main>
+    </>
+   
   );
 };
 

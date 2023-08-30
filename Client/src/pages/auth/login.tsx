@@ -2,7 +2,7 @@ import GoogleLoginButton from "../../components/google-login-button/google-login
 import styles from "./auth.module.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { LoginSchema, loginSchema } from "../../Schemas/LoginSchema";
+import { type LoginSchema, loginSchema } from "../../schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { setCredentials } from "../../redux/features/user/userSlice";
 import { useAppDispatch } from "../../redux/hooks";
@@ -32,7 +32,7 @@ const Login = () => {
     setPasswordVisibility((prev) => !prev);
   };
 
-  const {notifyError} = useToast()
+  const { notifyError } = useToast();
 
   const [login, { isLoading }] = useLoginMutation();
 
@@ -43,8 +43,10 @@ const Login = () => {
       authenticate();
       navigate("/");
     } catch (error: any) {
-      if(error.status === "FETCH_ERROR"){
-        return notifyError("Oops! Something went wrong while fetching data. Please check your network connection and try again.");
+      if (error.status === "FETCH_ERROR") {
+        return notifyError(
+          "Oops! Something went wrong while fetching data. Please check your network connection and try again."
+        );
       }
       const errors = error;
       if (errors.data.email) {
@@ -59,7 +61,7 @@ const Login = () => {
       }
       // return if it's a validation error
       if (errors.data && !errors.data.message) return;
-      
+
       if (errors.data.message) {
         return notifyError(errors.data.message);
       } else {
@@ -70,7 +72,7 @@ const Login = () => {
 
   return (
     <main className={styles.auth}>
-      <ToastContainer limit={1}/>
+      <ToastContainer limit={1} />
       <h1>Log in to Gaming Components</h1>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.auth__form}>
         <div className={styles.auth__form__inputBox}>
@@ -90,7 +92,7 @@ const Login = () => {
             className={`${
               errors.password && styles.auth__form__inputBox__error
             }`}
-            type={passwordVisibility? "text": "password"}
+            type={passwordVisibility ? "text" : "password"}
             placeholder=""
           />
           {passwordVisibility ? (
