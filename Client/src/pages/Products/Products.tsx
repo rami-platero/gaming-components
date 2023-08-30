@@ -7,6 +7,8 @@ import Search from "./Filters/Search";
 import SortBy from "./Filters/SortBy";
 import Pagination from "./Filters/Pagination";
 import { IoMdClose } from "react-icons/io";
+import {ToastContainer} from 'react-toastify'
+import useToast from "../../hooks/useToast";
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -14,6 +16,8 @@ const Products = () => {
   const search = searchParams.get("search") || "";
   const filter = searchParams.get("filter") || "";
   const page = searchParams.get("page") || "1";
+
+  const {notifyError} = useToast()
 
   const removeCurrentSearch = () => {
     setSearchParams((prevSearchParams) => {
@@ -37,9 +41,14 @@ const Products = () => {
     page,
   });
 
+  useEffect(()=>{
+    isError && notifyError("Internal Server Error.")
+  },[isError])
+
   return (
     <main className={styles.products}>
       <div className={styles.products__filters}>
+      <ToastContainer limit={1}/>
         <h2>Filters</h2>
         <div className={styles.products__filters__wrapper}></div>
       </div>
@@ -70,7 +79,6 @@ const Products = () => {
           ) : (
             <h2>No data</h2>
           )}
-          {isError && <p>Error: Couldn't fetch data</p>}
         </section>
 
         {/* Pagination */}
