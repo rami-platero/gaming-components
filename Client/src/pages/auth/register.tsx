@@ -9,8 +9,9 @@ import { useAppDispatch } from "../../redux/hooks";
 import { useSignUpMutation } from "../../redux/services/userApi";
 import { authContext } from "../../context/AuthContext";
 import { useContext, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
+import useToast from "../../hooks/useToast";
 
 const Register = () => {
   const { authenticate } = useContext(authContext);
@@ -32,13 +33,7 @@ const Register = () => {
     setPasswordVisibility((prev) => !prev);
   };
 
-  const notify = (message: string) => {
-    toast.error(message, {
-      theme: "colored",
-      position: "top-center",
-      autoClose: false,
-    });
-  };
+  const {notifyError} = useToast()
 
   const [signUp, { isLoading }] = useSignUpMutation();
 
@@ -49,6 +44,9 @@ const Register = () => {
       authenticate();
       navigate("/");
     } catch (error: any) {
+      if(error.status === "FETCH_ERROR"){
+        return notifyError("Oops! Something went wrong while fetching data. Please check your network connection and try again.");
+      }
       const errors = error;
       if (errors.data.username) {
         setError("username", {
@@ -65,18 +63,20 @@ const Register = () => {
           message: errors.data.password,
         });
       }
+      // return if it's a validation error
       if (errors.data && !errors.data.message) return;
+      
       if (errors.data.message) {
-        return notify(errors.data.message);
+        return notifyError(errors.data.message);
       } else {
-        return notify("Internal Server Error.");
+        return notifyError("Internal Server Error");
       }
     }
   };
 
   return (
     <main className={styles.auth}>
-      <ToastContainer />
+      <ToastContainer limit={1}/>
       <h1>Get started</h1>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.auth__form}>
         <div className={styles.auth__form__inputBox}>

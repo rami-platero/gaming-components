@@ -9,9 +9,10 @@ import { useAppDispatch } from "../../redux/hooks";
 import { authContext } from "../../context/AuthContext";
 import { useContext, useState } from "react";
 import { useLoginMutation } from "../../redux/services/userApi";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
+import useToast from "../../hooks/useToast";
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -31,13 +32,7 @@ const Login = () => {
     setPasswordVisibility((prev) => !prev);
   };
 
-  const notify = (message: string) => {
-    toast.error(message, {
-      theme: "colored",
-      position: "top-center",
-      autoClose: false,
-    });
-  };
+  const {notifyError} = useToast()
 
   const [login, { isLoading }] = useLoginMutation();
 
@@ -48,6 +43,9 @@ const Login = () => {
       authenticate();
       navigate("/");
     } catch (error: any) {
+      if(error.status === "FETCH_ERROR"){
+        return notifyError("Oops! Something went wrong while fetching data. Please check your network connection and try again.");
+      }
       const errors = error;
       if (errors.data.email) {
         setError("email", {
@@ -59,18 +57,20 @@ const Login = () => {
           message: errors.data.password,
         });
       }
+      // return if it's a validation error
       if (errors.data && !errors.data.message) return;
+      
       if (errors.data.message) {
-        return notify(errors.data.message);
+        return notifyError(errors.data.message);
       } else {
-        return notify("Internal Server Error.");
+        return notifyError("Internal Server Error.");
       }
     }
   };
 
   return (
     <main className={styles.auth}>
-      <ToastContainer />
+      <ToastContainer limit={1}/>
       <h1>Log in to Gaming Components</h1>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.auth__form}>
         <div className={styles.auth__form__inputBox}>
