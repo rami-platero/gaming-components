@@ -4,78 +4,47 @@
 .products {
   max-width: $content-width;
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin: 0 auto;
-  padding: 1rem;
-  gap: 2rem;
+  padding: 0 1rem;
   color: white;
   flex-grow: 1;
-
-  &__filters {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    max-width: 200px;
+  min-height: calc(100vh - 70px);
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  
+  &__container {
     width: 100%;
-
-    &__wrapper {
-      padding: 1rem;
-      box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 5px;
-      height: 100%;
-    }
-  }
-
-  &__content {
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 100%;
-
-    &__currentFilter {
+    gap: 2rem;
+    justify-content: space-between;
+    &__content {
       display: flex;
-      align-items: center;
-      font-size: 0.8rem;
-      font-weight: 500;
-      gap: 0.3rem;
-      padding: 0.2rem 0.7rem;
-      border-radius: 10px;
-      width: fit-content;
-      color: black;
-      background-color: white;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
 
-      button{
+      &__mainFilters {
         display: flex;
-        align-items: center;
-        border: none;
-        background-color: transparent;
-        svg {
-          cursor: pointer;
-          transition: 0.2s ease-in-out;
-          &:hover {
-            transition: 0.2s ease-in-out;
-            opacity: 0.5;
-          }
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      h1 {
+        font-size: 1.7rem;
+      }
+
+      &__wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+
+        &__notFound {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
         }
       }
-      
-    }
-
-    &__mainFilters {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    h1 {
-      font-size: 1.7rem;
-    }
-
-    &__wrapper {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
     }
   }
 }
