@@ -1,22 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Product } from "../../../types/products";
+import { TProducts } from "../../../types/products";
 
-const initialState = [] as Product[] 
+const initialState = {} as TProducts 
 
 const productsSlice = createSlice({
     name: "products",
     initialState,
     reducers: {
-        /* createProduct: (state,action)=>{
-
+        setProducts: (state,action)=>{
+            return state = action.payload
         },
-        updateProduct: (state,action)=>{
-
-        },
-        deleteProduct: (state,action)=>{
-
-        } */
+        resetProducts: (state,_action) => {
+            return state = initialState
+        }
     }
 })
+
+export const {setProducts,resetProducts} = productsSlice.actions
 
 export default productsSlice.reducer
