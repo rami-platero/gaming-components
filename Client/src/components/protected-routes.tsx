@@ -7,9 +7,13 @@ type Props = {
 };
 
 const ProtectedRoutes = ({ allowedRoles }: Props) => {
-  const user = useAppSelector(state=>state.user)
+  const auth = useAppSelector(state=>state.auth)
 
-  return user?.roles.find(role=> {
+  if(auth.loading){
+    return
+  }
+
+  return auth?.user?.roles.find(role=> {
     return allowedRoles.includes(role)
   })? <Outlet/> : <Navigate to={"/"} replace/>
 };

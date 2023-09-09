@@ -1,0 +1,41 @@
+@import "../styles/mixins";
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 200px;
+  width: 100%;
+  user-select: none;
+
+  hr{
+    opacity: .4;
+  }
+
+  &__wrapper {
+    position: sticky;
+    top: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    &__backButton {
+      @include centerFlex(row);
+      cursor: pointer;
+      gap: 0.7rem;
+      width: 100%;
+      font-weight: 600;
+      font-size: 0.7rem;
+      padding: 0.5rem 0.5rem;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      background-color: #313136;
+      transition: 0.2s ease-in-out;
+      &:hover {
+        transition: 0.2s ease-in-out;
+        background-color: rgb(68, 68, 68);
+      }
+    }
+  }
+}
