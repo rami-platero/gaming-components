@@ -1,0 +1,16 @@
+@import "../../styles/mixins";
+@import "../../styles/variables";
+
+.brands {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  h3 {
+    @include filter-tag;
+    margin-bottom: 0.5rem;
+  }
+
+  &__item {
+    @include checkbox;
+  }
+}
