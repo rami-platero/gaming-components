@@ -135,7 +135,6 @@ export const getProductsWithCategory = async (
     );
 
     if (no_stock !== "true") {
-      console.log("passed here");
       queryBuilder.andWhere("product.stock > :stock", { stock: 0 });
     }
 
