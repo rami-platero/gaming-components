@@ -1,0 +1,19 @@
+@import "../../styles/variables";
+@import '../../styles/mixins';
+
+.skeleton {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  @include loadAnimation;
+}
+
+@keyframes shimmer {
+    0%{
+    background-position: -200% 0;
+
+    }
+  100% {
+    background-position: 200% 0;
+  }
+}
