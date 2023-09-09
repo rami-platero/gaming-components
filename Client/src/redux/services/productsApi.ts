@@ -1,11 +1,16 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import {  Products } from "../../types/products";
+import { TProduct, TProducts } from "../../types/products";
 import config from "../../config/config";
 
 export type Params = {
+  category?: string;
   search: string;
   page: string;
   filter: string;
+  brands?: string;
+  price_min?: string;
+  price_max?: string;
+  no_stock?: string;
 };
 
 export const productsApi = createApi({
@@ -15,11 +20,22 @@ export const productsApi = createApi({
     credentials: "include",
   }),
   endpoints: (builder) => ({
-    getProducts: builder.query<Products, Params>({
+    getProducts: builder.query<TProducts, Params>({
       query: (params) =>
         `/products/?search=${params.search}&filter=${params.filter}&page=${params.page}`,
     }),
+    getProductsByCategory: builder.query<TProducts, Params>({
+      query: (params) =>
+        `/products/${params.category}?search=${params.search}&filter=${params.filter}&page=${params.page}&brand=${params.brands}&price_min=${params.price_min}&price_max=${params.price_max}&no_stock=${params.no_stock}`,
+    }),
+    getSingleProduct: builder.query<TProduct, string>({
+      query: (slug) => `/product/${slug}`,
+    }),
+    getProductComments: builder.query<TProduct, string>({
+      query: (slug) => `/product/comments/${slug}`
+    })
   }),
 });
 
-export const { useGetProductsQuery } = productsApi;
+export const { useGetProductsQuery, useGetProductsByCategoryQuery, useGetSingleProductQuery, useGetProductCommentsQuery } =
+  productsApi;
