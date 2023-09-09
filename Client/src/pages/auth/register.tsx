@@ -3,15 +3,15 @@ import styles from "./auth.module.scss";
 import GoogleLoginButton from "../../components/GoogleLoginButton/google-login-button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type SignUpSchema, signUpSchema } from "../../schemas/auth.schema";
-import {  setCredentials } from "../../redux/features/user/authSlice";
+import { type SignUpSchema, signUpSchema } from "../../schemas/authSchema";
+import { setCredentials } from "../../redux/features/user/authSlice";
 import { useAppDispatch } from "../../redux/hooks";
 import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import useToast from "../../hooks/useToast";
 import { useSignUpMutation } from "../../redux/services/authApiSlice";
-import Loader from '../../assets/Loader.svg'
+import Loader from "../../assets/Loader.svg";
 
 const Register = () => {
   const {
@@ -122,7 +122,7 @@ const Register = () => {
           {errors.password && <p>{errors.password.message}</p>}
         </div>
         <button type="submit" disabled={isSubmitting || isLoading}>
-        {isLoading ? <img src={Loader}/> : "Get Started"}
+          {isLoading ? <img src={Loader} /> : "Get Started"}
         </button>
         <div className={styles.auth__form__textDivider}>or</div>
         <GoogleLoginButton />

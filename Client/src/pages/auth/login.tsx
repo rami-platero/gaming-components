@@ -2,7 +2,7 @@ import GoogleLoginButton from "../../components/GoogleLoginButton/google-login-b
 import styles from "./auth.module.scss";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { type LoginSchema, loginSchema } from "../../schemas/auth.schema";
+import { type LoginSchema, loginSchema } from "../../schemas/authSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { setCredentials } from "../../redux/features/user/authSlice";
 import { useAppDispatch } from "../../redux/hooks";
@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import useToast from "../../hooks/useToast";
 import { useLoginMutation } from "../../redux/services/authApiSlice";
-import Loader from '../../assets/Loader.svg'
+import Loader from "../../assets/Loader.svg";
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -100,7 +100,7 @@ const Login = () => {
           {errors.password && <p>{errors.password.message}</p>}
         </div>
         <button disabled={isSubmitting || isLoading} type="submit">
-          {isLoading ? <img src={Loader}/> : "Log in"}
+          {isLoading ? <img src={Loader} /> : "Log in"}
         </button>
         <div className={styles.auth__form__textDivider}>or</div>
         <GoogleLoginButton />

@@ -1,4 +1,4 @@
-import { LoginSchema, SignUpSchema } from "../../schemas/auth.schema";
+import { LoginSchema, SignUpSchema } from "../../schemas/authSchema";
 import { User } from "../../types";
 import { apiSlice } from "./apiSlice";
 
