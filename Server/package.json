@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev index.ts",
+    "dev": "ts-node-dev ./src/index.ts",
     "start": "node build/index.js",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -44,6 +44,7 @@
     "passport-local": "^1.0.0",
     "pg": "^8.11.0",
     "reflect-metadata": "^0.1.13",
+    "slugify": "^1.6.6",
     "typeorm": "^0.3.16",
     "validator": "^13.9.0",
     "zod": "^3.22.2"
