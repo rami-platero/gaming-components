@@ -38,7 +38,7 @@ const Products = () => {
             {/* Products */}
             <section className={styles.products__container__content__wrapper}>
               {!!isLoading && <ProductCardSkeleton/>}
-              {!!data?.products?.length &&
+              {!isLoading && !!data?.products?.length &&
                 data?.products.map((product) => {
                   return <ProductCard key={product.id} product={product} />;
                 })}
