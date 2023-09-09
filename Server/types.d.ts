@@ -33,7 +33,10 @@ export interface Photo {
 }
 
 export interface DecodedToken {
-    id: number;
+    user: {
+        username: string,
+        roles: Roles[]
+    }
     iat: number;
     exp: number;
 }
@@ -51,6 +54,15 @@ declare global {
     namespace Express {
       interface Request {
         user?: IUser 
+        username: string,
+        roles: string[]
       }
     }
 }
+
+export type AccessToken = {
+    user: {
+      id: number;
+      roles: string[];
+    };
+  };
