@@ -1,21 +1,19 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "./auth.module.scss";
-import GoogleLoginButton from "../../components/google-login-button/google-login-button";
+import GoogleLoginButton from "../../components/GoogleLoginButton/google-login-button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type SignUpSchema, signUpSchema } from "../../schemas/auth.schema";
-import { setCredentials } from "../../redux/features/user/userSlice";
+import {  setCredentials } from "../../redux/features/user/authSlice";
 import { useAppDispatch } from "../../redux/hooks";
-import { useSignUpMutation } from "../../redux/services/userApi";
-import { authContext } from "../../context/AuthContext";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import useToast from "../../hooks/useToast";
+import { useSignUpMutation } from "../../redux/services/authApiSlice";
+import Loader from '../../assets/Loader.svg'
 
 const Register = () => {
-  const { authenticate } = useContext(authContext);
-
   const {
     register,
     handleSubmit,
@@ -24,7 +22,6 @@ const Register = () => {
   } = useForm<SignUpSchema>({
     resolver: zodResolver(signUpSchema),
   });
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const [passwordVisibility, setPasswordVisibility] = useState(false);
@@ -41,8 +38,7 @@ const Register = () => {
     try {
       const res = await signUp(data).unwrap();
       dispatch(setCredentials(res));
-      authenticate();
-      navigate("/");
+      window.location.reload();
     } catch (error: any) {
       if (error.status === "FETCH_ERROR") {
         return notifyError(
@@ -126,7 +122,7 @@ const Register = () => {
           {errors.password && <p>{errors.password.message}</p>}
         </div>
         <button type="submit" disabled={isSubmitting || isLoading}>
-          Get started
+        {isLoading ? <img src={Loader}/> : "Get Started"}
         </button>
         <div className={styles.auth__form__textDivider}>or</div>
         <GoogleLoginButton />

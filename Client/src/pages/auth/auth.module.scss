@@ -89,6 +89,15 @@
       border: none;
       cursor: pointer;
       transition: 0.2s ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 38px;
+
+      img {
+        width: 20px;
+        height: 20px;
+      }
 
       &:hover {
         background-color: $primary-light;
@@ -98,7 +107,7 @@
       &:disabled{
         pointer-events: none;
         color: black;
-        opacity: .5;
+        opacity: .7;
       }
     }
 
