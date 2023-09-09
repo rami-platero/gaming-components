@@ -21,10 +21,12 @@ const productsSlice = createSlice({
     initialState,
     reducers: {
         setProducts: (state,action)=>{
-            return state = action.payload
+            state = action.payload
+            return state
         },
         resetProducts: (state,_action) => {
-            return state = initialState
+            state = initialState
+            return state
         }
     }
 })

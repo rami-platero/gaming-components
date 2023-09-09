@@ -40,18 +40,18 @@ export const authSlice = createSlice({
       state.token = accessToken;
       state.isAuthenticated = true;
       state.loading = false
-      return;
+      return state
     },
     logOut: (state, _action) => {
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
       state.loading = false
-      return;
+      return state
     },
     handleLoading: (state,action) => {
       state.loading = action.payload
-      return
+      return state
     }
   },
 });
