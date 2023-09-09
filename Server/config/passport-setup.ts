@@ -1,16 +1,15 @@
 import passport from "passport";
-import { User } from "../entities/User";
+import { User } from "../src/entities/User";
 import { GoogleUser } from "../types";
 const GoogleStrategy = require("passport-google-oauth20");
 import * as dotenv from "dotenv";
-dotenv.config({ path: __dirname + "/.env" });
+dotenv.config();
 
 passport.serializeUser((user: any, done) => {
   return done(null, user.id);
 });
 
 passport.deserializeUser((id: number, done) => {
-  
   User.findOneBy({ id })
     .then((user) => {
       return done(null, user);
