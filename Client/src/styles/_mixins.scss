@@ -1,6 +1,6 @@
 @import "variables";
 
-@mixin link ($hoverColor:white){
+@mixin link($hoverColor: white) {
   text-decoration: none;
   color: $navbar-link-primary;
   transition: 0.2s ease-in-out;
@@ -11,14 +11,14 @@
   }
 }
 
-@mixin centerFlex ($direction) {
+@mixin centerFlex($direction) {
   display: flex;
   flex-direction: $direction;
   justify-content: center;
   align-items: center;
 }
 
-@mixin text-divider ($gap) {
+@mixin text-divider($gap) {
   display: flex;
   align-items: center;
 
@@ -37,4 +37,49 @@
   &::after {
     margin-left: $gap;
   }
+}
+
+@mixin filter-tag {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+@mixin checkbox {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 0.1rem;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    transition: 0.2s ease-in-out;
+    background-color: rgba(255, 255, 255, 0.041);
+  }
+
+  label {
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    font-size: 0.9rem;
+  }
+
+  input {
+    cursor: pointer;
+    padding: 1rem;
+    width: 17px;
+    height: 17px;
+  }
+}
+
+@mixin loadAnimation {
+  background: linear-gradient(
+    120deg,
+    #161616 10%,
+    #1f1f1f 35%,
+    #1f1f1f 40%,
+    #161616 48%
+  );
+  animation: shimmer 2s infinite reverse;
+  background-size: 200% 100%;
 }
