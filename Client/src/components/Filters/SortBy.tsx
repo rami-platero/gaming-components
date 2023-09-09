@@ -1,7 +1,6 @@
 import styles from "./sortBy.module.scss";
-import { useState, useRef, useEffect, useContext } from "react";
+import { useState, useRef, useEffect } from "react";
 import { BiChevronDown } from "react-icons/bi";
-import { productsContext } from "../../context/ProductsContext";
 import useProductQuery from "../../hooks/useProductQuery";
 
 const filters = [
@@ -27,8 +26,7 @@ const SortBy = () => {
   const [isActive, setIsActive] = useState<boolean>(false);
   const [currentOption, setCurrentOption] = useState<string>("");
   const filterRef = useRef<HTMLDivElement | null>(null);
-  const { filter } = useContext(productsContext);
-  const { setQuery } = useProductQuery("filter");
+  const { setQuery,queryValue: filter } = useProductQuery("filter");
 
   useEffect(() => {
     if (filter) {

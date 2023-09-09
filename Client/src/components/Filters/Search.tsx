@@ -1,16 +1,14 @@
 import styles from "./search.module.scss";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { IoMdClose } from "react-icons/io";
 import useProductQuery from "../../hooks/useProductQuery";
-import { productsContext } from "../../context/ProductsContext";
 
 const Search = () => {
   const [inputSearch, setInputSearch] = useState<string>("");
-  const { setQuery, removeQuery } = useProductQuery("search", {
+  const { setQuery, removeQuery,queryValue:search } = useProductQuery("search", {
     resetPage: true,
   });
-  const { search } = useContext(productsContext);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputSearch(e.target.value);

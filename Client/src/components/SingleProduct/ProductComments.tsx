@@ -9,7 +9,7 @@ const ProductComments = ({ product }: Params) => {
   const { data } = useGetProductCommentsQuery(product.slug);
 
   return <div>
-    
+    {JSON.stringify(data)}
   </div>;
 };
 

@@ -5,6 +5,7 @@ type Params = {
   };
 
 const ProductSpecs = ({product}:Params) => {
+  console.log(product);
   return (
     <div>
         
