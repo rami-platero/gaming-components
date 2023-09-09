@@ -1,20 +1,18 @@
 import Categories from "./Filters/Categories";
 import styles from "./filters.module.scss";
-import { type TFilters } from "../types/products";
 import PriceRange from "./Filters/PriceRange";
 import { useParams } from "react-router-dom";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import Brands from "./Filters/Brands";
 import { useEffect, useState, memo } from "react";
 import Availability from "./Filters/Availability";
+import { useAppSelector } from "../redux/hooks";
 
-type Params = {
-  filters?: TFilters;
-};
-
-const Filters = ({ filters }: Params) => {
+const Filters = () => {
   const { category } = useParams();
   const [isFiltering, setisFiltering] = useState<boolean>(false);
+
+  const filters = useAppSelector(state => state.products.filters)
 
   useEffect(() => {
     if (filters && Object.keys(filters).length > 0) {

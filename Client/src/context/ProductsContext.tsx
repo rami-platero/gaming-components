@@ -74,11 +74,11 @@ export const ProductsContextProvider = ({
       skip:
         // avoid making useless requests
         (!products?.length &&
-          parseInt(price_max) < parseInt(currentFilters?.priceRange?.max) &&
+         (!!currentFilters && parseInt(price_max) < parseInt(currentFilters?.priceRange?.max)) &&
           (brands !== currentFilters?.brands ||
             search === currentFilters.search)) ||
         (!products?.length &&
-          parseInt(price_min) > parseInt(currentFilters?.priceRange?.min) &&
+          (!!currentFilters && parseInt(price_min) > parseInt(currentFilters?.priceRange?.min)) &&
           (brands !== currentFilters?.brands ||
             search === currentFilters.search)),
     }

@@ -22,7 +22,7 @@ const Products = () => {
         <Breadcrumb />
         <div className={styles.products__container}>
           {/* Main Filters */}
-          <Filters filters={data?.filters} />
+          <Filters />
 
           <div className={styles.products__container__content}>
             <h1>Products</h1>

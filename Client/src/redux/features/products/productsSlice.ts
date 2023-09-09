@@ -1,7 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TProducts } from "../../../types/products";
+import { TCurrentFilters, TFilters, TProduct } from "../../../types/products";
 
-const initialState = {} as TProducts 
+type TProducts = {
+    products: TProduct[];
+    pages_amount: number;
+    filters?: TFilters | null;
+    currentFilters: TCurrentFilters | null;
+  };
+
+
+const initialState: TProducts = {
+    products: [],
+    pages_amount: 0,
+    filters: null,
+    currentFilters: null
+}
 
 const productsSlice = createSlice({
     name: "products",
