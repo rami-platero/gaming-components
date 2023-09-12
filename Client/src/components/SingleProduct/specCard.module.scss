@@ -1,0 +1,20 @@
+.card{
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.288);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 0;
+    /* background: linear-gradient(180deg, rgba(98, 131, 238, 0.363) 0%, rgba(5, 5, 5, 0.041) 100%); */
+    user-select: none;
+
+    h3{
+        font-size: 1.2rem;
+        font-weight: 700;
+    }
+    h5{
+        margin-bottom: .5rem;
+        font-weight: 500;
+    }
+}
