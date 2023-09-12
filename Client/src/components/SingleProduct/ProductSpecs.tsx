@@ -1,11 +1,11 @@
-import { TProduct } from "../../types/products";
+/* import { TProduct } from "../../types/products"; */
 import SpecCard from "./SpecCard";
 import styles from './productSpecs.module.scss'
 import {IoIosArrowDown} from 'react-icons/io'
 
-type Params = {
+/* type Params = {
     product: TProduct;
-  };
+  }; */
 
 const specs = [
   {
@@ -34,7 +34,7 @@ const specs = [
   }
 ]; 
 
-const ProductSpecs = ({product}:Params) => {
+const ProductSpecs = (/* {product}:Params */) => {
   return (
     <div className={styles.specs}>
         <h2>Specifications</h2>

@@ -1,12 +1,12 @@
 /* import { useGetProductCommentsQuery } from "../../redux/services/productsApi"; */
-import { TProduct } from "../../types/products";
+/* import { TProduct } from "../../types/products"; */
 import styles from './productComments.module.scss'
 
-type Params = {
+/* type Params = {
   product: TProduct;
-};
+}; */
 
-const ProductComments = ({ product }: Params) => {
+const ProductComments = (/* { product }: Params */) => {
   /* const { data } = useGetProductCommentsQuery(product.slug); */
   
   return <div className={styles.reviews}>

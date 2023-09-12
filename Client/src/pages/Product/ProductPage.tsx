@@ -20,8 +20,8 @@ const ProductPage = () => {
         <>
           <Breadcrumb current={data.name} />
           <ProductInfo product={data} />
-          <ProductSpecs product={data} />
-          <ProductComments product={data} />
+          <ProductSpecs /* product={data} */ />
+          <ProductComments /* product={data} */ />
         </>
       )}
     </main>
