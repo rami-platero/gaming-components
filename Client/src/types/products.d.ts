@@ -54,7 +54,9 @@ export type TCurrentFilters = {
     min: string
   }
   brands: string;
-  rating: Rating;
+  /* rating: Rating; */
+  no_stock: string
+  /* category: string */
 }
 
 export type TProducts = {
@@ -63,3 +65,10 @@ export type TProducts = {
   filters?: TFilters;
   currentFilters: TCurrentFilters;
 };
+
+export enum SortByFilters {
+  name_asc = "name_asc",
+  name_desc = "name_desc",
+  price_asc = "price_asc",
+  price_desc = "price_desc",
+}
