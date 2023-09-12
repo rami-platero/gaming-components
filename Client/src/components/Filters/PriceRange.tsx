@@ -1,9 +1,12 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useContext, useEffect, useState } from "react";
 import { type TPriceRange } from "../../types/products";
 import ReactSlider from "react-slider";
 import "./priceRange.scss";
 import useDebounce from "../../hooks/useDebounce";
 import useProductQuery from "../../hooks/useProductQuery";
+import { productsContext } from "../../context/ProductsContext";
+import { useAppSelector } from "../../redux/hooks";
+import useOnUpdate from "../../hooks/useOnUpdate";
 
 type Params = {
   priceRange: TPriceRange;
@@ -12,6 +15,8 @@ type Params = {
 const PriceRange = ({ priceRange }: Params) => {
   const [values, setValues] = useState<TPriceRange>(priceRange);
   const [userChangedValues, setUserChangedValues] = useState(false);
+  const { fetchProducts } = useContext(productsContext);
+  const currentValues = useAppSelector(state=>state.products.currentFilters?.priceRange)
 
   const { setQuery: setMaxQuery, queryValue: maxQueryValue } =
     useProductQuery("price_max");
@@ -20,6 +25,12 @@ const PriceRange = ({ priceRange }: Params) => {
 
   const debouncedMaxValue = useDebounce(values.max, 400);
   const debouncedMinValue = useDebounce(values.min, 400);
+
+  useOnUpdate(()=>{
+    if(currentValues?.max !== maxQueryValue || currentValues.min !== minQueryValue){
+      fetchProducts();
+    }
+  },[maxQueryValue, minQueryValue])
 
   useEffect(() => {
     if (userChangedValues) {

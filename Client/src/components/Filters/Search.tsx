@@ -1,14 +1,25 @@
 import styles from "./search.module.scss";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { IoMdClose } from "react-icons/io";
 import useProductQuery from "../../hooks/useProductQuery";
+import { productsContext } from "../../context/ProductsContext";
+import useOnUpdate from "../../hooks/useOnUpdate";
+import { useAppSelector } from "../../redux/hooks";
 
 const Search = () => {
   const [inputSearch, setInputSearch] = useState<string>("");
+  const {fetchProducts} = useContext(productsContext)
   const { setQuery, removeQuery,queryValue:search } = useProductQuery("search", {
     resetPage: true,
   });
+  const currentSearch = useAppSelector((state)=>state.products.currentFilters?.search)
+
+  useOnUpdate(()=>{
+    if(search !== currentSearch){
+      fetchProducts()
+    }
+  },[search])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputSearch(e.target.value);

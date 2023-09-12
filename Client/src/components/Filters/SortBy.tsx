@@ -1,7 +1,13 @@
 import styles from "./sortBy.module.scss";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import useProductQuery from "../../hooks/useProductQuery";
+import { productsContext } from "../../context/ProductsContext";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { sortProducts } from "../../redux/features/products/productsSlice";
+import useOnUpdate from "../../hooks/useOnUpdate";
+import { SortByFilters } from "../../types/products";
+import useClickOutside from "../../hooks/useClickOutside";
 
 const filters = [
   {
@@ -26,7 +32,12 @@ const SortBy = () => {
   const [isActive, setIsActive] = useState<boolean>(false);
   const [currentOption, setCurrentOption] = useState<string>("");
   const filterRef = useRef<HTMLDivElement | null>(null);
-  const { setQuery,queryValue: filter } = useProductQuery("filter");
+  const { setQuery, queryValue: filter } = useProductQuery("filter");
+
+  const { fetchProducts } = useContext(productsContext);
+
+  const pages = useAppSelector((state) => state.products.pages_amount);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (filter) {
@@ -38,18 +49,9 @@ const SortBy = () => {
     }
   }, []);
 
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
-        setIsActive(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  useClickOutside(filterRef,()=>{
+    setIsActive(false)
+  })
 
   const handleSortByToggle = () => {
     setIsActive((prev) => !prev);
@@ -61,6 +63,14 @@ const SortBy = () => {
     handleSortByToggle();
     setCurrentOption(e.currentTarget.innerText);
   };
+
+  useOnUpdate(() => {
+    if (pages === 1 || 0) {
+      dispatch(sortProducts(filter as SortByFilters));
+    } else if (pages > 1) {
+      fetchProducts();
+    }
+  }, [filter]);
 
   return (
     <div className={styles.sortBy} ref={filterRef}>
