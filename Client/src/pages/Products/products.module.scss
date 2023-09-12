@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  
+
   &__container {
     width: 100%;
     display: flex;
@@ -28,6 +28,10 @@
         display: flex;
         gap: 1rem;
         flex-wrap: wrap;
+        @media screen and (max-width: 537px){
+          flex-direction: column;
+          width: 100%;
+        }
       }
 
       h1 {
@@ -35,9 +39,14 @@
       }
 
       &__wrapper {
-        display: flex;
-        flex-wrap: wrap;
+        position: relative;
+        --auto-grid-min-size: 17rem;
         gap: 1rem;
+        display: grid;
+        grid-template-columns: repeat(
+          auto-fill,
+          minmax(var(--auto-grid-min-size), 1fr)
+        );
 
         &__notFound {
           display: flex;

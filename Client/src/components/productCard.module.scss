@@ -5,7 +5,7 @@
   box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 2px;
   transition: 0.2s ease-in-out;
   cursor: pointer;
-  max-width: 270px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   &:hover {
@@ -80,8 +80,7 @@
   &__imgContainer {
     overflow: hidden;
     width: 100%;
-    max-width: 270px;
-    max-height: 270px;
+    aspect-ratio: 1/1;
     img {
       width: 100%;
       margin-bottom: 1rem;
