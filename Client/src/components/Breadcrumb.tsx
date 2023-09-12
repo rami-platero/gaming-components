@@ -27,7 +27,7 @@ const Breadcrumb = ({ current }: { current?: string }) => {
 
   return <ul className={styles.breadcrumb}>
     {crumbs.map((crumb,index)=>{
-      return <li>
+      return <li key={index}>
       <span>{index !== 0 && index !== crumbs.length && "/"}</span>
       <Link to={crumb.link}>
         {crumb.name}
