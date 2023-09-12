@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { TProduct, TProducts } from "../../types/products";
 import config from "../../config/config";
 
-export type Params = {
+export type ProductsParams = {
   category?: string;
   search: string;
   page: string;
@@ -20,11 +20,11 @@ export const productsApi = createApi({
     credentials: "include",
   }),
   endpoints: (builder) => ({
-    getProducts: builder.query<TProducts, Params>({
+    getProducts: builder.query<TProducts, ProductsParams>({
       query: (params) =>
         `/products/?search=${params.search}&filter=${params.filter}&page=${params.page}`,
     }),
-    getProductsByCategory: builder.query<TProducts, Params>({
+    getProductsByCategory: builder.query<TProducts, ProductsParams>({
       query: (params) =>
         `/products/${params.category}?search=${params.search}&filter=${params.filter}&page=${params.page}&brand=${params.brands}&price_min=${params.price_min}&price_max=${params.price_max}&no_stock=${params.no_stock}`,
     }),
@@ -37,5 +37,5 @@ export const productsApi = createApi({
   }),
 });
 
-export const { useGetProductsQuery, useGetProductsByCategoryQuery, useGetSingleProductQuery, useGetProductCommentsQuery } =
+export const { useGetProductsQuery, useGetProductsByCategoryQuery, useGetSingleProductQuery, useGetProductCommentsQuery, useLazyGetProductsQuery, useLazyGetProductsByCategoryQuery } =
   productsApi;
