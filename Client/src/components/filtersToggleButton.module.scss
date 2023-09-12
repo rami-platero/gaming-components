@@ -1,0 +1,31 @@
+@import "../styles/mixins";
+
+.filtersToggle {
+  max-width: 120px;
+  width: 100%;
+  user-select: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.45rem 0.5rem 0.45rem 1rem;
+  border-radius: 10px;
+  transition: 0.2s ease-in-out;
+  gap: 0.3rem;
+  border: none;
+  color: white;
+  @include centerFlex(row);
+  justify-content: space-between;
+  background-color: #202024;
+  &:hover {
+    transition: 0.2s ease-in-out;
+    background-color: rgb(49, 49, 49);
+  }
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  @media screen and (min-width:901px) {
+    display: none;
+  }
+}
