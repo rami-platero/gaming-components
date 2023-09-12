@@ -90,7 +90,13 @@ export const getProducts = async (
       products = filterProductsByPage(products, page);
     }
 
-    return res.status(200).json({ products, pages_amount });
+    return res
+      .status(200)
+      .json({
+        products,
+        pages_amount,
+        currentFilters: { search, filter, page },
+      });
   } catch (error) {
     return next(error);
   }
@@ -207,7 +213,22 @@ export const getProductsWithCategory = async (
       products = filterProductsByPage(products, page);
     }
 
-    return res.status(200).json({ products, pages_amount, filters });
+    return res.status(200).json({
+      products,
+      pages_amount,
+      filters,
+      currentFilters: {
+        search,
+        filter,
+        page,
+        priceRange:{
+          min: price_min,
+          max: price_max,
+        },
+        brand,
+        no_stock,
+      },
+    });
   } catch (error) {
     return next(error);
   }
