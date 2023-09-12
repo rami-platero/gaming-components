@@ -1,34 +1,28 @@
-import { createContext, useEffect } from "react";
+import { createContext, useEffect, useRef } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import {
-  useGetProductsByCategoryQuery,
-  useGetProductsQuery,
-} from "../redux/services/productsApi";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import useToast from "../hooks/useToast";
-import { resetProducts, setProducts } from "../redux/features/products/productsSlice";
+import {
+  getProducts,
+  resetProducts,
+  setProducts,
+} from "../redux/features/products/productsSlice";
+import {
+  useLazyGetProductsByCategoryQuery,
+  useLazyGetProductsQuery,
+} from "../redux/services/productsApi";
+import useOnUpdate from "../hooks/useOnUpdate";
+import { checkError } from "../utils/checkErrors";
 
 type ContextValues = {
-  isLoading: boolean
+  isLazyFetching: boolean;
+  fetchProducts: () => void;
 };
 
 export const productsContext = createContext<ContextValues>({
-  isLoading: true
+  isLazyFetching: true,
+  fetchProducts: async () => {},
 });
-
-const checkError = (error: any) => {
-  if (error && "status" in error) {
-    return (
-      error.status === 500 ||
-      error.status === "TIMEOUT_ERROR" ||
-      error.status === "FETCH_ERROR" ||
-      error.status === "PARSING_ERROR" ||
-      error.status === "CUSTOM_ERROR"
-    );
-  } else {
-    return false;
-  }
-};
 
 export const ProductsContextProvider = ({
   children,
@@ -38,6 +32,8 @@ export const ProductsContextProvider = ({
   const [searchParams, _setSearchParams] = useSearchParams();
   const { notifyError } = useToast();
 
+  const { category } = useParams();
+  const prevCategory = useRef(category);
   const search = searchParams.get("search") || "";
   const filter = searchParams.get("filter") || "";
   const page = searchParams.get("page") || "1";
@@ -45,71 +41,85 @@ export const ProductsContextProvider = ({
   const price_min = searchParams.get("price_min") || "";
   const price_max = searchParams.get("price_max") || "";
   const no_stock = searchParams.get("no_stock") || "";
+  const currentSearchParams = {
+    search,
+    filter,
+    page,
+    category,
+    brands,
+    price_max,
+    price_min,
+    no_stock,
+  };
 
   const products = useAppSelector((state) => state?.products?.products);
+  const productsError = useAppSelector(
+    (state) => state.products.error?.response
+  );
   const currentFilters = useAppSelector(
     (state) => state.products.currentFilters
   );
 
   const dispatch = useAppDispatch();
 
-  const { category } = useParams();
+  const queryHook = category
+    ? useLazyGetProductsByCategoryQuery()
+    : useLazyGetProductsQuery();
+  const [fetchData, { error, data, isFetching }] = queryHook;
 
-  const queryHook = !category
-    ? useGetProductsQuery
-    : useGetProductsByCategoryQuery;
+  // fetchProducts function
+  const fetchProducts = async () => {
+    const skip =
+      (!products?.length &&
+        !!currentFilters &&
+        parseInt(price_max) < parseInt(currentFilters?.priceRange?.max) &&
+        (brands !== currentFilters?.brands ||
+          search === currentFilters.search)) ||
+      (!products?.length &&
+        !!currentFilters &&
+        parseInt(price_min) > parseInt(currentFilters?.priceRange?.min) &&
+        (brands !== currentFilters?.brands ||
+          search === currentFilters.search) &&
+        !products?.length &&
+        currentFilters?.no_stock === "true" &&
+        !no_stock);
 
-  const { data, isError, error, isFetching } = queryHook(
-    {
-      search,
-      filter,
-      page,
-      category,
-      brands,
-      price_max,
-      price_min,
-      no_stock
-    },
-    {
-      skip:
-        // avoid making useless requests
-        (!products?.length &&
-         (!!currentFilters && parseInt(price_max) < parseInt(currentFilters?.priceRange?.max)) &&
-          (brands !== currentFilters?.brands ||
-            search === currentFilters.search)) ||
-        (!products?.length &&
-          (!!currentFilters && parseInt(price_min) > parseInt(currentFilters?.priceRange?.min)) &&
-          (brands !== currentFilters?.brands ||
-            search === currentFilters.search)),
+    if (prevCategory.current === category && !skip) {
+      await fetchData(currentSearchParams);
     }
-  );
+  };
 
-  useEffect(() => {
-    // keeps track of filters of last request
-    const currentFilters = {
-      search,
-      filter,
-      page,
-      brands,
-      priceRange: {
-        max: price_max,
-        min: price_min,
-      },
-    };
-    dispatch(setProducts({ ...data, currentFilters }));
-  }, [data]);
+  // calls the fetchProducts function on change
+  useOnUpdate(() => {
+    fetchProducts();
+  }, [page, brands]);
 
+  // dispatch function after calling the fetchProducts function
   useEffect(() => {
-    if (checkError(error)) {
+    if (!isFetching && data) {
+      dispatch(setProducts(data));
+    }
+  }, [data, isFetching]);
+
+  // initial request
+  useEffect(() => {
+    prevCategory.current = category;
+    dispatch(getProducts(currentSearchParams));
+  }, [category]);
+
+  // toastify errors
+  useEffect(() => {
+    if (checkError(error || productsError)) {
       notifyError("Internal Server Error");
-      dispatch(resetProducts(null))
+      dispatch(resetProducts(null));
     }
-  }, [isError, error]);
+  }, [error, productsError]);
 
   return (
     <productsContext.Provider
       value={{
-        isLoading: isFetching
+        isLazyFetching: isFetching,
+        fetchProducts,
       }}
     >
       {children}
