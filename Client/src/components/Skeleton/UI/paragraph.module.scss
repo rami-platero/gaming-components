@@ -1,0 +1,14 @@
+@import '../../../styles/mixins';
+
+.paragraph{
+    display: flex;
+    flex-direction: row;
+    gap: .5rem;
+    max-width: 600px;
+    width: 100%;
+    &__words{
+        height: 15px;
+        border-radius: 10px;
+        @include loadAnimation;
+    }
+}
