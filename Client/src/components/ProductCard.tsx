@@ -3,6 +3,10 @@ import RTXExampleIMG from "../assets/rtx3070.png";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { TProduct } from "../types/products";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../redux/hooks";
+import { isProductInCart } from "../redux/features/cart/cartSlice";
+import useToast from "../hooks/useToast";
+import { useAddItemToCartMutation } from "../redux/services/cartApi";
 
 type Props = {
   product: TProduct;
@@ -10,10 +14,24 @@ type Props = {
 
 const ProductCard = ({ product }: Props) => {
   const navigate = useNavigate();
+  const [addItemToCart] = useAddItemToCartMutation()
+
+  const {notifyError} = useToast()
+
+  const isInCart = useAppSelector(isProductInCart(product.id))
 
   const handleClickProduct = () => {
     navigate(`/products/${product.category}/${product.slug}`);
   };
+
+  const handleAddItem = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation()
+    if(product.stock>=1){
+      addItemToCart(product)
+    } else {
+      notifyError("This product is out of stock!")
+    }
+  }
 
   return (
     <div className={styles.product} onClick={handleClickProduct}>
@@ -30,10 +48,9 @@ const ProductCard = ({ product }: Props) => {
         <div className={styles.product__info__lower}>
           <h3>$ {product.price}.00</h3>
           <div className={styles.product__info__lower__actions}>
-            <button>
-              <AiOutlineShoppingCart /> Add to cart
+            <button onClick={handleAddItem} disabled={isInCart}>
+              <AiOutlineShoppingCart /> {!isInCart? "Add to cart": "In cart"}
             </button>
-            <button>Buy Now</button>
           </div>
         </div>
       </div>
