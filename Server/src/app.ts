@@ -36,6 +36,7 @@ app.use((req, res, next) => {
   }
 });
 app.use(express.urlencoded({ extended: true }));
+app.set("trust proxy", 1);
 app.use(
   session({
     secret: process.env.SESSION_SECRET_CODE!,
@@ -44,8 +45,8 @@ app.use(
     name: 'session',
     cookie: {
       maxAge: 3600000,
-      sameSite: process.env.NODE_ENV === "development" ? "strict" : "none",
-      secure: process.env.NODE_ENV === "development" ? false : true,
+      sameSite: process.env.NODE_ENV === "development" ? "strict" : "lax",
+      secure: 'auto',
       httpOnly: true,
     },
   })
