@@ -1,6 +1,23 @@
 @import "../../styles/mixins";
 @import "../../styles/variables";
 
+.inactiveFilters{
+  max-width: 200px;
+      width: 100%;
+  @media screen and (max-width: 900px) {
+    display: none !important;
+  }
+}
+
+@keyframes enterAnimation {
+  0%{
+    transform: translateX(-100%);
+  }
+  100%{
+    transform: translateX(0%);
+  }
+}
+
 .products {
   max-width: $content-width;
   width: 100%;
@@ -18,7 +35,30 @@
     display: flex;
     gap: 2rem;
     justify-content: space-between;
-    &__content {
+
+    &__filters {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 200px;
+      width: 100%;
+      user-select: none;
+      position: relative;
+    
+      @media screen and (max-width: 900px) {
+        position: fixed;
+        height: 100vh;
+        max-width: 70vw;
+        top: 0;
+        left: 0;
+        padding: 6rem 1rem 1rem 1rem;
+        background-color: rgb(0, 0, 0);
+        z-index: 888;
+        animation: enterAnimation 200ms ease-in-out;
+      }
+    }
+
+    &__products {
       display: flex;
       flex-direction: column;
       gap: 1rem;
@@ -47,6 +87,7 @@
           auto-fill,
           minmax(var(--auto-grid-min-size), 1fr)
         );
+        margin-bottom: 100px;
 
         &__notFound {
           display: flex;

@@ -1,4 +1,4 @@
-import styles from "./products.module.scss";
+import styles from "./productsPage.module.scss";
 import ProductCard from "../../components/ProductCard";
 import Search from "../../components/Filters/Search";
 import SortBy from "../../components/Filters/SortBy";
@@ -8,52 +8,72 @@ import Filters from "../../components/Filters";
 import { useAppSelector } from "../../redux/hooks";
 import Breadcrumb from "../../components/Breadcrumb";
 import ProductCardSkeleton from "../../components/Skeleton/ProductCardSkeleton";
-import { useContext, useState,useMemo } from "react";
+import { useContext, useState, useMemo, useRef } from "react";
 import { productsContext } from "../../context/ProductsContext";
 import SpinnerLoader from "../../components/UI/SpinnerLoader";
 import FiltersToggleButton from "../../components/FiltersToggleButton";
+import FiltersSkeleton from "../../components/Skeleton/FiltersSkeleton";
+import useClickOutside from "../../hooks/useClickOutside";
+import { useParams } from "react-router-dom";
 
-const Products = () => {
+const ProductsPage = () => {
   const data = useAppSelector((state) => state.products);
   const { isLazyFetching } = useContext(productsContext);
   const isLoading = useAppSelector((state) => state.products.isFetching);
-  const products = useMemo(()=>{
-    return data.products
-  },[data.products])
-  
-  const [filtering, setFiltering] = useState(false)
+  const filtersRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(filtersRef, () => {
+    closeFilters();
+  });
+
+  const products = useMemo(() => {
+    return data.products;
+  }, [data.products]);
+
+  const [filtering, setFiltering] = useState(false);
   const openFilters = () => {
-    setFiltering(true)
-  }
+    setFiltering(true);
+  };
 
   const closeFilters = () => {
-    setFiltering(false)
-  }
+    setFiltering(false);
+  };
+
+  const {category} = useParams()
 
   return (
     <>
-      <ToastContainer limit={1} />
+      <ToastContainer limit={3} />
       <main className={styles.products}>
         <Breadcrumb />
         <div className={styles.products__container}>
           {/* Main Filters */}
-          <Filters filtering={filtering} closeFilters={closeFilters}/>
-
-          <div className={styles.products__container__content}>
+          <div
+            className={`${styles.products__container__filters} ${
+              !filtering && styles.inactiveFilters
+            }`}
+            ref={filtersRef}
+          >
+            <h2>Filters</h2>
+            {!!isLoading && <FiltersSkeleton />}
+            {!!isLazyFetching && !isLoading && !!category && <SpinnerLoader />}
+            {!isLoading && <Filters closeFilters={closeFilters} />}
+          </div>
+          <div className={styles.products__container__products}>
             <h1>Products</h1>
 
             {/* Top Filters */}
             <section
-              className={styles.products__container__content__mainFilters}
+              className={styles.products__container__products__mainFilters}
             >
               <Search />
               <SortBy />
-              <FiltersToggleButton openFilters={openFilters}/>
+              <FiltersToggleButton openFilters={openFilters} />
             </section>
 
             {/* Products */}
-            <section className={styles.products__container__content__wrapper}>
-              {!!isLazyFetching && !isLoading && <SpinnerLoader/>}
+            <section className={styles.products__container__products__wrapper}>
+              {!!isLazyFetching && !isLoading && <SpinnerLoader />}
               {!!isLoading && <ProductCardSkeleton />}
               {!isLoading &&
                 !!products?.length &&
@@ -63,7 +83,7 @@ const Products = () => {
               {!isLoading && !products?.length && (
                 <div
                   className={
-                    styles.products__container__content__wrapper__notFound
+                    styles.products__container__products__wrapper__notFound
                   }
                 >
                   <div>0 results found</div>
@@ -83,4 +103,4 @@ const Products = () => {
   );
 };
 
-export default Products
+export default ProductsPage;
