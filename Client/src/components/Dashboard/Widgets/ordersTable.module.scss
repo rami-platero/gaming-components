@@ -1,0 +1,66 @@
+.container {
+  width: 100%;
+  @media screen and (max-width: 678px) {
+    max-width: 100% !important;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead {
+    tr th {
+      padding: 1rem 1rem 0.5rem 1rem;
+      text-align: left;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.185);
+    }
+  }
+}
+
+.row {
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+
+  &:hover {
+    transition: 0.2s ease-in-out;
+    background-color: rgba(0, 0, 0, 0.322);
+  }
+  button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  td {
+    user-select: none;
+    padding: 1rem;
+    font-size: 0.9rem;
+    div {
+      width: fit-content;
+    }
+
+    .total {
+      font-weight: 600;
+      color: white;
+    }
+    .status {
+      border-radius: 5px;
+      padding: 0.2rem 1rem;
+      font-weight: 600;
+      color: rgb(18, 105, 0);
+      background-color: rgb(99, 255, 60);
+    }
+  }
+  td:last-child {
+    overflow: hidden;
+  }
+}

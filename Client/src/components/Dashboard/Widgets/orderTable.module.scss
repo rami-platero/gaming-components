@@ -1,0 +1,41 @@
+.tableWrapper {
+    max-width: 700px;
+    width: 100%;
+
+    @media screen and (max-width: 1397px) {
+      max-width: 100% !important;
+    }
+
+    @media screen and (max-width: 650px) {
+      max-width: 100% !important;
+      overflow-x: auto;
+    }
+    
+    table {
+      min-width: 600px;
+      width: 100%;
+      background-color: rgba(7, 7, 10, 0.61);
+      border-collapse: collapse;
+
+      font-size: 0.9rem;
+      thead tr {
+        background-color: rgba(0, 0, 0, 0.562);
+      }
+      thead tr th {
+        padding: 1rem;
+        text-align: left;
+      }
+      tbody {
+        tr {
+          td {
+            padding: 1rem;
+            div {
+              display: flex;
+              align-items: center;
+              gap: 1rem;
+            }
+          }
+        }
+      }
+    }
+  }
