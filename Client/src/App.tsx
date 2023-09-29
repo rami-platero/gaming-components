@@ -3,14 +3,28 @@ import Login from "./pages/auth/login";
 import Register from "./pages/auth/register";
 import AuthRoutes from "./components/auth-routes";
 import Layout from "./components/layout";
-import HomePage from "./pages/HomePage/home-page";
-import Products from "./pages/Products/Products";
-import NotFound from "./pages/NotFound/not-found";
-import ProtectedRoutes from "./components/protected-routes";
-import Profile from "./pages/Profile/Profile";
 import { Roles } from "./types.d";
 import { ProductsContextProvider } from "./context/ProductsContext";
+import {
+  DashboardLayout,
+  dashboardRoutes,
+} from "./pages/Dashboard/DashboardPage";
+
+// pages
 import ProductPage from "./pages/Product/ProductPage";
+import HomePage from "./pages/HomePage/home-page";
+import ProtectedRoutes from "./components/protected-routes";
+import SuccessPage from "./pages/Payment/SuccessPage";
+import CartPage from "./pages/Cart/CartPage";
+import NotFoundPage from "./pages/NotFound/NotFoundPage";
+import ProductsPage from "./pages/Products/ProductsPage";
+
+export enum DashboardOptions {
+  dashboard = "Dashboard",
+  settings = "Settings",
+  orders = "Orders",
+  comments = "Comments",
+}
 
 const App = () => {
   return (
@@ -23,7 +37,7 @@ const App = () => {
           <Route
             element={
               <ProductsContextProvider>
-                <Products />
+                <ProductsPage />
               </ProductsContextProvider>
             }
             path="/products"
@@ -31,15 +45,22 @@ const App = () => {
           <Route
             element={
               <ProductsContextProvider>
-                <Products />
+                <ProductsPage />
               </ProductsContextProvider>
             }
             path="/products/:category"
           />
-          <Route element={<ProductPage/>} path="/products/:category/:slug" />
-          <Route element={<NotFound />} path="/*" />
+          <Route element={<ProductPage />} path="/products/:category/:slug" />
+          <Route element={<NotFoundPage />} path="/*" />
+          <Route element={<CartPage />} path="/cart" />
+          <Route element={<SuccessPage />} path="/success" />
+
           <Route element={<ProtectedRoutes allowedRoles={[Roles.user]} />}>
-            <Route element={<Profile />} path="/profile" />
+            <Route element={<DashboardLayout />}>
+              {dashboardRoutes.map((route) => {
+                return <Route key={route.path} element={route.component} path={route.path} />;
+              })}
+            </Route>
           </Route>
 
           {/* Auth Routes */}
@@ -48,11 +69,6 @@ const App = () => {
             <Route path="/register" element={<Register />} />
           </Route>
         </Route>
-        {/* Auth Routes */}
-
-        {/* Admin Routes */}
-
-        {/* Admin Routes */}
       </Routes>
     </BrowserRouter>
   );
