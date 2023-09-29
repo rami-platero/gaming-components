@@ -90,13 +90,11 @@ export const getProducts = async (
       products = filterProductsByPage(products, page);
     }
 
-    return res
-      .status(200)
-      .json({
-        products,
-        pages_amount,
-        currentFilters: { search, filter, page },
-      });
+    return res.status(200).json({
+      products,
+      pages_amount,
+      currentFilters: { search, filter, page },
+    });
   } catch (error) {
     return next(error);
   }
@@ -221,7 +219,7 @@ export const getProductsWithCategory = async (
         search,
         filter,
         page,
-        priceRange:{
+        priceRange: {
           min: price_min,
           max: price_max,
         },
@@ -302,6 +300,43 @@ export const getProduct = async (
       );
 
     return res.status(200).json(product);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+import * as dotenv from "dotenv";
+dotenv.config();
+import Stripe from "stripe";
+const stripe = new Stripe(process.env.STRIPE_KEY!, {
+  apiVersion: "2023-08-16",
+});
+
+export const createStripeProducts = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const products = await Product.find();
+
+    products.forEach(async (product) => {
+      const { default_price } = await stripe.products.create({
+        name: product.name,
+        description: product.description,
+        id: product.id.toString(),
+        default_price_data: {
+          currency: "usd",
+          unit_amount: product.price * 100,
+        },
+      });
+      if (default_price) {
+        product.default_stripe_price = default_price as string;
+        await product.save();
+      }
+    });
+
+    return res.json({ message: "success" });
   } catch (error) {
     return next(error);
   }
