@@ -8,6 +8,7 @@ import {
 import passport from "passport";
 import { validateLogin, validateSignUp } from "../middlewares/validate";
 import {
+  handleGoogleJWT,
   handleJWT,
   handleLogin,
   handleLogout,
@@ -25,11 +26,11 @@ router.get(
   "/auth/google",
   passport.authenticate("google", { scope: ["email", "profile"] })
 );
-/* router.get(
+router.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/login" }),
-  loginWithGoogle
-); */
+  handleGoogleJWT
+);
 router.get("/api/auth/refresh", refreshToken);
 router.post("/api/auth/logout", handleLogout);
 
