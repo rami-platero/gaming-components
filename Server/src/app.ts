@@ -1,9 +1,12 @@
-import express from "express";
+import express, { NextFunction, Request } from "express";
 import morgan from "morgan";
 import cors from "cors";
 import router from "./routes/user.routes";
 import productRouter from "./routes/product.routes";
 import commentRouter from "./routes/comment.routes";
+import cartRouter from "./routes/cart.routes";
+import paymentRouter from "./routes/payment.routes";
+import orderRouter from "./routes/order.routes";
 import passport from "passport";
 import session from "express-session";
 import * as dotenv from "dotenv";
@@ -25,19 +28,43 @@ app.use(
   })
 );
 
-app.use(express.json());
+app.use((req, res, next) => {
+  if (req.originalUrl === "/api/webhook") {
+    next();
+  } else {
+    express.json()(req, res, next);
+  }
+});
 app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
-    secret: "secretcode",
-    resave: true,
+    secret: process.env.SESSION_SECRET_CODE!,
+    resave: false,
     saveUninitialized: true,
+    cookie: {
+      maxAge: 3600000,
+    },
   })
 );
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/", router, productRouter, commentRouter);
+app.use((req: Request, _res, next: NextFunction) => {
+  if (!req.session.cart) {
+    req.session.cart = [];
+  }
+  next();
+});
+
+app.use(
+  "/",
+  router,
+  productRouter,
+  commentRouter,
+  cartRouter,
+  paymentRouter,
+  orderRouter
+);
 app.use(errorHandler);
 
 export default app;
