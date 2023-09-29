@@ -40,7 +40,7 @@ const ProductSpecs = (/* {product}:Params */) => {
         <h2>Specifications</h2>
         <div className={styles.specs__wrapper}>
         {specs.map((spec)=>{
-          return <SpecCard spec={spec}/>
+          return <SpecCard spec={spec} key={spec.name}/>
         })}
         </div>
         <button><IoIosArrowDown/> More</button>

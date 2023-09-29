@@ -42,6 +42,7 @@ const ProductInfo = ({ product }: Params) => {
           {images.map((image, index) => {
             return (
               <img
+                key={index}
                 src={image.image}
                 className={
                   index === currentImage
@@ -57,10 +58,10 @@ const ProductInfo = ({ product }: Params) => {
         </div>
       </div>
       <div className={styles.info__data}>
-        <h5 className={styles.info__data__stock}>{product.stock} Available</h5>
+        <h5 className={styles.info__data__stock}>{product.stock > 0? `${product.stock} Available`: "Out of stock"}</h5>
         <h1 className={styles.info__data__name}>{product.name}</h1>
         <h2 className={styles.info__data__category}>{product.category}</h2>
-        <h3 className={styles.info__data__price}>${product.price}.00</h3>
+        <h3 className={styles.info__data__price}>$ {product.price}.00</h3>
         <div className={styles.info__data__description}>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit.
           Exercitationem libero necessitatibus ea dolor ratione recusandae,
