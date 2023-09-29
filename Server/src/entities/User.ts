@@ -12,6 +12,7 @@ import bcrypt from "bcrypt";
 import validator from "validator";
 import { Comment } from "./Comment";
 import { AppError } from "../helpers/AppError";
+import { Order } from "./Order";
 
 export enum Roles {
   user = "User",
@@ -42,14 +43,23 @@ export class User extends BaseEntity implements IUser {
   @Column({ nullable: true })
   password: string;
 
+  @Column({nullable: true})
+  avatar: string
+
   @Column({ type: "simple-array" })
   refreshToken: string[];
+
+  @Column({ nullable: true })
+  customer_id: string;
 
   @Column({ type: "enum", enum: Roles, array: true, default: [Roles.user] })
   roles: Roles[];
 
   @OneToMany(() => Comment, (comment) => comment.product)
   comments: Comment[];
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 
   @CreateDateColumn()
   createdAt: Date;

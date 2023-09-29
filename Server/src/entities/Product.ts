@@ -7,9 +7,12 @@ import {
   BaseEntity,
   OneToMany,
   BeforeInsert,
+  ManyToMany,
 } from "typeorm";
 import { Comment } from "./Comment";
 import slugify from "slugify";
+import { Order } from "./Order";
+import { OrderItem } from "./OrderItem";
 
 export enum Category {
   GPU = "Graphics Card",
@@ -71,9 +74,17 @@ export class Product extends BaseEntity {
   @OneToMany(() => Comment, (comment) => comment.product)
   comments: Comment[];
 
+  @Column({nullable:true})
+  default_stripe_price: string
+
+  @OneToMany(()=> OrderItem, (orderItem)=>{orderItem.product},{onDelete: "SET NULL"})
+  orderItems: OrderItem[]
+
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
 }
+
+export type TProduct = typeof Product
