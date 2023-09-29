@@ -34,11 +34,12 @@ passport.use(
       profile: GoogleUser,
       done: any
     ) {
-      const user = await User.findOneBy({ username: profile.displayName });
+      const user = await User.findOneBy({ email: profile._json.email });
       if (!user) {
         const newUser: User = new User();
         newUser.username = profile.displayName;
         newUser.email = profile._json.email;
+        newUser.refreshToken = []
         await newUser.save();
         return done(null, newUser);
       }
