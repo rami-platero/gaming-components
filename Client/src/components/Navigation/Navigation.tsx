@@ -1,11 +1,11 @@
 import styles from "./navigation.module.scss";
 import { Link } from "react-router-dom";
-import { AiOutlineShoppingCart } from "react-icons/ai";
 import DefaultPFP from "../../assets/default_pfp.png";
 import { useLogOutMutation } from "../../redux/services/authApiSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { handleLoading, logOut } from "../../redux/features/user/authSlice";
 import NavSkeleton from "../Skeleton/NavSkeleton";
+import CartNavItem from "./CartNavItem";
 
 const Navigation = () => {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
@@ -49,7 +49,7 @@ const Navigation = () => {
           ) : !isLoading && !isAuthenticated ? (
             <>
               <li>
-                <AiOutlineShoppingCart />
+                <CartNavItem />
               </li>
               <li>
                 <Link to={"/login"}>Login</Link>
@@ -58,10 +58,10 @@ const Navigation = () => {
                 <Link to={"/register"}>Get Started</Link>
               </li>
             </>
-          ) : !isLoading && !!isAuthenticated? (
+          ) : !isLoading && !!isAuthenticated ? (
             <>
               <li>
-                <AiOutlineShoppingCart />
+                <CartNavItem />
               </li>
               <li>
                 <Link to={"/dashboard"}>
@@ -72,7 +72,7 @@ const Navigation = () => {
                 <button onClick={handleLogOut}>Logout</button>
               </li>
             </>
-          ): null}
+          ) : null}
         </ul>
       </nav>
     </header>

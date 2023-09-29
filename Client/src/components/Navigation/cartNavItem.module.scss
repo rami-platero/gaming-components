@@ -1,0 +1,22 @@
+@import "../../styles/mixins";
+
+.cart{
+    position: relative;
+    
+    svg {
+        width: 1.5rem;
+        height: 1.5rem;
+        cursor: pointer;
+        @include link;
+    }
+    span{
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background-color: rgb(253, 73, 73);
+        color: white;
+        padding: 1px 5px;
+        border-radius: 100%;
+        font-size: .7rem;
+    }
+}
