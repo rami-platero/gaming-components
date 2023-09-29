@@ -4,6 +4,8 @@ import { setupListeners } from "@reduxjs/toolkit/dist/query";
 import userReducer from "./features/user/authSlice";
 import productReducer from "./features/products/productsSlice";
 import { productsApi } from "./services/productsApi";
+import cartReducer from './features/cart/cartSlice'
+import { cartApi } from "./services/cartApi";
 
 const store = configureStore({
   reducer: {
@@ -11,11 +13,14 @@ const store = configureStore({
     [apiSlice.reducerPath]: apiSlice.reducer,
     products: productReducer,
     [productsApi.reducerPath]: productsApi.reducer,
+    cart: cartReducer,
+    [cartApi.reducerPath]: cartApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(
       apiSlice.middleware,
-      productsApi.middleware
+      productsApi.middleware,
+      cartApi.middleware
     ),
 });
 
