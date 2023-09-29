@@ -41,10 +41,12 @@ app.use(
     secret: process.env.SESSION_SECRET_CODE!,
     resave: false,
     saveUninitialized: true,
+    name: 'session',
     cookie: {
       maxAge: 3600000,
-      /* sameSite: process.env.NODE_ENV === "development" ? "strict" : "none",
-      secure: process.env.NODE_ENV === "development" ? false : true, */
+      sameSite: process.env.NODE_ENV === "development" ? "strict" : "none",
+      secure: process.env.NODE_ENV === "development" ? false : true,
+      httpOnly: false,
     },
   })
 );
