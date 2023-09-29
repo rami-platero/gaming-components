@@ -1,7 +1,7 @@
 @import '../../../styles/mixins';
 
 .skeleton{
-    min-height: calc(100vh - 70px);
+    min-height: calc(100vh - 70px - 20vh);
     display: flex;
     flex-direction: column;
     justify-content: center;
