@@ -59,6 +59,10 @@
           align-items: center;
           cursor: pointer;
           transition: 0.2s ease-in-out;
+          &:disabled{
+            opacity: .4;
+            pointer-events: none;
+          }
           &:hover {
             color: black;
             background-color: white;
@@ -69,7 +73,7 @@
             border: none;
             &:hover {
               color: white;
-              background-color: rgb(56, 71, 153);
+              background-color: rgb(33, 43, 100);
             }
           }
         }
