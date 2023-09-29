@@ -13,7 +13,7 @@ import {
   setCookieLoggedIn,
 } from "../utils/jwt";
 import { loginUser } from "../services/auth.services";
-import { RefreshToken } from "./user.controller";
+import { RefreshToken, createToken } from "./user.controller";
 
 export const refreshToken = async (req: Request, res: Response) => {
   const cookies = req.cookies;
@@ -164,7 +164,7 @@ export const handleSignUp = async (
   }
 };
 
-/*   export const loginWithGoogle = async (req: Request, res: Response) => {
+/*   export const loginWithGoogle = async (req: Request, res: Response, next: NextFunction) => {
     if (req.user && req.user instanceof User) {
       const token = createToken(req.user.id);
       res.cookie("token", token);
@@ -199,3 +199,28 @@ export const handleJWT = async (
     return next(error);
   }
 };
+
+export const handleGoogleJWT = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = req.user as User
+    // create JWT
+    const newRefreshToken = createRefreshToken(user);
+
+    // Saving refreshToken with current user
+    user.refreshToken = [...user.refreshToken, newRefreshToken];
+    await user.save();
+
+    // Creates Secure Cookie with refresh token
+    createJWTCookie(res, newRefreshToken);
+    setCookieLoggedIn(res);
+
+    return res.redirect("http://localhost:5173");
+  } catch (error) {
+    return next(error);
+  }
+};
+
