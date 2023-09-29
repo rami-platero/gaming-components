@@ -1,0 +1,27 @@
+@import "../../styles/mixins";
+@import "../../styles/variables";
+
+.dashboard {
+  background: linear-gradient(180deg, #07070893 0%, #050507c2 100%);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  &__container{
+    color: white;
+    display: flex;
+    flex-direction: row;
+    max-width: $content-width;
+    margin: 0 auto;
+    width: 100%;
+    flex: 1;
+  }
+
+  @media screen and (max-width: 900px) {
+    flex-wrap: wrap;
+  }
+
+  hr {
+    opacity: 0.1;
+  }
+}
