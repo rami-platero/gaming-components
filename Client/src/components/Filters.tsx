@@ -4,27 +4,20 @@ import PriceRange from "./Filters/PriceRange";
 import { useParams } from "react-router-dom";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import Brands from "./Filters/Brands";
-import { useEffect, useState, memo, useRef } from "react";
+import { useEffect, useState, memo } from "react";
 import Availability from "./Filters/Availability";
 import { useAppSelector } from "../redux/hooks";
-import {AiOutlineClose} from 'react-icons/ai'
-import useClickOutside from "../hooks/useClickOutside";
+import { AiOutlineClose } from "react-icons/ai";
 
 type Params = {
-  filtering: boolean;
-  closeFilters: ()=>void
+  closeFilters: () => void;
 };
 
-const Filters = ({ filtering, closeFilters }: Params) => {
+const Filters = ({ closeFilters }: Params) => {
   const { category } = useParams();
   const [isFiltering, setisFiltering] = useState<boolean>(false);
-  const filtersRef = useRef<HTMLDivElement>(null)
 
   const filters = useAppSelector((state) => state.products.filters);
-
-  useClickOutside(filtersRef,()=>{
-    closeFilters()
-  })
 
   useEffect(() => {
     if (filters && Object.keys(filters).length > 0) {
@@ -37,17 +30,10 @@ const Filters = ({ filtering, closeFilters }: Params) => {
   };
 
   return (
-    <div
-      className={`${styles.filters} ${
-        !filtering && styles.inactiveFilters
-      }`}
-      ref={filtersRef}
-    >
-      <button className={styles.filters__closeButton} onClick={closeFilters}>
-        <AiOutlineClose/>
+    <div className={styles.filters}>
+      <button className={styles.closeButton} onClick={closeFilters}>
+        <AiOutlineClose />
       </button>
-      <h2>Filters</h2>
-
       <div className={styles.filters__wrapper}>
         {category && isFiltering && (
           <button
@@ -69,8 +55,12 @@ const Filters = ({ filtering, closeFilters }: Params) => {
         {!!filters && isFiltering ? (
           <>
             <PriceRange priceRange={filters?.priceRange} />
-            <hr />
-            <Brands />
+            {!!filters.brands.length && (
+              <>
+                <hr />
+                <Brands />
+              </>
+            )}
             <hr />
             <Availability />
           </>
