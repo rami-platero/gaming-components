@@ -1,45 +1,12 @@
 @import "../styles/mixins";
 
-.inactiveFilters{
-  @media screen and (max-width: 900px) {
-    display: none !important;
-  }
-}
+.filters{
 
-@keyframes enterAnimation {
-  0%{
-    transform: translateX(-100%);
-  }
-  100%{
-    transform: translateX(0%);
-  }
-}
-
-.filters {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 200px;
-  width: 100%;
-  user-select: none;
-
-  @media screen and (max-width: 900px) {
-    position: fixed;
-    height: 100vh;
-    max-width: 70vw;
-    top: 0;
-    left: 0;
-    padding: 6rem 1rem 1rem 1rem;
-    background-color: rgb(0, 0, 0);
-    z-index: 888;
-    animation: enterAnimation 200ms ease-in-out;
-  }
-
-  &__closeButton{
-    @media screen and (min-width:901px) {
+  .closeButton {
+    @media screen and (min-width: 901px) {
       display: none;
     }
-
+  
     position: absolute;
     width: fit-content;
     background-color: transparent;
@@ -47,28 +14,28 @@
     border: none;
     right: 1rem;
     top: 100px;
-
-    svg{
+  
+    svg {
       width: 1.5rem;
       height: 1.5rem;
     }
   }
-
-  hr{
-    opacity: .4;
+  
+  hr {
+    opacity: 0.4;
   }
-
+  
   &__wrapper {
     position: sticky;
     top: 80px;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-
+  
     @media screen and (max-width: 900px) {
       position: initial !important;
     }
-
+  
     &__backButton {
       @include centerFlex(row);
       cursor: pointer;
@@ -88,4 +55,5 @@
       }
     }
   }
+  
 }
