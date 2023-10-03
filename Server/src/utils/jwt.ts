@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { User } from "../entities/User";
 import { Response } from "express";
+import { CartItem } from "../types/cart";
 
 export const clearJWTCookie = (res: Response) => {
   return res.clearCookie("jwt", {
@@ -58,3 +59,17 @@ export const createRefreshToken = (user: User) => {
   );
   return refreshToken;
 };
+
+export const createCartToken = (cart: CartItem[]) => {
+  return jwt.sign( {cart} , process.env.CART_TOKEN_SECRET!, {
+    expiresIn: "1h",
+  });
+};
+
+export const clearCartCookie = (res: Response) => {
+  return res.clearCookie("cart", {
+    httpOnly: false,
+    secure: true,
+    sameSite: "none",
+  });
+}
