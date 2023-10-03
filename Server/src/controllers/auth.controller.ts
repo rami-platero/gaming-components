@@ -164,14 +164,6 @@ export const handleSignUp = async (
   }
 };
 
-/*   export const loginWithGoogle = async (req: Request, res: Response, next: NextFunction) => {
-    if (req.user && req.user instanceof User) {
-      const token = createToken(req.user.id);
-      res.cookie("token", token);
-    }
-    return res.redirect("http://localhost:5173");
-  }; */
-
 export const handleJWT = async (
   _req: Request,
   res: Response,
@@ -218,7 +210,7 @@ export const handleGoogleJWT = async (
     createJWTCookie(res, newRefreshToken);
     setCookieLoggedIn(res);
 
-    return res.redirect("http://localhost:5173");
+    return res.redirect(process.env.CLIENT_BASE_URL!);
   } catch (error) {
     return next(error);
   }
