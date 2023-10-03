@@ -1,16 +1,18 @@
 import styles from "./navigation.module.scss";
 import { Link } from "react-router-dom";
-import DefaultPFP from "../../assets/default_pfp.png";
+import DefaultAvatar from "../../assets/default_pfp.png";
 import { useLogOutMutation } from "../../redux/services/authApiSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { handleLoading, logOut } from "../../redux/features/user/authSlice";
 import NavSkeleton from "../Skeleton/NavSkeleton";
 import CartNavItem from "./CartNavItem";
+import config from "../../config/config";
+import Image from "../Image";
 
 const Navigation = () => {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
-
   const isLoading = useAppSelector((state) => state.auth.loading);
+  const avatar = useAppSelector((state) => state.auth.user?.avatar);
 
   const [logout] = useLogOutMutation();
 
@@ -64,8 +66,12 @@ const Navigation = () => {
                 <CartNavItem />
               </li>
               <li>
-                <Link to={"/dashboard"}>
-                  <img src={DefaultPFP} alt="profile_picture" />
+                <Link to={"/dashboard"} className={styles.avatar}>
+                  {avatar ? (
+                    <Image src={`${config.API_BASE_URL}/avatar/${avatar}`}/>
+                  ) : (
+                    <img src={DefaultAvatar} alt="profile_picture" />
+                  )}
                 </Link>
               </li>
               <li>
