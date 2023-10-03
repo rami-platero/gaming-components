@@ -1,9 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useGetOrdersQuery } from "../../../redux/services/ordersApi";
 import styles from "./ordersTable.module.scss";
+import { Order } from "../../../types/order";
 
-const OrdersTable = () => {
-  const { data: orders } = useGetOrdersQuery(null);
+const OrdersTable = ({orders}: {orders: Order[]}) => {
 
   const navigate = useNavigate();
 
