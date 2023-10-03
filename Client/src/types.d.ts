@@ -9,6 +9,7 @@ export type User = {
     email: string;
     password: string;
     roles: Roles[];
+    avatar: string,
     createdAt: Date,
     updatedAt: Date
 }
