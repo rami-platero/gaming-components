@@ -8,7 +8,7 @@ import {
   createAccessToken,
   setCookieLoggedIn,
 } from "../utils/jwt";
-import { getFileURL, uploadFile } from "../utils/s3";
+import { deleteFile, getFileURL, uploadFile } from "../utils/s3";
 import { AccessToken } from "../../types";
 import { AppError } from "../helpers/AppError";
 dotenv.config({ path: __dirname + "/.env" });
@@ -128,6 +128,11 @@ export const uploadAvatar = async (
             JSON.stringify({ message: "File size exceeds 5MB limit!" })
           );
         }
+        const foundUser = await User.findOne({where: {id: user.id}})
+        if(!foundUser) throw new AppError(404, JSON.stringify({message: "User does not exist."}))
+        if(foundUser.avatar){
+          const result = await deleteFile(foundUser.avatar)
+        }
         const result = await uploadFile(file);
         const updatedUser = await User.createQueryBuilder()
           .update(User)
@@ -141,6 +146,7 @@ export const uploadAvatar = async (
         return res.status(200).json({ avatar: avatarURL });
       }
     } catch (error) {
+      console.log(error);
       return next(error);
     }
   }

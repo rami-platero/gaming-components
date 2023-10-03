@@ -2,6 +2,7 @@ import {
   PutObjectCommand,
   S3Client,
   GetObjectCommand,
+  DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
@@ -28,7 +29,7 @@ const s3 = new S3Client({
 
 export const uploadFile = async (file: Express.Multer.File) => {
   const buffer = await sharp(file.buffer)
-    .resize({ height: 150, width: 150, fit: "contain" })
+    .resize({ height: 150, width: 150, fit: "cover" })
     .toBuffer();
   const imageName = randomImageName();
 
@@ -54,3 +55,13 @@ export const getFileURL = async (fileKey: string) => {
   const command = new GetObjectCommand(getObjectParams);
   return await getSignedUrl(s3, command, { expiresIn: 24 * 60 * 60 });
 };
+
+export const deleteFile = async (fileKey: string) => {
+  const params = {
+    Bucket: bucketName,
+    Key: fileKey,
+  };
+
+  const command = new DeleteObjectCommand(params)
+  return await s3.send(command)
+}
