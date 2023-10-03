@@ -42,16 +42,15 @@ export const uploadFile = async (file: Express.Multer.File) => {
   const command = new PutObjectCommand(params);
 
   await s3.send(command);
-  return imageName
+  return imageName;
 };
 
 export const getFileURL = async (fileKey: string) => {
-
   const getObjectParams = {
     Bucket: bucketName,
     Key: fileKey,
   };
 
   const command = new GetObjectCommand(getObjectParams);
-  return await getSignedUrl(s3, command, { expiresIn: 3600 });
+  return await getSignedUrl(s3, command, { expiresIn: 24 * 60 * 60 });
 };
