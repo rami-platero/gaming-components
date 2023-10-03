@@ -17,7 +17,6 @@ import {
   handleSignUp,
   refreshToken,
 } from "../controllers/auth.controller";
-import { uploadFile } from "../utils/s3";
 import multer from "multer";
 import { isAuthenticated } from "../middlewares/authentication";
 
@@ -41,12 +40,14 @@ router.post("/api/auth/logout", handleLogout);
 
 //user routes
 
-const upload = multer({ dest: "uploads/" });
-
 router.get("/api/auth/getUser", getUser);
 router.delete("/api/auth/user/:id", deleteUser);
 router.put("/api/auth/user/:id", updateUser);
 router.get("/profile", viewProfile);
+
+const storage = multer.memoryStorage()
+const upload = multer({storage: storage})
+
 router.post(
   "/api/avatar",
   isAuthenticated,
