@@ -1,38 +1,57 @@
-import S3 from "aws-sdk/clients/s3";
+import {
+  PutObjectCommand,
+  S3Client,
+  GetObjectCommand,
+} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+
 import * as dotenv from "dotenv";
 dotenv.config();
-import fs from "fs";
+import crypto from "crypto";
+import sharp from "sharp";
 
 const bucketName = process.env.AWS_BUCKET_NAME!;
-const region = process.env.AWS_BUCKET_REGION;
-const accessKeyId = process.env.AWS_ACCESS_KEY;
-const secretAccessKey = process.env.AWS_SECRET_KEY;
+const region = process.env.AWS_BUCKET_REGION!;
+const accessKeyId = process.env.AWS_ACCESS_KEY!;
+const secretAccessKey = process.env.AWS_SECRET_KEY!;
 
-const s3 = new S3({
+const randomImageName = (bytes = 32) =>
+  crypto.randomBytes(bytes).toString("hex");
+
+const s3 = new S3Client({
   region,
-  accessKeyId,
-  secretAccessKey,
+  credentials: {
+    accessKeyId,
+    secretAccessKey,
+  },
 });
 
-export const uploadFile = (file: Express.Multer.File) => {
-  const fileStream = fs.createReadStream(file.path);
+export const uploadFile = async (file: Express.Multer.File) => {
+  const buffer = await sharp(file.buffer)
+    .resize({ height: 150, width: 150, fit: "contain" })
+    .toBuffer();
+  const imageName = randomImageName();
 
-  const uploadParams = {
+  const params = {
     Bucket: bucketName,
-    Body: fileStream,
-    Key: file.filename,
+    Body: buffer,
+    Key: imageName,
+    ContentType: file.mimetype,
   };
 
-  return s3
-    .upload(uploadParams)
-    .promise();
+  const command = new PutObjectCommand(params);
+
+  await s3.send(command);
+  return imageName
 };
 
-export const getFileStream = (fileKey: string) => {
-    const downloadParams = {
-        Key: fileKey,
-        Bucket: bucketName
-    }
+export const getFileURL = async (fileKey: string) => {
 
-    return s3.getObject(downloadParams).createReadStream()
-}
+  const getObjectParams = {
+    Bucket: bucketName,
+    Key: fileKey,
+  };
+
+  const command = new GetObjectCommand(getObjectParams);
+  return await getSignedUrl(s3, command, { expiresIn: 3600 });
+};

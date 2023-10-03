@@ -8,7 +8,7 @@ import {
   createAccessToken,
   setCookieLoggedIn,
 } from "../utils/jwt";
-import { getFileStream, uploadFile } from "../utils/s3";
+import {  getFileURL, uploadFile } from "../utils/s3";
 import { AccessToken } from "../../types";
 import { AppError } from "../helpers/AppError";
 dotenv.config({ path: __dirname + "/.env" });
@@ -130,7 +130,7 @@ export const uploadAvatar = async (
         const updatedUser = await User.createQueryBuilder()
           .update(User)
           .where("id=:id", { id: user.id })
-          .set({ avatar: result.Key })
+          .set({ avatar: result })
           .returning("avatar")
           .execute();
 
@@ -154,9 +154,8 @@ export const getAvatarImage = async (
 ) => {
   try {
     const key = req.params.key;
-    const readStream = getFileStream(key);
-
-    readStream.pipe(res);
+    const result = await getFileURL(key)
+    return res.status(200).json({avatar: result})
   } catch (error) {
     return next(error);
   }
