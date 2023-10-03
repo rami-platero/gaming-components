@@ -4,6 +4,8 @@ import {
   getUser,
   viewProfile,
   updateUser,
+  uploadAvatar,
+  getAvatarImage,
 } from "../controllers/user.controller";
 import passport from "passport";
 import { validateLogin, validateSignUp } from "../middlewares/validate";
@@ -15,6 +17,9 @@ import {
   handleSignUp,
   refreshToken,
 } from "../controllers/auth.controller";
+import { uploadFile } from "../utils/s3";
+import multer from "multer";
+import { isAuthenticated } from "../middlewares/authentication";
 
 const router = Router();
 
@@ -36,9 +41,18 @@ router.post("/api/auth/logout", handleLogout);
 
 //user routes
 
+const upload = multer({ dest: "uploads/" });
+
 router.get("/api/auth/getUser", getUser);
 router.delete("/api/auth/user/:id", deleteUser);
 router.put("/api/auth/user/:id", updateUser);
 router.get("/profile", viewProfile);
+router.post(
+  "/api/avatar",
+  isAuthenticated,
+  upload.single("image"),
+  uploadAvatar
+);
+router.get("/api/avatar/:key", getAvatarImage);
 
 export default router;
