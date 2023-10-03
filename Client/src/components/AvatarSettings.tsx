@@ -4,7 +4,7 @@ import { AiOutlineUpload } from "react-icons/ai";
 import { useUploadAvatarMutation } from "../redux/services/userApi";
 import Loader from "../assets/Loader.svg";
 import Image from "./Image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useToast from "../hooks/useToast";
 import { ToastContainer } from "react-toastify";
 import config from "../config/config";
@@ -16,6 +16,15 @@ type Props = {
 const AvatarSettings = ({ avatar }: Props) => {
   const [upload, { isLoading, isSuccess, error }] = useUploadAvatarMutation();
   const { notifySuccess, notifyError } = useToast();
+  const [avatarURL, setAvatarURL] = useState("")
+  const getURL = async () => {
+    const result = await fetch(`${config.API_BASE_URL}/avatar/${avatar}`)
+    const json = await result.json()
+    setAvatarURL(json.avatar)
+  }
+  useEffect(()=>{
+    getURL()
+  },[avatar])
 
   useEffect(() => {
     if (isSuccess) {
@@ -49,8 +58,8 @@ const AvatarSettings = ({ avatar }: Props) => {
             ></div>
           ) : (
             <>
-              {avatar ? (
-                <Image src={`${config.API_BASE_URL}/avatar/${avatar}`} />
+              {avatarURL ? (
+                <Image src={avatarURL}/>
               ) : (
                 <img src={Avatar} alt="avatar" />
               )}
