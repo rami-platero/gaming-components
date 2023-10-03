@@ -6,7 +6,6 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { handleLoading, logOut } from "../../redux/features/user/authSlice";
 import NavSkeleton from "../Skeleton/NavSkeleton";
 import CartNavItem from "./CartNavItem";
-import config from "../../config/config";
 import Image from "../Image";
 
 const Navigation = () => {
@@ -68,7 +67,7 @@ const Navigation = () => {
               <li>
                 <Link to={"/dashboard"} className={styles.avatar}>
                   {avatar ? (
-                    <Image src={`${config.API_BASE_URL}/avatar/${avatar}`}/>
+                    <Image src={avatar}/>
                   ) : (
                     <img src={DefaultAvatar} alt="profile_picture" />
                   )}

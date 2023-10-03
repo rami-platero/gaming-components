@@ -1,10 +1,10 @@
 import styles from "./avatarSettings.module.scss";
 import Avatar from "../assets/default_pfp.png";
 import { AiOutlineUpload } from "react-icons/ai";
-import {  useLazyGetAvatarSignedURLQuery, useUploadAvatarMutation } from "../redux/services/userApi";
+import { useUploadAvatarMutation } from "../redux/services/userApi";
 import Loader from "../assets/Loader.svg";
 import Image from "./Image";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useToast from "../hooks/useToast";
 import { ToastContainer } from "react-toastify";
 
@@ -15,23 +15,6 @@ type Props = {
 const AvatarSettings = ({ avatar }: Props) => {
   const [upload, { isLoading, isSuccess, error }] = useUploadAvatarMutation();
   const { notifySuccess, notifyError } = useToast();
-  const [avatarURL, setAvatarURL] = useState("")
-  const [getSignedURL] = useLazyGetAvatarSignedURLQuery()
-
-  const getURL = async (avatar:string) => {
-    try {
-      const data = getSignedURL(avatar).unwrap()
-      setAvatarURL((await data).avatar)
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  useEffect(()=>{
-    if(avatar){
-      getURL(avatar)
-    }
-  },[avatar])
 
   useEffect(() => {
     if (isSuccess) {
@@ -65,8 +48,8 @@ const AvatarSettings = ({ avatar }: Props) => {
             ></div>
           ) : (
             <>
-              {avatarURL ? (
-                <Image src={avatarURL}/>
+              {avatar ? (
+                <Image src={avatar}/>
               ) : (
                 <img src={Avatar} alt="avatar" />
               )}

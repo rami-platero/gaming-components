@@ -8,7 +8,6 @@ import { useAppSelector } from "../../redux/hooks";
 import { useGetOrdersQuery } from "../../redux/services/ordersApi";
 import OrdersTableSkeleton from "../Skeleton/Dashboard/OrdersTableSkeleton";
 import ImageWithLoader from '../Image'
-import config from "../../config/config";
 
 const Dashboard = () => {
   const user = useAppSelector((state) => state.auth.user);
@@ -39,7 +38,7 @@ const Dashboard = () => {
           </div>
           <div className={styles.dashboard__widgets__profile__wrapper}>
             <div className={styles.dashboard__widgets__profile__wrapper__imgContainer}>
-            {user?.avatar ? <ImageWithLoader src={`${config.API_BASE_URL}/avatar/${user.avatar}`}/> : <img src={Avatar} />}
+            {user?.avatar ? <ImageWithLoader src={user.avatar}/> : <img src={Avatar} />}
             </div>
             <h3>{user?.username}</h3>
             <h4>{user?.email}</h4>
