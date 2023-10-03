@@ -8,7 +8,7 @@ import {
   createAccessToken,
   setCookieLoggedIn,
 } from "../utils/jwt";
-import {  getFileURL, uploadFile } from "../utils/s3";
+import { getFileURL, uploadFile } from "../utils/s3";
 import { AccessToken } from "../../types";
 import { AppError } from "../helpers/AppError";
 dotenv.config({ path: __dirname + "/.env" });
@@ -49,6 +49,8 @@ export const getUser = async (
           });
           if (user) {
             const accessToken = createAccessToken(user);
+            const avatarURL = await getFileURL(user.avatar);
+            user.avatar = avatarURL
             const { password, roles, refreshToken, ...rest } = user;
             // set logged_in cookie in case someone deletes it
             setCookieLoggedIn(res);
@@ -135,7 +137,8 @@ export const uploadAvatar = async (
           .execute();
 
         const data = updatedUser.raw[0];
-        return res.status(200).json(data);
+        const avatarURL = await getFileURL(data.avatar);
+        return res.status(200).json({ avatar: avatarURL });
       }
     } catch (error) {
       return next(error);
@@ -154,8 +157,8 @@ export const getAvatarImage = async (
 ) => {
   try {
     const key = req.params.key;
-    const result = await getFileURL(key)
-    return res.status(200).json({avatar: result})
+    const result = await getFileURL(key);
+    return res.status(200).json({ avatar: result });
   } catch (error) {
     return next(error);
   }
