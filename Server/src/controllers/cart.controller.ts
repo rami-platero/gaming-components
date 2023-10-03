@@ -2,27 +2,31 @@ import { NextFunction, Request, Response } from "express";
 import { Product } from "../entities/Product";
 import { AppError } from "../helpers/AppError";
 import { CartItem } from "../types/cart";
+import { clearCartCookie, createCartToken } from "../utils/jwt";
 
 export const getCart = async (
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    return res.status(200).json(req.session.cart);
+    if (res.locals.cart.length === 0) {
+      return res.sendStatus(204);
+    }
+    return res.status(200).json(res.locals.cart);
   } catch (error) {
     return next(error);
   }
 };
 
 export const clearCart = async (
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    req.session.cart = []
-    return res.status(200).json({message: "Cleared the cart."})
+    clearCartCookie(res);
+    return res.sendStatus(204);
   } catch (error) {
     return next(error);
   }
@@ -35,9 +39,10 @@ export const updateQuantity = async (
 ) => {
   const { id } = req.params;
   const { quantity } = req.body;
+  const cart = res.locals.cart as CartItem[];
   try {
-    if(req.session.cart === undefined){
-      throw new AppError(404, JSON.stringify({message: "Cart does not exist"}))
+    if (cart.length === 0) {
+      return res.status(204).json({ message: "Cart is empty." });
     }
     const product = await Product.findOne({
       where: {
@@ -52,15 +57,34 @@ export const updateQuantity = async (
       );
     }
 
-    const index = req.session.cart?.findIndex((p: CartItem) => {
+    if (quantity > product.stock) {
+      throw new AppError(
+        422,
+        JSON.stringify({
+          message: "Requested quantity exceeds stock availability",
+        })
+      );
+    }
+
+    const index = cart?.findIndex((p: CartItem) => {
       return p.product.id === product.id;
     });
 
     if (index === -1) {
-      req.session.cart.push({ product, quantity });
+      cart.push({ product, quantity });
     } else {
-      req.session.cart[index].quantity = quantity
+      cart[index].quantity = quantity;
     }
+
+    // sign cart token
+    const cartToken = createCartToken(cart);
+    // update cookie with new token
+    res.cookie("cart", cartToken, {
+      httpOnly: false,
+      secure: true,
+      sameSite: "none",
+      maxAge: 3600000,
+    });
 
     return res.status(200).json({ message: "Success!" });
   } catch (error) {
@@ -74,6 +98,7 @@ export const addItemToCart = async (
   next: NextFunction
 ) => {
   const { id } = req.params;
+  const cart = res.locals.cart as CartItem[];
   try {
     const product = await Product.findOne({
       where: {
@@ -90,12 +115,22 @@ export const addItemToCart = async (
 
     if (product.stock === 0) {
       throw new AppError(
-        404,
+        422,
         JSON.stringify({ message: "This product is out of stock!" })
       );
     }
 
-    req.session.cart?.push({ product, quantity: 1 });
+    cart?.push({ product, quantity: 1 });
+
+    // sign cart token
+    const cartToken = createCartToken(cart);
+    // update cookie with new token
+    res.cookie("cart", cartToken, {
+      httpOnly: false,
+      secure: true,
+      sameSite: "none",
+      maxAge: 3600000,
+    });
 
     return res.status(200).json({ message: "Added item to cart." });
   } catch (error) {
@@ -109,9 +144,20 @@ export const removeItemFromCart = async (
   next: NextFunction
 ) => {
   const { id } = req.params;
+  let cart = res.locals.cart as CartItem[];
   try {
-    req.session.cart = req.session.cart?.filter((p: CartItem) => {
+    cart = cart?.filter((p: CartItem) => {
       return p.product.id !== parseInt(id);
+    });
+
+    // sign cart token
+    const cartToken = createCartToken(cart);
+    // update cookie with new token
+    res.cookie("cart", cartToken, {
+      httpOnly: false,
+      secure: true,
+      sameSite: "none",
+      maxAge: 3600000,
     });
 
     return res.status(204).json({ message: "Removed item from cart." });
