@@ -8,6 +8,9 @@ import {
   createAccessToken,
   setCookieLoggedIn,
 } from "../utils/jwt";
+import { getFileStream, uploadFile } from "../utils/s3";
+import { AccessToken } from "../../types";
+import { AppError } from "../helpers/AppError";
 dotenv.config({ path: __dirname + "/.env" });
 
 export const createToken = (id: number): string => {
@@ -103,5 +106,65 @@ export const viewProfile = async (req: Request, res: Response) => {
       return res.status(500).json({ error: error.message });
     }
     return res.status(400).json({ error });
+  }
+};
+
+import fs from "fs";
+import util from "util";
+
+const unlinkFile = util.promisify(fs.unlink);
+
+export const uploadAvatar = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const file = req.file;
+  const user = res.locals.user as AccessToken["user"];
+
+  if (file) {
+    try {
+      if (file) {
+        if (file.size > 5000000) {
+          throw new AppError(
+            404,
+            JSON.stringify({ message: "File size exceeds 5MB limit!" })
+          );
+        }
+        const result = await uploadFile(file);
+        const updatedUser = await User.createQueryBuilder()
+          .update(User)
+          .where("id=:id", { id: user.id })
+          .set({ avatar: result.Key })
+          .returning("avatar")
+          .execute();
+
+        const data = updatedUser.raw[0];
+        return res.status(200).json(data);
+      }
+    } catch (error) {
+      return next(error);
+    } finally {
+      await unlinkFile(file.path);
+    }
+  }
+  throw new AppError(
+    404,
+    JSON.stringify({ message: "No files were provided" })
+  );
+};
+
+export const getAvatarImage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const key = req.params.key;
+    const readStream = getFileStream(key);
+
+    readStream.pipe(res);
+  } catch (error) {
+    return next(error);
   }
 };
