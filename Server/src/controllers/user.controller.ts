@@ -109,11 +109,6 @@ export const viewProfile = async (req: Request, res: Response) => {
   }
 };
 
-import fs from "fs";
-import util from "util";
-
-const unlinkFile = util.promisify(fs.unlink);
-
 export const uploadAvatar = async (
   req: Request,
   res: Response,
@@ -144,8 +139,6 @@ export const uploadAvatar = async (
       }
     } catch (error) {
       return next(error);
-    } finally {
-      await unlinkFile(file.path);
     }
   }
   throw new AppError(
