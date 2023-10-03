@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Roles, User } from "../../../types";
 import jwtDecode from "jwt-decode";
 import Cookies from "js-cookie";
@@ -52,10 +52,14 @@ export const authSlice = createSlice({
     handleLoading: (state,action) => {
       state.loading = action.payload
       return state
+    },
+    updateAvatar: (state,action: PayloadAction<string>) => {
+      state.user!.avatar = action.payload
+      return state
     }
   },
 });
 
-export const { setCredentials, logOut, handleLoading } = authSlice.actions;
+export const { setCredentials, logOut, handleLoading,updateAvatar } = authSlice.actions;
 
 export default authSlice.reducer;
