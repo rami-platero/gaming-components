@@ -28,11 +28,11 @@ const router = Router();
 router.post("/api/auth/signup", validateSignUp, handleSignUp);
 router.post("/api/auth/login", validateLogin, handleLogin, handleJWT);
 router.get(
-  "/auth/google",
+  "/api/auth/google",
   passport.authenticate("google", { scope: ["email", "profile"] })
 );
 router.get(
-  "/auth/google/callback",
+  "/api/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/login" }),
   handleGoogleJWT
 );
