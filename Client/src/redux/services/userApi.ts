@@ -20,10 +20,14 @@ export const userApi = apiSlice.injectEndpoints({
                 } catch (error) {
 
                 }
-            },
-            
+            }, 
         }),
+        getAvatarSignedURL: builder.query<Avatar,string>({
+            query: (avatar) => ({
+                url: `/avatar/${avatar}`
+            })
+        })
     })
 })
 
-export const {useUploadAvatarMutation} = userApi
+export const {useUploadAvatarMutation,useLazyGetAvatarSignedURLQuery} = userApi
