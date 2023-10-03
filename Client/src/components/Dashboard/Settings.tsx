@@ -1,7 +1,6 @@
 import styles from "./settings.module.scss";
-import Avatar from "../../assets/default_pfp.png";
-import { AiOutlineUpload } from "react-icons/ai";
 import { useAppSelector } from "../../redux/hooks";
+import AvatarSettings from "../AvatarSettings";
 
 const Settings = () => {
   const user = useAppSelector((state) => state.auth.user);
@@ -24,26 +23,7 @@ const Settings = () => {
             </p>
           </div>
 
-          <div className={styles.profile__cards__userInfo__avatar}>
-            <h3>Your Avatar</h3>
-            <div className={styles.profile__cards__userInfo__avatar__wrapper}>
-              <img src={Avatar} alt="avatar" />
-              <div
-                className={
-                  styles.profile__cards__userInfo__avatar__wrapper__upload
-                }
-              >
-                <button>
-                  <AiOutlineUpload /> Upload a new photo
-                </button>
-                <p>
-                  Supported file formats: jpg, png, svg.
-                  <br />
-                  Max file size of 5MB
-                </p>
-              </div>
-            </div>
-          </div>
+          <AvatarSettings avatar={user?.avatar}/>
 
           <div className={styles.profile__cards__userInfo__email}>
             <label htmlFor="">Email address</label>
@@ -55,14 +35,6 @@ const Settings = () => {
               <label htmlFor="">Username</label>
               <input type="text" readOnly defaultValue={user?.username} />
             </div>
-            {/*  <div>
-              <label htmlFor="">First Name</label>
-              <input type="text" readOnly defaultValue={"John"} />
-            </div>
-            <div>
-              <label htmlFor="">Last Name</label>
-              <input type="text" readOnly />
-            </div> */}
           </div>
         </div>
 
