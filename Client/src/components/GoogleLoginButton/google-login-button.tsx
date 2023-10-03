@@ -4,7 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 
 const GoogleLoginButton = () => {
   const login = () => {
-    window.open(`${config.API_BASE_URL}/auth/google`, "_self");
+    window.open(config.API_GOOGLE_URL, "_self");
   };
 
   return (
