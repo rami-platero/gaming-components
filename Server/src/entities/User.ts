@@ -10,9 +10,9 @@ import {
 
 import bcrypt from "bcrypt";
 import validator from "validator";
-import { Comment } from "./Comment";
 import { AppError } from "../helpers/AppError";
 import { Order } from "./Order";
+import { Review } from "./Review";
 
 export enum Roles {
   user = "User",
@@ -43,8 +43,8 @@ export class User extends BaseEntity implements IUser {
   @Column({ nullable: true })
   password: string;
 
-  @Column({nullable: true})
-  avatar: string
+  @Column({ nullable: true })
+  avatar: string;
 
   @Column({ type: "simple-array" })
   refreshToken: string[];
@@ -55,8 +55,8 @@ export class User extends BaseEntity implements IUser {
   @Column({ type: "enum", enum: Roles, array: true, default: [Roles.user] })
   roles: Roles[];
 
-  @OneToMany(() => Comment, (comment) => comment.product)
-  comments: Comment[];
+  @OneToMany(() => Review, (review) => review.product)
+  reviews: Review[];
 
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];
