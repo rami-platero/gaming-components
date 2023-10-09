@@ -150,6 +150,11 @@ export const removeItemFromCart = async (
       return p.product.id !== parseInt(id);
     });
 
+    if(cart.length === 0){
+      clearCartCookie(res)
+      return res.sendStatus(204)
+    }
+
     // sign cart token
     const cartToken = createCartToken(cart);
     // update cookie with new token

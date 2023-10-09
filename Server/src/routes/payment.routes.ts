@@ -8,12 +8,16 @@ import {
 import { createStripeProducts } from "../controllers/product.controller";
 import { isAuthenticated } from "../middlewares/authentication";
 import express from "express";
+import { verifyCartToken } from "../middlewares/verifyCartToken";
+import { checkCart } from "../middlewares/checkCart";
 
 const router = Router();
 
 router.post(
   "/api/create-checkout-session",
   isAuthenticated,
+  verifyCartToken,
+  checkCart,
   createCheckoutSession
 );
 router.post("/api/createStripeProducts", createStripeProducts);
