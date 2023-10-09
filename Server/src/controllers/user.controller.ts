@@ -49,8 +49,10 @@ export const getUser = async (
           });
           if (user) {
             const accessToken = createAccessToken(user);
-            const avatarURL = await getFileURL(user.avatar);
-            user.avatar = avatarURL
+            if(user.avatar){
+              const avatarURL = await getFileURL(user.avatar);
+              user.avatar = avatarURL
+            }
             const { password, roles, refreshToken, ...rest } = user;
             // set logged_in cookie in case someone deletes it
             setCookieLoggedIn(res);
