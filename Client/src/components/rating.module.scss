@@ -1,0 +1,17 @@
+.rating {
+  display: flex;
+  gap: 0.5rem;
+  &__stars {
+    cursor: pointer;
+
+    svg {
+      fill: rgb(247, 207, 32);
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+  }
+  p {
+    font-size: 0.9rem;
+    font-weight: 300;
+  }
+}

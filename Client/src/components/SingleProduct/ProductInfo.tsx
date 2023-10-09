@@ -3,6 +3,7 @@ import RTXExampleIMG from "../../assets/rtx3070.png";
 import { TProduct } from "../../types/products";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useState } from "react";
+import Rating from "../Rating";
 
 type Params = {
   product: TProduct;
@@ -59,6 +60,7 @@ const ProductInfo = ({ product }: Params) => {
       </div>
       <div className={styles.info__data}>
         <h5 className={styles.info__data__stock}>{product.stock > 0? `${product.stock} Available`: "Out of stock"}</h5>
+        <Rating rating={product.rating}/>
         <h1 className={styles.info__data__name}>{product.name}</h1>
         <h2 className={styles.info__data__category}>{product.category}</h2>
         <h3 className={styles.info__data__price}>$ {product.price}.00</h3>
