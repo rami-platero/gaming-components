@@ -284,6 +284,7 @@ export const getProduct = async (
   res: Response,
   next: NextFunction
 ) => {
+  const user = res.locals.user as AccessToken["user"];
   try {
     const { slug } = req.params;
 
@@ -299,7 +300,27 @@ export const getProduct = async (
         JSON.stringify({ message: "Product does not exist!" })
       );
 
-    return res.status(200).json(product);
+    const rating = await Review.createQueryBuilder()
+      .select(["AVG(review.rating) AS avg", "COUNT(review.rating) as amount"])
+      .from(Review, "review")
+      .where("review.product_id=:product_id", { product_id: product.id })
+      .getRawOne();
+
+    let avg = 0;
+    let amount = 0;
+
+    if (rating) {
+      avg = Math.round(Number(rating.avg));
+      amount = Number(rating.amount);
+    }
+
+    return res.status(200).json({
+      ...product,
+      rating: {
+        avg,
+        amount,
+      },
+    });
   } catch (error) {
     return next(error);
   }
@@ -308,6 +329,8 @@ export const getProduct = async (
 import * as dotenv from "dotenv";
 dotenv.config();
 import Stripe from "stripe";
+import { Review } from "../entities/Review";
+import { AccessToken } from "../../types";
 const stripe = new Stripe(process.env.STRIPE_KEY!, {
   apiVersion: "2023-08-16",
 });
@@ -321,22 +344,16 @@ export const createStripeProducts = async (
     const products = await Product.find();
 
     products.forEach(async (product) => {
-      const { default_price } = await stripe.products.create({
-        name: product.name,
-        description: product.description,
-        id: product.id.toString(),
-        default_price_data: {
-          currency: "usd",
-          unit_amount: product.price * 100,
-        },
-      });
+      const { default_price } = await stripe.products.retrieve(
+        product.id.toString()
+      );
       if (default_price) {
-        product.default_stripe_price = default_price as string;
+        product.stripe_price = default_price as string;
         await product.save();
       }
     });
 
-    return res.json({ message: "success" });
+    return res.json({ message: "success", products });
   } catch (error) {
     return next(error);
   }
