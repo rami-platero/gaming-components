@@ -11,7 +11,7 @@ const Orders = () => {
       <h1>Orders</h1>
       <p>Manage and view a detailed list of your orders history.</p>
       {!isFetching && !!orders && <OrdersTable orders={orders} />}
-      {isFetching && <OrdersTableSkeleton length={5}/>}
+      {isFetching && <OrdersTableSkeleton rows={5} columns={5}/>}
     </div>
   );
 };
