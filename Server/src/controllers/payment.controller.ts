@@ -12,6 +12,8 @@ import {
   updateOrder,
 } from "../services/payment.services";
 import { Order } from "../entities/Order";
+import { Product } from "../entities/Product";
+import { clearCartCookie } from "../utils/jwt";
 dotenv.config();
 
 const stripe = new Stripe(process.env.STRIPE_KEY!, {
@@ -19,11 +21,12 @@ const stripe = new Stripe(process.env.STRIPE_KEY!, {
 });
 
 export const createCheckoutSession = async (
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const user = res.locals.user as AccessToken["user"];
+  const cart = res.locals.cart as CartItem[];
 
   try {
     const foundUser = await User.findOne({
@@ -56,8 +59,8 @@ export const createCheckoutSession = async (
       await foundUser.save();
     }
 
-    const products = req.session.cart?.map((p: CartItem) => {
-      return { price: p.product.default_stripe_price, quantity: p.quantity };
+    const products = cart?.map((p: CartItem) => {
+      return { price: p.product.stripe_price, quantity: p.quantity };
     });
 
     const expiresAt = getUnixExpirationTime();
@@ -67,15 +70,16 @@ export const createCheckoutSession = async (
       customer: customer.id,
       mode: "payment",
       expires_at: expiresAt,
-      success_url:
-        "http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}",
-      cancel_url:
-        "http://localhost:5173/cancel?session_id={CHECKOUT_SESSION_ID}",
+      success_url: `${process.env.CLIENT_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.CLIENT_BASE_URL}/cancel?session_id={CHECKOUT_SESSION_ID}`,
       expand: ["line_items"],
     });
 
     // create order
     createOrder(session.id);
+
+    // clear cart
+    clearCartCookie(res)
 
     return res.status(200).json({ url: session.url });
   } catch (error) {
@@ -137,7 +141,7 @@ export const stripeWebhook = async (
       const order = await Order.findOne({
         where: {
           session_id: data.id,
-        }
+        },
       });
       if (!order) {
         throw new AppError(
