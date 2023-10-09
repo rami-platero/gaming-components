@@ -22,7 +22,11 @@ export type TProduct = {
   brand: string
   main_image: ProductImage;
   images: ProductImage[];
-  default_stripe_price: string;
+  stripe_price: string;
+  rating: {
+    avg: number,
+    amount: number
+  }
   createdAt: Date;
   updatedAt: Date;
 };
