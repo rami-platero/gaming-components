@@ -16,6 +16,10 @@ body{
     }
 }
 
+html{
+  scrollbar-gutter: stable;
+}
+
 html::-webkit-scrollbar-track {
     border-radius: 10px;
     background-color: $darkPrimary;
