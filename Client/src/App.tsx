@@ -18,6 +18,7 @@ import SuccessPage from "./pages/Payment/SuccessPage";
 import CartPage from "./pages/Cart/CartPage";
 import NotFoundPage from "./pages/NotFound/NotFoundPage";
 import ProductsPage from "./pages/Products/ProductsPage";
+import ScrollToTop from "./components/ScrollToTop";
 
 export enum DashboardOptions {
   dashboard = "Dashboard",
@@ -29,6 +30,7 @@ export enum DashboardOptions {
 const App = () => {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         {/* Layout */}
         <Route element={<Layout />}>
@@ -58,7 +60,13 @@ const App = () => {
           <Route element={<ProtectedRoutes allowedRoles={[Roles.user]} />}>
             <Route element={<DashboardLayout />}>
               {dashboardRoutes.map((route) => {
-                return <Route key={route.path} element={route.component} path={route.path} />;
+                return (
+                  <Route
+                    key={route.path}
+                    element={route.component}
+                    path={route.path}
+                  />
+                );
               })}
             </Route>
           </Route>
