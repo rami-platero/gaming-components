@@ -2,17 +2,18 @@ import { Link } from "react-router-dom";
 import OrdersTable from "./Widgets/OrdersTable";
 import styles from "./dashboard.module.scss";
 import Avatar from "../../assets/default_pfp.png";
-import { BsCartX } from "react-icons/bs";
+import { BsCartX, BsFillCartCheckFill } from "react-icons/bs";
 import Image from "../../assets/rtx3070.png";
 import { useAppSelector } from "../../redux/hooks";
 import { useGetOrdersQuery } from "../../redux/services/ordersApi";
 import OrdersTableSkeleton from "../Skeleton/Dashboard/OrdersTableSkeleton";
-import ImageWithLoader from '../Image'
+import ImageWithLoader from "../Image";
+import {ImFileEmpty} from 'react-icons/im'
 
 const Dashboard = () => {
   const user = useAppSelector((state) => state.auth.user);
   const cart = useAppSelector((state) => state.cart);
-  const { data: orders, isFetching } = useGetOrdersQuery(null);
+  const { data: orders, isFetching } = useGetOrdersQuery(2);
 
   return (
     <div className={styles.dashboard}>
@@ -26,8 +27,13 @@ const Dashboard = () => {
             <Link to={"/dashboard/orders"}>View all</Link>
           </div>
           <div className={styles.dashboard__widgets__orders__wrapper}>
-            {isFetching && <OrdersTableSkeleton length={2} />}
-            {!isFetching && !!orders && <OrdersTable orders={orders} />}
+            {isFetching && <OrdersTableSkeleton rows={2} columns={5} />}
+            {!isFetching && !!orders?.length && <OrdersTable orders={orders} />}
+            {!isFetching && (!orders?.length || !orders) && <div className={styles.dashboard__widgets__orders__wrapper__noOrders}>
+              <ImFileEmpty/>
+              <h3>No orders placed yet</h3>
+              <h5 className={styles.dashboard__widgets__orders__wrapper__noOrders__message}>It looks like you haven't made any orders yet.</h5>
+              </div>}
           </div>
         </div>
 
@@ -37,8 +43,16 @@ const Dashboard = () => {
             <Link to={"/dashboard/settings"}>Account settings</Link>
           </div>
           <div className={styles.dashboard__widgets__profile__wrapper}>
-            <div className={styles.dashboard__widgets__profile__wrapper__imgContainer}>
-            {user?.avatar ? <ImageWithLoader src={user.avatar}/> : <img src={Avatar} />}
+            <div
+              className={
+                styles.dashboard__widgets__profile__wrapper__imgContainer
+              }
+            >
+              {user?.avatar ? (
+                <ImageWithLoader src={user.avatar} />
+              ) : (
+                <img src={Avatar} />
+              )}
             </div>
             <h3>{user?.username}</h3>
             <h4>{user?.email}</h4>
@@ -76,7 +90,16 @@ const Dashboard = () => {
             </div>
           ) : (
             <div className={styles.dashboard__widgets__cart__wrapper}>
-              <h3>You have {cart.length} item in your cart</h3>
+              <BsFillCartCheckFill/>
+              <h4>
+                You have{" "}
+                {cart.length === 1
+                  ? `${cart.length} item`
+                  : `${cart.length} items`}{" "}
+                in your cart
+              </h4>
+              <h5>Go to your cart to continue with the checkout!</h5>
+              <Link to={"/products"}>Go to my cart</Link>
             </div>
           )}
         </div>
