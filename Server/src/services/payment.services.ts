@@ -12,7 +12,7 @@ export const createOrderItems = async (
     const orderItem = new OrderItem();
     const product = await Product.findOne({
       where: {
-        default_stripe_price: item.price?.id,
+        stripe_price: item.price?.id,
       },
     });
     if (product) {
