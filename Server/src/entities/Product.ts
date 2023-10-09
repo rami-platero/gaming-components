@@ -7,11 +7,9 @@ import {
   BaseEntity,
   OneToMany,
   BeforeInsert,
-  ManyToMany,
 } from "typeorm";
-import { Comment } from "./Comment";
+import { Review } from "./Review";
 import slugify from "slugify";
-import { Order } from "./Order";
 import { OrderItem } from "./OrderItem";
 
 export enum Category {
@@ -31,13 +29,13 @@ export class Product extends BaseEntity {
   id: number;
 
   @Column({
-    unique: true
+    unique: true,
   })
   name: string;
 
   @Column({
     nullable: true,
-    unique: true
+    unique: true,
   })
   slug: string;
 
@@ -71,14 +69,20 @@ export class Product extends BaseEntity {
   @Column("simple-array", { nullable: true })
   images: ProductImage[];
 
-  @OneToMany(() => Comment, (comment) => comment.product)
-  comments: Comment[];
+  @OneToMany(() => Review, (review) => review.product)
+  reviews: Review[];
 
-  @Column({nullable:true})
-  default_stripe_price: string
+  @Column({ nullable: true })
+  stripe_price: string;
 
-  @OneToMany(()=> OrderItem, (orderItem)=>{orderItem.product},{onDelete: "SET NULL"})
-  orderItems: OrderItem[]
+  @OneToMany(
+    () => OrderItem,
+    (orderItem) => {
+      orderItem.product;
+    },
+    { onDelete: "SET NULL" }
+  )
+  orderItems: OrderItem[];
 
   @CreateDateColumn()
   createdAt: Date;
@@ -87,4 +91,4 @@ export class Product extends BaseEntity {
   updatedAt: Date;
 }
 
-export type TProduct = typeof Product
+export type TProduct = typeof Product;

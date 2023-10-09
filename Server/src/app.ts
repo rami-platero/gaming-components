@@ -3,7 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 import router from "./routes/user.routes";
 import productRouter from "./routes/product.routes";
-import commentRouter from "./routes/comment.routes";
+import reviewRouter from "./routes/review.routes";
 import cartRouter from "./routes/cart.routes";
 import paymentRouter from "./routes/payment.routes";
 import orderRouter from "./routes/order.routes";
@@ -65,7 +65,7 @@ app.use(
   "/",
   router,
   productRouter,
-  commentRouter,
+  reviewRouter,
   cartRouter,
   paymentRouter,
   orderRouter

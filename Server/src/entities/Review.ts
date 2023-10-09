@@ -7,13 +7,12 @@ import {
   BaseEntity,
   ManyToOne,
   JoinColumn,
-  BeforeInsert,
 } from "typeorm";
 import { Product } from "./Product";
 import { User } from "./User";
 
 @Entity()
-export class Comment extends BaseEntity {
+export class Review extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -23,11 +22,14 @@ export class Comment extends BaseEntity {
   @Column({ nullable:false, default: false })
   edited: boolean;
 
-  @ManyToOne(() => Product, (product) => product.comments)
+  @Column()
+  rating: number
+
+  @ManyToOne(() => Product, (product) => product.reviews)
   @JoinColumn({ name: "product_id" })
   product: Product;
 
-  @ManyToOne(() => User, (user) => user.comments, {
+  @ManyToOne(() => User, (user) => user.reviews, {
     onDelete: "SET NULL",
   })
   @JoinColumn({ name: "user_id" })
