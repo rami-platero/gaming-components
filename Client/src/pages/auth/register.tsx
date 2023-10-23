@@ -7,7 +7,6 @@ import { type SignUpSchema, signUpSchema } from "../../schemas/authSchema";
 import { setCredentials } from "../../redux/features/user/authSlice";
 import { useAppDispatch } from "../../redux/hooks";
 import { useState } from "react";
-import { ToastContainer } from "react-toastify";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import useToast from "../../hooks/useToast";
 import { useSignUpMutation } from "../../redux/services/authApiSlice";
@@ -74,7 +73,6 @@ const Register = () => {
 
   return (
     <main className={styles.auth}>
-      <ToastContainer limit={1} />
       <h1>Get started</h1>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.auth__form}>
         <div className={styles.auth__form__inputBox}>

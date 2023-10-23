@@ -1,7 +1,6 @@
 import { createContext, useEffect, useRef } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import useToast from "../hooks/useToast";
 import {
   getProducts,
   resetProducts,
@@ -30,7 +29,6 @@ export const ProductsContextProvider = ({
   children: JSX.Element | JSX.Element[];
 }) => {
   const [searchParams, _setSearchParams] = useSearchParams();
-  const { notifyError } = useToast();
 
   const { category } = useParams();
   const prevCategory = useRef(category);
@@ -110,7 +108,6 @@ export const ProductsContextProvider = ({
   // toastify errors
   useEffect(() => {
     if (checkError(error || productsError)) {
-      notifyError("Internal Server Error");
       dispatch(resetProducts(null));
     }
   }, [error, productsError]);

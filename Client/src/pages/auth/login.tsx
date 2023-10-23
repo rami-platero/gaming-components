@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { setCredentials } from "../../redux/features/user/authSlice";
 import { useAppDispatch } from "../../redux/hooks";
 import { useState } from "react";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import useToast from "../../hooks/useToast";
@@ -69,7 +68,6 @@ const Login = () => {
 
   return (
     <main className={styles.auth}>
-      <ToastContainer limit={1} />
       <h1>Log in to Gaming Components</h1>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.auth__form}>
         <div className={styles.auth__form__inputBox}>
