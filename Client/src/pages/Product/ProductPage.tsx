@@ -21,7 +21,7 @@ const ProductPage = () => {
           <Breadcrumb current={data.name} />
           <ProductInfo product={data} />
           <ProductSpecs /* product={data} */ />
-          <ProductReviews rating={data.rating} />
+          <ProductReviews rating={data.rating} id={data.id}/>
         </>
       )}
     </main>
