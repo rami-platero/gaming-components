@@ -1,45 +1,53 @@
 import { NextFunction, Request, Response } from "express";
-import { Product } from "../entities/Product";
+import { Product, ProductImage } from "../entities/Product";
 import { AppError } from "../helpers/AppError";
 import {
+  createStripeProduct,
   filterProductsByBrand,
   filterProductsByName,
   filterProductsByPage,
   sortProducts,
 } from "../services/product.services";
 
-export const createProduct = async (req: Request, res: Response) => {
+export const createProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const files = req.files;
   try {
-    const {
-      category,
-      description,
-      price,
-      main_image,
-      images,
-      stock,
-      name,
-      brand,
-    } = req.body;
+    const { category, description, price, stock, name, brand } = req.body;
 
-    const product = Product.create({
-      category,
-      description,
-      price,
-      main_image,
-      images,
-      stock,
-      name,
-      brand,
-    });
+    if (files && Array.isArray(files)) {
+      const images = [] as ProductImage[];
+      for (const file of files) {
+        const imageKey = await uploadProductFile(file);
+        const thumbnailKey = `thumbnail/${imageKey}-thumbnail`;
+        images.push({ thumbnail: thumbnailKey, xl: imageKey });
+      }
+      const product = Product.create({
+        category,
+        description,
+        price: Number(price),
+        stock: Number(stock),
+        images,
+        name,
+        brand,
+      });
 
-    const newProduct = await product.save();
+      // save product to get id
+      await product.save();
 
-    return res.status(200).json({ message: "Success", product: newProduct });
-  } catch (error) {
-    if (error instanceof Error) {
-      return res.status(500).json({ error: error.message });
+      const default_price = await createStripeProduct(product);
+      product.stripe_price = default_price as string;
+      await product.save();
+
+      return res.status(200).json({ message: "Success", product });
     }
-    return res.status(500).json();
+
+    throw new AppError(404, "Not files where found.");
+  } catch (error) {
+    return next(error);
   }
 };
 
@@ -301,7 +309,10 @@ export const getProduct = async (
       );
 
     const rating = await Review.createQueryBuilder()
-      .select(["AVG(review.rating) AS avg", "COUNT(review.rating) as amount"])
+      .select([
+        "AVG(review.rating) AS avg",
+        "COUNT(DISTINCT review.id) as amount",
+      ])
       .from(Review, "review")
       .where("review.product_id=:product_id", { product_id: product.id })
       .getRawOne();
@@ -331,6 +342,7 @@ dotenv.config();
 import Stripe from "stripe";
 import { Review } from "../entities/Review";
 import { AccessToken } from "../../types";
+import { uploadProductFile } from "../utils/s3";
 const stripe = new Stripe(process.env.STRIPE_KEY!, {
   apiVersion: "2023-08-16",
 });
@@ -354,6 +366,27 @@ export const createStripeProducts = async (
     });
 
     return res.json({ message: "success", products });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const updateImages = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const { images }: {images: ProductImage[]} = req.body
+
+    await Product.createQueryBuilder("product")
+      .update()
+      .where("product.id = :id", { id })
+      .set({ images })
+      .execute();
+
+    return res.status(200).json({message: "success"})  
   } catch (error) {
     return next(error);
   }
