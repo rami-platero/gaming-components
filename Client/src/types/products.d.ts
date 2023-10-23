@@ -20,7 +20,6 @@ export type TProduct = {
   price: number;
   stock: number;
   brand: string
-  main_image: ProductImage;
   images: ProductImage[];
   stripe_price: string;
   rating: {
@@ -59,9 +58,7 @@ export type TCurrentFilters = {
     min: string
   }
   brands: string;
-  /* rating: Rating; */
   no_stock: string
-  /* category: string */
 }
 
 export type TProducts = {
