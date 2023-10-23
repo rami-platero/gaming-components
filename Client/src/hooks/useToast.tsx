@@ -16,7 +16,14 @@ const useToast = () => {
       autoClose: false,
     });
   };
-  return {notifyError,notifySuccess};
+
+  const notifyTemporalSuccess = (message:string) => {
+    toast.success(message, {
+      theme: "colored",
+      position: "top-center",      
+    });
+  }
+  return {notifyError,notifySuccess, notifyTemporalSuccess};
 };
 
 export default useToast;
