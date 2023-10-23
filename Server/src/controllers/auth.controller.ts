@@ -13,11 +13,11 @@ import {
   setCookieLoggedIn,
 } from "../utils/jwt";
 import { loginUser } from "../services/auth.services";
-import { RefreshToken, createToken } from "./user.controller";
+import { RefreshToken } from "./user.controller";
 
 export const refreshToken = async (req: Request, res: Response) => {
   const cookies = req.cookies;
-  if (!cookies?.jwt) res.sendStatus(401);
+  if (!cookies?.jwt) {return res.sendStatus(401);}
   const refreshToken = cookies.jwt;
 
   const foundUser = await User.createQueryBuilder("user")
@@ -29,11 +29,9 @@ export const refreshToken = async (req: Request, res: Response) => {
   if (!foundUser) {
     jwt.verify(
       refreshToken,
-      process.env.JWT_SECRET!,
+      process.env.REFRESH_TOKEN_SECRET!,
       async (err: any, decoded: any) => {
-        if (err) res.sendStatus(403);
-
-        console.log(decoded);
+        if (err) {res.sendStatus(403);}
 
         let hackedUser = await User.findOne({
           where: {
