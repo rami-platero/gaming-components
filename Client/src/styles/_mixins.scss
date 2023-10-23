@@ -92,3 +92,51 @@
   animation: shimmer 2s infinite reverse;
   background-size: 200% 100%;
 }
+
+@mixin formButton(
+  $width: fit-content,
+  $height: auto,
+  $textColor: white,
+  $bgColor: #1d1d1d,
+  $hoverColor: darken(#1d1d1d, 7%),
+  $borderColor: #ffffff75
+) {
+  @include centerFlex(row);
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  border-radius: 10px;
+  width: $width;
+  height: $height;
+  color: $textColor;
+  background-color: $bgColor;
+  border: 1px solid $borderColor;
+  transition: 0.2s ease-in-out;
+
+  &:hover {
+    transition: 0.2s ease-in-out;
+    background-color: $hoverColor;
+  }
+
+  &:disabled {
+    transition: 0.2s ease-in-out;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  img {
+    max-width: 20px;
+  }
+}
+
+@mixin errorMessage {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: $danger-medium;
+}
+
+@mixin inputError{
+  border: 1px solid darken($danger-medium, 10%) !important;
+  background-color: rgba($danger-medium, .15) !important;
+  transition: 0.2s ease-in-out; 
+}
