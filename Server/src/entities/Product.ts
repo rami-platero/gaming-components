@@ -19,7 +19,7 @@ export enum Category {
 }
 
 export interface ProductImage {
-  thumbnail: string;
+  thumbnail?: string;
   xl: string;
 }
 
@@ -64,9 +64,6 @@ export class Product extends BaseEntity {
   brand: string;
 
   @Column("jsonb", { nullable: true })
-  main_image: ProductImage;
-
-  @Column("simple-array", { nullable: true })
   images: ProductImage[];
 
   @OneToMany(() => Review, (review) => review.product)
