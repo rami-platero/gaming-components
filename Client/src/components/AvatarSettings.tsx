@@ -6,7 +6,6 @@ import Loader from "../assets/Loader.svg";
 import Image from "./Image";
 import { useEffect } from "react";
 import useToast from "../hooks/useToast";
-import { ToastContainer } from "react-toastify";
 
 type Props = {
   avatar?: string;
@@ -38,7 +37,6 @@ const AvatarSettings = ({ avatar }: Props) => {
   };
   return (
     <div className={styles.container}>
-      <ToastContainer limit={1} />
       <h3>Your Avatar</h3>
       <div className={styles.container__wrapper}>
         <div className={styles.container__wrapper__imgContainer}>
