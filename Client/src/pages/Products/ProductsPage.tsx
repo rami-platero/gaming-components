@@ -3,7 +3,6 @@ import ProductCard from "../../components/ProductCard";
 import Search from "../../components/Filters/Search";
 import SortBy from "../../components/Filters/SortBy";
 import Pagination from "../../components/Filters/Pagination";
-import { ToastContainer } from "react-toastify";
 import Filters from "../../components/Filters";
 import { useAppSelector } from "../../redux/hooks";
 import Breadcrumb from "../../components/Breadcrumb";
@@ -43,7 +42,6 @@ const ProductsPage = () => {
 
   return (
     <>
-      <ToastContainer limit={3} />
       <main className={styles.products}>
         <Breadcrumb />
         <div className={styles.products__container}>
