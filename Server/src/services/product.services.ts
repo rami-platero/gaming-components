@@ -58,3 +58,28 @@ export const filterProductsByPage = (products: Product[], page: string) => {
     postsPerPage * parseInt(page)
   );
 };
+
+import * as dotenv from "dotenv";
+dotenv.config();
+import Stripe from "stripe";
+const stripe = new Stripe(process.env.STRIPE_KEY!, {
+  apiVersion: "2023-08-16",
+});
+
+export const createStripeProduct = async (product: Product) => {
+  const { default_price } = await stripe.products.create({
+    name: product.name,
+    description: product.description,
+    id: product.id.toString(),
+    default_price_data: {
+      currency: "usd",
+      unit_amount: product.price * 100,
+    },
+  });
+  if (default_price) {
+    product.stripe_price = default_price as string;
+    await product.save();
+  }
+
+  return default_price
+}
