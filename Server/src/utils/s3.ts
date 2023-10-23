@@ -12,6 +12,7 @@ import crypto from "crypto";
 import sharp from "sharp";
 
 const bucketName = process.env.AWS_BUCKET_NAME!;
+const productBucketName = process.env.AWS_PRODUCTS_BUCKET_NAME!;
 const region = process.env.AWS_BUCKET_REGION!;
 const accessKeyId = process.env.AWS_ACCESS_KEY_ID!;
 const secretAccessKey = process.env.AWS_SECRET_KEY_ID!;
@@ -44,6 +45,22 @@ export const uploadFile = async (file: Express.Multer.File) => {
 
   await s3.send(command);
   return imageName;
+};
+
+export const uploadProductFile = async (file: Express.Multer.File) => {
+  const imageName = randomImageName();
+
+  const params = {
+    Bucket: productBucketName,
+    Body: file.buffer,
+    Key: imageName,
+    ContentType: file.mimetype,
+  };
+
+  const command = new PutObjectCommand(params);
+
+  await s3.send(command);
+  return imageName
 };
 
 export const getFileURL = async (fileKey: string) => {
