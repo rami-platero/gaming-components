@@ -23,6 +23,10 @@ export interface ProductImage {
   xl: string;
 }
 
+export type Specs = {
+  [key: string]: string
+}
+
 @Entity()
 export class Product extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -62,6 +66,9 @@ export class Product extends BaseEntity {
 
   @Column({ nullable: true })
   brand: string;
+
+  @Column({nullable: true, type: "jsonb"})
+  specifications: Specs
 
   @Column("jsonb", { nullable: true })
   images: ProductImage[];
