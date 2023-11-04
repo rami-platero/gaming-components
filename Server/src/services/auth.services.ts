@@ -2,7 +2,6 @@ import { User } from "../entities/User";
 import { AppError } from "../helpers/AppError";
 import bcrypt from "bcrypt";
 import validator from "validator";
-import { createJWTCookie, createRefreshToken } from "../utils/jwt";
 
 export const loginUser = async (email: string, password: string) => {
   const user = await User.findOneBy({ email });
@@ -77,3 +76,7 @@ export const signUpUser = async (
   user.refreshToken = [];
   return await user.save();
 };
+
+export const comparePasswords = async (userPassword: string, enteredPassword: string) => {
+  return await bcrypt.compare(enteredPassword, userPassword);
+}
