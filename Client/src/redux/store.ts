@@ -10,7 +10,6 @@ import { reviewsApi } from "./services/reviewsApi";
 import { isRejectedWithValue } from "@reduxjs/toolkit";
 import type { MiddlewareAPI, Middleware } from "@reduxjs/toolkit";
 import useToast from "../hooks/useToast";
-import { isCustomError } from "../utils/checkErrors";
 const { notifyError } = useToast();
 
 export const rtkQueryErrorLogger: Middleware =
@@ -19,9 +18,8 @@ export const rtkQueryErrorLogger: Middleware =
     if (
       isRejectedWithValue(action) &&
       action.meta.arg.endpointName !== "getUser" &&
-      !isCustomError(action.payload)
+      action.payload.status === 500
     ) {
-      console.log(action);
       notifyError("Internal server error");
     }
 
