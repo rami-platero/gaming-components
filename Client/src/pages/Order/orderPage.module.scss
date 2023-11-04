@@ -1,3 +1,5 @@
+@import '../../styles/mixins';
+
 .order {
   padding: 2rem;
   width: 100%;
@@ -7,30 +9,13 @@
 
   h1 {
     margin-bottom: 1.5rem;
+    font-size: 1.7rem;
+    font-weight: 500;
   }
 
   a {
-    text-decoration: none;
-    width: fit-content;
-    background-color: transparent;
-    color: white;
-    border: 1px solid white;
-    padding: 0.5rem 1rem;
-    border-radius: 10px;
-    font-size: 0.8rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: 0.2s ease-in-out;
-
-    &:hover {
-      background-color: white;
-      color: black;
-      transition: 0.2s ease-in-out;
-    }
+    @include formButton;
+    gap: .5rem;
 
     svg {
       width: 1.2rem;
@@ -46,7 +31,7 @@
     width: 100%;
 
     &__summary {
-      background-color: rgba(7, 7, 10, 0.61);
+      background-color: rgba(3, 3, 3, 0.61);
       max-width: 350px;
       height: fit-content;
       width: 100%;
@@ -57,7 +42,7 @@
       h2 {
         font-size: 1.3rem;
         padding: 1rem;
-        background-color: rgba(7, 7, 10, 0.61);
+        background-color: rgba(0, 0, 0, 0.61);
       }
 
       div {

@@ -1,3 +1,5 @@
+@import '../../../styles/mixins';
+
 .tableWrapper {
     max-width: 700px;
     width: 100%;
@@ -14,21 +16,21 @@
     table {
       min-width: 600px;
       width: 100%;
-      background-color: rgba(7, 7, 10, 0.61);
-      border-collapse: collapse;
+      border-spacing: 0;
 
       font-size: 0.9rem;
-      thead tr {
-        background-color: rgba(0, 0, 0, 0.562);
+
+      thead{
+        @include tableHead;
       }
-      thead tr th {
-        padding: 1rem;
-        text-align: left;
-      }
+
       tbody {
         tr {
+          &:not(:last-child) td{
+              border-bottom: 1px solid rgba(255, 255, 255, 0.185);
+          }
           td {
-            padding: 1rem;
+            padding: .7rem 1rem;
             div {
               display: flex;
               align-items: center;

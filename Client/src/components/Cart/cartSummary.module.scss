@@ -1,3 +1,5 @@
+@import '../../styles/mixins';
+
 .summary {
   min-width: 300px;
   background-color: rgba(0, 0, 0, 0.274);
@@ -41,7 +43,13 @@
   }
 
   button {
-    text-decoration: none;
+    @include formButton;
+    width: 100%;
+    background-color: $darkPrimary;
+    &:hover{
+      background-color: lighten($darkPrimary, 3%);
+    }
+    /* text-decoration: none;
     color: white;
     background-color: transparent;
     border: 1px solid white;
@@ -62,7 +70,7 @@
       transition: 0.2s ease-in-out;
       pointer-events: none;
       background-color: white;
-    }
+    } */
 
     img {
       width: 17px;

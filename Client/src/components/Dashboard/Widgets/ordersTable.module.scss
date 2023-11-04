@@ -1,3 +1,6 @@
+@import "../../../styles/mixins";
+@import "../../../styles/variables";
+
 .container {
   width: 100%;
   @media screen and (max-width: 678px) {
@@ -7,16 +10,18 @@
 
   table {
     width: 100%;
-    border-collapse: collapse;
-  }
+    border-spacing: 0;
 
-  thead {
-    tr th {
-      padding: 1rem 1rem 0.5rem 1rem;
-      text-align: left;
-      font-size: 0.9rem;
-      font-weight: 600;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.185);
+    thead{
+      @include tableHead;
+    }
+
+    tbody{
+      tr {
+        &:not(:last-child) td{
+          border-bottom: 1px solid rgba(255, 255, 255, 0.185);
+      }
+      }
     }
   }
 }
@@ -42,7 +47,7 @@
 
   td {
     user-select: none;
-    padding: 1rem;
+    padding: .7rem 1rem;
     font-size: 0.9rem;
     div {
       width: fit-content;
@@ -55,9 +60,9 @@
     .status {
       border-radius: 5px;
       padding: 0.2rem 1rem;
-      font-weight: 600;
-      color: rgb(18, 105, 0);
-      background-color: rgb(99, 255, 60);
+      font-weight: 500;
+      color: rgb(60, 240, 84);
+      background-color: rgba(60, 255, 92, 0.37);
     }
   }
   td:last-child {

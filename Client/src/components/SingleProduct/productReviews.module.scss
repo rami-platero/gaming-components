@@ -1,20 +1,8 @@
+@import "../../styles/mixins";
+
 // add review button
 .addReview {
-  width: fit-content;
-  padding: 0.5rem 1.3rem;
-  font-weight: 600;
-  font-size: 0.9rem;
-  background-color: rgb(51, 89, 255);
-  border: none;
-  color: white;
-  border-radius: 15px;
-  cursor: pointer;
-  transition: 0.2s ease-in-out;
-
-  &:hover {
-    background-color: rgb(97, 126, 255);
-    transition: 0.2s ease-in-out;
-  }
+  @include formButton;
 }
 
 .reviews {
@@ -25,7 +13,11 @@
   flex-direction: column;
   gap: 0.5rem;
 
-  &__loader{
+  &__title {
+    @include gradientTitle(2rem);
+  }
+
+  &__loader {
     max-width: 40px;
     margin: 50px auto 0 auto;
   }

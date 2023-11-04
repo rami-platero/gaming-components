@@ -2,11 +2,13 @@
 @import "../../styles/variables";
 
 .footer {
-  background-color: $darkSecondary;
+  background-color: rgb(0, 0, 0);
   width: 100%;
   margin-top: auto;
   @include centerFlex(column);
   color: white;
+  /* background-color: black; */
+  background: radial-gradient(60% 50% at center 0%, rgba(0, 0, 0, 0.2) 3%, rgba(0, 0, 0, .5) 70%, rgba(0, 0, 0, 1) 100%);;
 
   &__content {
     margin: 0 auto;
@@ -24,6 +26,12 @@
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
+
+      h3{
+        font-weight: 500;
+        font-size: 1rem;
+      }
+
       &:nth-child(1) {
         grid-column: span 3;
       }
@@ -38,18 +46,14 @@
           grid-column: span 2 !important;
         }
       }
-      hr {
-        width: 100%;
-        max-width: 50px;
-        margin-bottom: 1rem;
-      }
 
       &__mail {
         user-select: none;
         cursor: pointer;
         padding: 0.7rem 1rem;
         color: white;
-        background-color: #141414;
+        border: 1px solid rgba(255, 255, 255, 0.356);
+        background-color: #0f0f0f42;
         width: 100%;
         max-width: 300px;
         display: grid;
@@ -61,7 +65,7 @@
 
         &:hover {
           transition: 0.3s ease-in-out;
-          background-color: #050505;
+          background-color: #0a0a0a;
         }
 
         p {

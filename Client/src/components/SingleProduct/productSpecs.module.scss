@@ -1,3 +1,5 @@
+@import '../../styles/mixins';
+
 .specs{
     color: white;
     margin-top: 50px;
@@ -8,13 +10,15 @@
 
     h2{
         text-align: center;
-        font-size: 2rem;
+        @include gradientTitle(2rem);
     }
 
     &__wrapper{
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
         width: 100%;
-        display: grid;
-        grid-template-columns: repeat(auto-fill,minmax(400px,1fr));
+        /* grid-template-columns: repeat(auto-fill,minmax(400px,1fr)); */
         gap: 2rem;
     }
 

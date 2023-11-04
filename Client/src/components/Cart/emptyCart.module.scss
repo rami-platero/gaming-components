@@ -1,28 +1,22 @@
+@import '../../styles/mixins';
+
 .emptyCart{
     display: flex;
     flex-direction: column;
-    gap: .5rem;
-
     margin-top: 50px;
+
+    h2{
+       font-weight: 500; 
+    }
 
     p{
         margin-bottom: 1rem;
+        opacity: .7;
+        font-weight: 300;
+        font-size: .9rem
     }
 
     a{
-        text-decoration: none;
-        color: white;
-        background-color: transparent;
-        border: 1px solid white;
-        padding: .5rem 2rem;
-        width: fit-content;
-        font-weight: 600;
-        transition: 0.2s ease-in-out;
-
-        &:hover{
-            background-color: white;
-            color: black;
-            transition: 0.2s ease-in-out;
-        }
+        @include formButton;
     }
 }
