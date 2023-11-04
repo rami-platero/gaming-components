@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useGetSingleProductQuery } from "../../redux/services/productsApi";
 import ProductInfo from "../../components/SingleProduct/ProductInfo";
 import ProductSpecs from "../../components/SingleProduct/ProductSpecs";
-import Breadcrumb from "../../components/Breadcrumb";
+import Breadcrumb from "../../components/UI/Breadcrumb";
 import SingleProductSkeleton from "../../components/Skeleton/SingleProduct/SingleProductSkeleton";
 import ProductReviews from "../../components/SingleProduct/ProductReviews";
 
@@ -15,13 +15,13 @@ const ProductPage = () => {
   return (
     <main className={styles.product}>
       {isError && <h2>Product does not exist!</h2>}
-      {!!isFetching && !data && <SingleProductSkeleton/>}
+      {!!isFetching && !data && <SingleProductSkeleton />}
       {data && (
         <>
           <Breadcrumb current={data.name} />
           <ProductInfo product={data} />
-          <ProductSpecs /* product={data} */ />
-          <ProductReviews rating={data.rating} id={data.id}/>
+          <ProductSpecs product={data} />
+          <ProductReviews rating={data.rating} id={data.id} />
         </>
       )}
     </main>
