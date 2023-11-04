@@ -17,7 +17,9 @@ import { RefreshToken } from "./user.controller";
 
 export const refreshToken = async (req: Request, res: Response) => {
   const cookies = req.cookies;
-  if (!cookies?.jwt) {return res.sendStatus(401);}
+  if (!cookies?.jwt) {
+    return res.sendStatus(401);
+  }
   const refreshToken = cookies.jwt;
 
   const foundUser = await User.createQueryBuilder("user")
@@ -31,7 +33,9 @@ export const refreshToken = async (req: Request, res: Response) => {
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET!,
       async (err: any, decoded: any) => {
-        if (err) {res.sendStatus(403);}
+        if (err) {
+          res.sendStatus(403);
+        }
 
         let hackedUser = await User.findOne({
           where: {
@@ -97,26 +101,28 @@ export const handleLogout = async (
     const refreshToken = cookies.jwt;
 
     // Is refreshToken in db?
-    const foundUser = await User.findOne({
-      where: {
+    const foundUser = await User.createQueryBuilder("user")
+      .where(":refreshToken = ANY ( string_to_array(user.refreshToken, ','))", {
         refreshToken,
-      },
-    });
+      })
+      .getOne();
+
     if (!foundUser) {
       clearCookieLoggedIn(res);
       clearJWTCookie(res);
       return res.sendStatus(204);
     }
-
     // Delete refreshToken in db
     foundUser.refreshToken = foundUser.refreshToken.filter(
       (rt) => rt !== refreshToken
     );
     await foundUser.save();
 
+    clearCookieLoggedIn(res);
     clearJWTCookie(res);
     return res.sendStatus(204);
   } catch (error) {
+    console.log(error);
     return next(error);
   }
 };
@@ -147,16 +153,9 @@ export const handleSignUp = async (
 
   try {
     const user = await User.signUp(username, email, pass);
+    res.locals.user = user
 
-    // handle jwt tokens / cookies
-    const accessToken = createAccessToken(user);
-    const newRefreshToken = createRefreshToken(user);
-    createJWTCookie(res, newRefreshToken);
-    setCookieLoggedIn(res);
-
-    const { password, refreshToken, roles, ...rest } = user;
-
-    return res.status(200).json({ user: { ...rest }, accessToken });
+    return next();
   } catch (error) {
     return next(error);
   }
@@ -196,7 +195,7 @@ export const handleGoogleJWT = async (
   next: NextFunction
 ) => {
   try {
-    const user = req.user as User
+    const user = req.user as User;
     // create JWT
     const newRefreshToken = createRefreshToken(user);
 
@@ -213,4 +212,3 @@ export const handleGoogleJWT = async (
     return next(error);
   }
 };
-
