@@ -3,23 +3,25 @@ import ProductCard from "../../components/ProductCard";
 import Search from "../../components/Filters/Search";
 import SortBy from "../../components/Filters/SortBy";
 import Pagination from "../../components/Filters/Pagination";
-import Filters from "../../components/Filters";
+import Filters from "../../components/Filters/Filters";
 import { useAppSelector } from "../../redux/hooks";
-import Breadcrumb from "../../components/Breadcrumb";
+import Breadcrumb from "../../components/UI/Breadcrumb";
 import ProductCardSkeleton from "../../components/Skeleton/ProductCardSkeleton";
 import { useContext, useState, useMemo, useRef } from "react";
 import { productsContext } from "../../context/ProductsContext";
 import SpinnerLoader from "../../components/UI/SpinnerLoader";
-import FiltersToggleButton from "../../components/FiltersToggleButton";
+import FiltersToggleButton from "../../components/Filters/FiltersToggleButton";
 import FiltersSkeleton from "../../components/Skeleton/FiltersSkeleton";
 import useClickOutside from "../../hooks/useClickOutside";
 import { useParams } from "react-router-dom";
+import useScroll from "../../hooks/useScroll";
 
 const ProductsPage = () => {
   const data = useAppSelector((state) => state.products);
   const { isLazyFetching } = useContext(productsContext);
   const isLoading = useAppSelector((state) => state.products.isFetching);
   const filtersRef = useRef<HTMLDivElement>(null);
+  const { scrollRef, scrollToElement } = useScroll();
 
   useClickOutside(filtersRef, () => {
     closeFilters();
@@ -38,7 +40,7 @@ const ProductsPage = () => {
     setFiltering(false);
   };
 
-  const {category} = useParams()
+  const { category } = useParams();
 
   return (
     <>
@@ -70,8 +72,11 @@ const ProductsPage = () => {
             </section>
 
             {/* Products */}
-            <section className={styles.products__container__products__wrapper}>
-              {!!isLazyFetching && !isLoading && <SpinnerLoader />}
+            <section
+              className={styles.products__container__products__wrapper}
+              ref={scrollRef}
+            >
+              {isLazyFetching && !isLoading ? <SpinnerLoader /> : null}
               {!!isLoading && <ProductCardSkeleton />}
               {!isLoading &&
                 !!products?.length &&
@@ -92,7 +97,10 @@ const ProductsPage = () => {
 
             {/* Pagination */}
             {!!data?.pages_amount && data?.pages_amount > 1 && (
-              <Pagination pages_amount={data?.pages_amount} />
+              <Pagination
+                pages_amount={data?.pages_amount}
+                scrollToProducts={scrollToElement}
+              />
             )}
           </div>
         </div>
