@@ -6,9 +6,14 @@ import {
   updateUser,
   uploadAvatar,
   getAvatarImage,
+  changePassword,
 } from "../controllers/user.controller";
 import passport from "passport";
-import { validateLogin, validateSignUp } from "../middlewares/validate";
+import {
+  validateChangePassword,
+  validateLogin,
+  validateSignUp,
+} from "../middlewares/validate";
 import {
   handleGoogleJWT,
   handleJWT,
@@ -24,7 +29,7 @@ const router = Router();
 
 //auth routes
 
-router.post("/api/auth/signup", validateSignUp, handleSignUp);
+router.post("/api/auth/signup", validateSignUp, handleSignUp, handleJWT);
 router.post("/api/auth/login", validateLogin, handleLogin, handleJWT);
 router.get(
   "/auth/google",
@@ -45,8 +50,8 @@ router.delete("/api/auth/user/:id", deleteUser);
 router.put("/api/auth/user/:id", updateUser);
 router.get("/profile", viewProfile);
 
-const storage = multer.memoryStorage()
-const upload = multer({storage: storage})
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 router.post(
   "/api/avatar",
@@ -55,5 +60,11 @@ router.post(
   uploadAvatar
 );
 router.get("/api/avatar/:key", getAvatarImage);
+router.patch(
+  "/api/auth/changePassword",
+  validateChangePassword,
+  isAuthenticated,
+  changePassword
+);
 
 export default router;
