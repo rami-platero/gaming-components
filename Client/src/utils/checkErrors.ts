@@ -19,6 +19,13 @@ type ErrorWithMessage = {
   };
 };
 
+type ErrorWithCustomField<FieldName extends string> = {
+  status: number,
+  data: {
+    [key in FieldName]: string
+  }
+}
+
 export function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
   return (
     typeof error === "object" &&
@@ -28,6 +35,18 @@ export function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
     !!error.data &&
     typeof error.data === "object" &&
     "message" in error.data
+  );
+}
+
+export function isErrorWithCustomField<FieldName extends string>(error: unknown, field: FieldName): error is ErrorWithCustomField<FieldName> {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "status" in error &&
+    "data" in error &&
+    !!error.data &&
+    typeof error.data === "object" &&
+    field in error.data
   );
 }
 
