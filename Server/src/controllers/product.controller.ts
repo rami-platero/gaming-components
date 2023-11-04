@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { Product, ProductImage } from "../entities/Product";
+import { Category, Product, ProductImage, Specs } from "../entities/Product";
 import { AppError } from "../helpers/AppError";
 import {
   createStripeProduct,
@@ -107,12 +107,6 @@ export const getProducts = async (
     return next(error);
   }
 };
-
-enum Category {
-  CPU = "CPU",
-  GPU = "GPU",
-  // Add other categories here
-}
 
 type TFilters = {
   priceRange: {
@@ -292,7 +286,6 @@ export const getProduct = async (
   res: Response,
   next: NextFunction
 ) => {
-  const user = res.locals.user as AccessToken["user"];
   try {
     const { slug } = req.params;
 
@@ -382,8 +375,8 @@ export const updateImages = async (
 
     await Product.createQueryBuilder("product")
       .update()
-      .where("product.id = :id", { id })
       .set({ images })
+      .where("product.id = :id", { id })
       .execute();
 
     return res.status(200).json({message: "success"})  
@@ -391,3 +384,24 @@ export const updateImages = async (
     return next(error);
   }
 };
+
+export const setProductsSpecs = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const body = req.body as Specs
+    const {id} = req.params
+
+    await Product.createQueryBuilder("product")
+      .update()
+      .set({ specifications: body})
+      .where("product.id = :id", { id })
+      .execute();
+
+    return res.status(200).json({message: "success"})
+  } catch (error) {
+    return next(error)
+  }
+}
