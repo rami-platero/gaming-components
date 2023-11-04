@@ -61,8 +61,11 @@ export const createRefreshToken = (user: User) => {
 };
 
 export const createCartToken = (cart: CartItem[]) => {
-  return jwt.sign( {cart} , process.env.CART_TOKEN_SECRET!, {
-    expiresIn: "1h",
+  const formattedCart = cart.map((item)=>{
+    return {quantity: item.quantity, id: item.id}
+  })
+  return jwt.sign( {cart: formattedCart} , process.env.CART_TOKEN_SECRET!, {
+    expiresIn: 3600000,
   });
 };
 

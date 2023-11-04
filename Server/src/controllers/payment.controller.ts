@@ -4,7 +4,7 @@ import * as dotenv from "dotenv";
 import { AccessToken } from "../../types";
 import { User } from "../entities/User";
 import { AppError } from "../helpers/AppError";
-import { CartItem } from "../types/cart";
+import { CartItem, CartUpdatedItem } from "../types/cart";
 import {
   createOrder,
   createOrderItems,
@@ -26,7 +26,7 @@ export const createCheckoutSession = async (
   next: NextFunction
 ) => {
   const user = res.locals.user as AccessToken["user"];
-  const cart = res.locals.cart as CartItem[];
+  const cart = res.locals.cart as CartUpdatedItem[];
 
   try {
     const foundUser = await User.findOne({
@@ -59,7 +59,7 @@ export const createCheckoutSession = async (
       await foundUser.save();
     }
 
-    const products = cart?.map((p: CartItem) => {
+    const products = cart?.map((p: CartUpdatedItem) => {
       return { price: p.product.stripe_price, quantity: p.quantity };
     });
 

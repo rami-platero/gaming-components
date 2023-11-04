@@ -10,11 +10,20 @@ export const getCart = async (
   next: NextFunction
 ) => {
   try {
+    const cart = res.locals.cart as CartItem[]
     if (res.locals.cart.length === 0) {
       return res.sendStatus(204);
     }
-    return res.status(200).json(res.locals.cart);
+    let getCart = []
+    for (const item of cart) {
+      const product = await Product.findOne({where: {
+        id: item.id
+      }})
+      getCart.push({product, quantity: item.quantity})
+    }
+    return res.status(200).json(getCart);
   } catch (error) {
+    console.log(error);
     return next(error);
   }
 };
@@ -66,12 +75,12 @@ export const updateQuantity = async (
       );
     }
 
-    const index = cart?.findIndex((p: CartItem) => {
-      return p.product.id === product.id;
+    const index = cart?.findIndex((item: CartItem) => {
+      return item.id === product.id;
     });
 
     if (index === -1) {
-      cart.push({ product, quantity });
+      cart.push({ id: product.id, quantity });
     } else {
       cart[index].quantity = quantity;
     }
@@ -119,8 +128,7 @@ export const addItemToCart = async (
         JSON.stringify({ message: "This product is out of stock!" })
       );
     }
-
-    cart?.push({ product, quantity: 1 });
+    cart?.push({ id: product.id, quantity: 1 });
 
     // sign cart token
     const cartToken = createCartToken(cart);
@@ -146,8 +154,8 @@ export const removeItemFromCart = async (
   const { id } = req.params;
   let cart = res.locals.cart as CartItem[];
   try {
-    cart = cart?.filter((p: CartItem) => {
-      return p.product.id !== parseInt(id);
+    cart = cart?.filter((item: CartItem) => {
+      return item.id !== parseInt(id);
     });
 
     if(cart.length === 0){
