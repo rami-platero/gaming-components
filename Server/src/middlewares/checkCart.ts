@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { CartItem } from "../types/cart";
+import { CartItem, CartUpdatedItem } from "../types/cart";
 import { AppError } from "../helpers/AppError";
 import { Product } from "../entities/Product";
 
@@ -9,7 +9,7 @@ export const checkCart = async (
   next: NextFunction
 ) => {
   const cart = res.locals.cart as CartItem[];
-  const updatedCart = [] as CartItem[];
+  const updatedCart = [] as CartUpdatedItem[];
   try {
     if (cart.length === 0) {
       throw new AppError(
@@ -20,7 +20,7 @@ export const checkCart = async (
     for (const item of cart) {
       const foundProduct = await Product.findOne({
         where: {
-          id: item.product.id,
+          id: item.id,
         },
       });
       if (!foundProduct) {
