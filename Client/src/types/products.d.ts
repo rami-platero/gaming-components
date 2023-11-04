@@ -11,6 +11,13 @@ export type ProductImage = {
   xl: string;
 };
 
+export type Specs = {
+  [key: string]: {
+    name: string,
+    value: string
+  }
+}
+
 export type TProduct = {
   id: number;
   name: string;
@@ -28,6 +35,7 @@ export type TProduct = {
   }
   createdAt: Date;
   updatedAt: Date;
+  specifications: Specs | null
 };
 
 export enum Rating {
