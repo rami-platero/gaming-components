@@ -1,0 +1,55 @@
+@import "../../styles/mixins";
+@import "../../styles/variables";
+
+.categories {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  h2 {
+    @include gradientTitle(2.5rem);
+  }
+  p {
+    max-width: 500px;
+    width: 100%;
+  }
+
+  img {
+    max-width: 150px;
+  }
+
+  &__wrapper {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+    &__item {
+      border: 1px solid rgba(255, 255, 255, 0.089);
+      padding: 2rem 3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      transition: 0.2s ease-in-out;
+      border-radius: 15px;
+      background-color: $darkPrimary;
+
+      &:hover {
+        transition: 0.2s ease-in-out;
+        background: rgba(0, 0, 0, 0.096);
+      }
+
+      h3 {
+        @include gradientTitle(1.1rem);
+      }
+      h4 {
+        font-weight: 400;
+      }
+      a {
+        @include formButton();
+      }
+    }
+  }
+}
