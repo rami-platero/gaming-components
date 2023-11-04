@@ -97,8 +97,8 @@
   $width: fit-content,
   $height: auto,
   $textColor: white,
-  $bgColor: #1d1d1d,
-  $hoverColor: darken(#1d1d1d, 7%),
+  $bgColor: lighten($darkPrimary, 3%),
+  $hoverColor: darken(#1d1d1d, 10%),
   $borderColor: #ffffff75
 ) {
   @include centerFlex(row);
@@ -112,6 +112,8 @@
   background-color: $bgColor;
   border: 1px solid $borderColor;
   transition: 0.2s ease-in-out;
+  font-size: 0.85rem;
+  text-decoration: none;
 
   &:hover {
     transition: 0.2s ease-in-out;
@@ -135,8 +137,103 @@
   color: $danger-medium;
 }
 
-@mixin inputError{
+@mixin inputError {
   border: 1px solid darken($danger-medium, 10%) !important;
-  background-color: rgba($danger-medium, .15) !important;
-  transition: 0.2s ease-in-out; 
+  background-color: rgba($danger-medium, 0.15) !important;
+  transition: 0.2s ease-in-out;
+}
+
+@mixin ModalBackground {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  content: "";
+  background-color: rgba(0, 0, 0, 0.596);
+  z-index: 9;
+  color: white;
+}
+
+@mixin ModalContainer {
+  position: fixed;
+  width: 100%;
+  padding: 1.5rem;
+  max-width: 500px;
+  border: 1px solid rgba(255, 255, 255, 0.144);
+  background-color: $darkPrimary;
+  border-radius: 15px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@mixin warningBox {
+  padding: 0.7rem 1rem;
+  font-size: 0.9rem;
+  color: $danger-medium;
+  font-weight: 500;
+  background-color: rgba($danger-medium, 0.15);
+  border-radius: 15px;
+}
+
+@mixin gradientTitle($fontSize) {
+  font-size: $fontSize;
+  font-weight: 500;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgb(192, 192, 192) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@mixin tableHead {
+  border-radius: 10px;
+  background-color: rgb(17, 17, 17);
+  border: 1px solid rgba(255, 255, 255, 0.329);
+
+  tr th:first-of-type {
+    border-top: 1px solid rgba(255, 255, 255, 0.329);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.329);
+    border-left: 1px solid rgba(255, 255, 255, 0.329);
+  }
+
+  tr th:last-of-type {
+    border-top: 1px solid rgba(255, 255, 255, 0.329);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.329);
+    border-right: 1px solid rgba(255, 255, 255, 0.329);
+  }
+
+  tr:first-of-type th:not(:first-child):not(:last-child) {
+    border-top: 1px solid rgba(255, 255, 255, 0.329);
+  }
+
+  tr:last-of-type th:not(:first-child):not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.329);
+  }
+
+  tr th {
+    padding: 0.2rem 1rem 0.2rem 1rem;
+    text-align: left;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.7);
+
+    &:first-child {
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+
+    &:last-child {
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+  }
 }
