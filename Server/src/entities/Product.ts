@@ -13,9 +13,13 @@ import slugify from "slugify";
 import { OrderItem } from "./OrderItem";
 
 export enum Category {
-  GPU = "Graphics Card",
-  CPU = "CPU",
-  Monitor = "Monitor",
+  GPUs = "GPUs",
+  CPUs = "CPUs",
+  Monitors = "Monitors",
+  Motherboards = "Motherboards",
+  Mouse = "Mouse",
+  Keyboards = "Keyboards",
+  RAM = "RAM"
 }
 
 export interface ProductImage {
@@ -24,7 +28,10 @@ export interface ProductImage {
 }
 
 export type Specs = {
-  [key: string]: string
+  [key: string]: {
+    name: string,
+    value: string
+  }
 }
 
 @Entity()
@@ -52,7 +59,7 @@ export class Product extends BaseEntity {
     });
   }
 
-  @Column()
+  @Column({type: "enum", enum: Category, nullable: true})
   category: Category;
 
   @Column()
@@ -64,13 +71,13 @@ export class Product extends BaseEntity {
   @Column()
   stock: number;
 
-  @Column({ nullable: true })
+  @Column()
   brand: string;
 
   @Column({nullable: true, type: "jsonb"})
   specifications: Specs
 
-  @Column("jsonb", { nullable: true })
+  @Column("jsonb")
   images: ProductImage[];
 
   @OneToMany(() => Review, (review) => review.product)
