@@ -2,6 +2,12 @@ import { LoginSchema, SignUpSchema } from "../../schemas/authSchema";
 import { User } from "../../types";
 import { apiSlice } from "./apiSlice";
 
+type ChangePasswordParams = {
+  oldPassword: string;
+  newPassword: string;
+  repeatPassword: string;
+}
+
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getUser: builder.query<User, null>({
@@ -27,6 +33,13 @@ export const authApiSlice = apiSlice.injectEndpoints({
         method: "POST",
       }),
     }),
+    changePassword: builder.mutation<null,ChangePasswordParams>({
+      query: (data) => ({
+        url: "/auth/changePassword",
+        method: "PATCH",
+        body: data
+      })
+    })
   }),
 });
 
@@ -35,4 +48,5 @@ export const {
   useSignUpMutation,
   useLoginMutation,
   useLogOutMutation,
+  useChangePasswordMutation
 } = authApiSlice;
