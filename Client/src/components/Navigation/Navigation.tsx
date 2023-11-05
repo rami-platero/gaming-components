@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { handleLoading, logOut } from "../../redux/features/user/authSlice";
 import NavSkeleton from "../Skeleton/NavSkeleton";
 import CartNavItem from "./CartNavItem";
-import Image from "../Image";
+import Image from "../UI/Image";
 
 const Navigation = () => {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
@@ -21,7 +21,6 @@ const Navigation = () => {
     try {
       dispatch(handleLoading(true));
       await logout(null).unwrap();
-      window.location.reload();
       dispatch(logOut(null));
     } catch (error) {
       console.log(error);
@@ -67,7 +66,7 @@ const Navigation = () => {
               <li>
                 <Link to={"/dashboard"} className={styles.avatar}>
                   {avatar ? (
-                    <Image src={avatar}/>
+                    <Image src={avatar} />
                   ) : (
                     <img src={DefaultAvatar} alt="profile_picture" />
                   )}
