@@ -1,12 +1,12 @@
 import { memo } from "react";
 import Rating from "../Rating";
 import styles from "./productReviews.module.scss";
-import Review from "../Review";
-import AddReviewModal from "../Review/AddReviewModal";
-import useModal from "../../hooks/useModal";
+import Review from "../Review/Review";
 import useReviews from "../../hooks/useReviews";
 import useInfiniteScroll from "../../hooks/useInfiniteScroll";
 import Loader from "../../assets/WhiteLoader.svg";
+import { useSetAtom } from "jotai";
+import { Modal, uiAtom } from "../Modals";
 
 type Params = {
   id: number;
@@ -19,6 +19,16 @@ type Params = {
 const ProductReviews = ({ id, rating }: Params) => {
   const { isLoading, reviews, hasNextPage, setOffset } = useReviews({ id });
 
+  const setUI = useSetAtom(uiAtom) 
+
+  const handleOpenReviewModal = () => {
+    setUI((prev) => ({
+      ...prev,
+      modal: Modal.ADD_REVIEW,
+      id
+    }))
+  }
+
   const ref = useInfiniteScroll(
     () => {
       setOffset((prev) => prev + 5);
@@ -27,11 +37,8 @@ const ProductReviews = ({ id, rating }: Params) => {
     [reviews]
   );
 
-  const { ref: modalRef, isOpen, closeModal, openModal } = useModal();
-
   return (
     <div className={styles.reviews}>
-      {!!isOpen && <AddReviewModal ref={modalRef} id={id} closeModal={closeModal} />}
       <h2 className={styles.reviews__title}>Reviews</h2>
       <Rating rating={rating} />
       <hr />
@@ -43,14 +50,14 @@ const ProductReviews = ({ id, rating }: Params) => {
           <h4 className={styles.reviews__noReviews__message}>
             Be the first one to review this product.
           </h4>
-          <button className={styles.addReview} onClick={openModal}>
+          <button className={styles.addReview} onClick={handleOpenReviewModal}>
             Add review
           </button>
         </div>
       )}
       {!!reviews?.length && (
         <div className={styles.reviews__wrapper}>
-          <button className={styles.addReview} onClick={openModal}>
+          <button className={styles.addReview} onClick={handleOpenReviewModal}>
             Add review
           </button>
           {reviews?.map((review) => {
