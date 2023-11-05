@@ -1,0 +1,44 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.removeModal {
+  @include ModalBackground;
+
+    &__wrapper {
+      @include ModalContainer;
+
+      &__question {
+        font-weight: 400;
+        font-size: 0.9rem;
+      }
+
+      &__warning {
+        @include warningBox;
+        margin: 1rem 0;
+      }
+
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+
+      &__buttons {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        &__delete {
+          @include formButton(
+            150px,
+            35px,
+            black,
+            darken($danger-medium, 2%),
+            lighten($danger-medium, 10%),
+            black
+          );
+        }
+        &__cancel {
+          @include formButton;
+        }
+      }
+    }
+  }
