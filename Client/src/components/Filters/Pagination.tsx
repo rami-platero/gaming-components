@@ -4,9 +4,10 @@ import { useEffect } from "react";
 
 type Props = {
   pages_amount: number;
+  scrollToProducts: () => void 
 };
 
-const Pagination = ({ pages_amount }: Props) => {
+const Pagination = ({ pages_amount, scrollToProducts }: Props) => {
   const pages = [];
   const { setQuery, queryValue } = useProductQuery("page");
 
@@ -20,6 +21,7 @@ const Pagination = ({ pages_amount }: Props) => {
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setQuery(e.currentTarget.value);
+    scrollToProducts()
   };
 
   for (let i = 0; i < pages_amount; i++) {
