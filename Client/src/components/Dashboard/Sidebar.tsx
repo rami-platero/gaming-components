@@ -1,13 +1,6 @@
 import { Link } from "react-router-dom";
 import styles from "./sidebar.module.scss";
-import { mainDashboardRoutes } from "../../pages/Dashboard/DashboardPage";
-
-export enum DashboardOptions {
-  dashboard = "Dashboard",
-  settings = "Settings",
-  orders = "Orders",
-  comments = "Comments",
-}
+import { mainDashboardRoutes } from "../DashboardLayout";
 
 const Sidebar = () => {
   return (
