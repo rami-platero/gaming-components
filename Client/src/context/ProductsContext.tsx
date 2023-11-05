@@ -19,7 +19,7 @@ type ContextValues = {
 };
 
 export const productsContext = createContext<ContextValues>({
-  isLazyFetching: true,
+  isLazyFetching: false,
   fetchProducts: async () => {},
 });
 
