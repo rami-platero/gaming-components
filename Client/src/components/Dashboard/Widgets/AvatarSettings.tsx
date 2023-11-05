@@ -1,11 +1,11 @@
 import styles from "./avatarSettings.module.scss";
-import Avatar from "../assets/default_pfp.png";
+import Avatar from "../../../assets/default_pfp.png";
 import { AiOutlineUpload } from "react-icons/ai";
-import { useUploadAvatarMutation } from "../redux/services/userApi";
-import Loader from "../assets/Loader.svg";
-import Image from "./Image";
+import { useUploadAvatarMutation } from "../../../redux/services/userApi";
+import Loader from "../../../assets/Loader.svg";
+import Image from "../../UI/Image";
 import { useEffect } from "react";
-import useToast from "../hooks/useToast";
+import useToast from "../../../hooks/useToast";
 
 type Props = {
   avatar?: string;
@@ -47,7 +47,7 @@ const AvatarSettings = ({ avatar }: Props) => {
           ) : (
             <>
               {avatar ? (
-                <Image src={avatar}/>
+                <Image src={avatar} />
               ) : (
                 <img src={Avatar} alt="avatar" />
               )}

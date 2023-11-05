@@ -1,19 +1,20 @@
-@import "../styles/mixins";
+@import "../../styles/mixins";
 
 .filters{
-
+  position: sticky;
+  top: 80px;
+  
   .closeButton {
     @media screen and (min-width: 901px) {
       display: none;
     }
-  
     position: absolute;
     width: fit-content;
     background-color: transparent;
     color: white;
     border: none;
     right: 1rem;
-    top: 100px;
+    top: -45px;
   
     svg {
       width: 1.5rem;
@@ -26,11 +27,9 @@
   }
   
   &__wrapper {
-    position: sticky;
-    top: 80px;
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  flex-direction: column;
+  gap: 1rem;
   
     @media screen and (max-width: 900px) {
       position: initial !important;

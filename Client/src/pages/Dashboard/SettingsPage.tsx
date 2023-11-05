@@ -1,9 +1,17 @@
-import styles from "./settings.module.scss";
+import styles from "./settingsPage.module.scss";
 import { useAppSelector } from "../../redux/hooks";
-import AvatarSettings from "../AvatarSettings";
+import AvatarSettings from "../../components/Dashboard/Widgets/AvatarSettings";
+import { useSetAtom } from "jotai";
+import { Modal, uiAtom } from "../../components/Modals";
 
-const Settings = () => {
+const SettingsPage = () => {
   const user = useAppSelector((state) => state.auth.user);
+
+  const setAtom = useSetAtom(uiAtom);
+
+  const handleChangePassword = () => {
+    setAtom((prev) => ({ ...prev, modal: Modal.CHANGE_PASSWORD }));
+  };
 
   return (
     <div className={styles.profile}>
@@ -23,7 +31,7 @@ const Settings = () => {
             </p>
           </div>
 
-          <AvatarSettings avatar={user?.avatar}/>
+          <AvatarSettings avatar={user?.avatar} />
 
           <div className={styles.profile__cards__userInfo__email}>
             <label htmlFor="">Email address</label>
@@ -44,7 +52,7 @@ const Settings = () => {
             Your online security is our priority. Here you can change your
             password in just a few steps.
           </p>
-          <button>Change password</button>
+          <button onClick={handleChangePassword}>Change password</button>
         </div>
 
         <div className={styles.profile__cards__removeAccount}>
@@ -60,4 +68,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default SettingsPage;

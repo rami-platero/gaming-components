@@ -2,59 +2,18 @@
 @import '../../styles/variables';
 
 .modalBackground {
-  backdrop-filter: blur(2px);
-  background-color: rgba(0, 0, 0, 0.322);
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 2;
-  transition: 0.2s ease-in-out;
+  @include ModalBackground;
 }
 
 .modal {
-  position: fixed;
-  background-color: rgb(7, 7, 7);
+  @include ModalContainer;
   max-width: 700px;
-  width: 100%;
-  height: fit-content;
-  z-index: 9;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  border: 2px solid rgba(255, 255, 255, 0.185);
 
   button[type="submit"] {
-    color: white;
-    border: none;
-    padding: 0.5rem 2rem;
-    background-color: rgb(60, 105, 240);
-    font-weight: 500;
-    margin: 0 auto;
-    cursor: pointer;
-    max-width: 100px;
-    width: 100%;
-    min-height: 35px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &:disabled{
-      pointer-events: none;
-    }
+    @include formButton;
 
     img{
       max-width: 20px;
-    }
-
-    &:hover {
-      background-color: rgb(54, 54, 255);
     }
   }
 
@@ -64,7 +23,10 @@
     font-size: 1.2rem;
     font-weight: 500;
     padding: 1rem;
-    background-color: rgb(60, 105, 240);
+  }
+
+  hr{
+    opacity: .2;
   }
 
   &__form {
@@ -96,7 +58,7 @@
         color: white;
         padding: 1rem;
         box-sizing: border-box;
-        background-color: rgb(19, 19, 19);
+        background-color: $darkSecondary;
         outline: none;
         border: none;
         height: 100%;

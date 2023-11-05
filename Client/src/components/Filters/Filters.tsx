@@ -1,12 +1,12 @@
-import Categories from "./Filters/Categories";
+import Categories from "./Categories";
 import styles from "./filters.module.scss";
-import PriceRange from "./Filters/PriceRange";
+import PriceRange from "./PriceRange";
 import { useParams } from "react-router-dom";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
-import Brands from "./Filters/Brands";
+import Brands from "./Brands";
 import { useEffect, useState, memo } from "react";
-import Availability from "./Filters/Availability";
-import { useAppSelector } from "../redux/hooks";
+import Availability from "./Availability";
+import { useAppSelector } from "../../redux/hooks";
 import { AiOutlineClose } from "react-icons/ai";
 
 type Params = {

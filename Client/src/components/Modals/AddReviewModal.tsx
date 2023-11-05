@@ -1,4 +1,4 @@
-import { useState, Fragment, forwardRef } from "react";
+import { useState, Fragment, useRef } from "react";
 import styles from "./addReviewModal.module.scss";
 import { AiFillStar, AiOutlineClose } from "react-icons/ai";
 import { usePostReviewMutation } from "../../redux/services/reviewsApi";
@@ -9,20 +9,20 @@ import { isErrorWithMessage } from "../../utils/checkErrors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReviewFormSchema, reviewFormSchema } from "../../schemas/reviewSchema";
 import { useParams } from "react-router-dom";
+import { useSetAtom } from "jotai";
+import { INITIAL_ATOM, uiAtom } from "../Modals";
+import useClickOutside from "../../hooks/useClickOutside";
 
 type Params = {
-  closeModal: () => void;
-  id: number;
-};
+  id: number
+}
 
-const AddReviewModal = forwardRef<HTMLDivElement, Params>(
-  ({ closeModal, id }, ref) => {
+const AddReviewModal = ({id}:Params) => {
     const [rating, setRating] = useState(0);
     const [hovering, setHovering] = useState<number>(-1);
     const [addReview, { isLoading }] = usePostReviewMutation();
     const { notifyTemporalSuccess, notifyError } = useToast();
     const {slug} = useParams()
-
     const {
       register,
       handleSubmit,
@@ -30,6 +30,17 @@ const AddReviewModal = forwardRef<HTMLDivElement, Params>(
     } = useForm<ReviewFormSchema>({
       resolver: zodResolver(reviewFormSchema),
     });
+
+    const handleClose = () => {
+      if(!isLoading && !isSubmitting){
+        setUI(INITIAL_ATOM)
+      }
+    }
+
+    const setUI = useSetAtom(uiAtom)
+    const ref = useRef<HTMLDivElement>(null)
+    useClickOutside(ref,handleClose)
+
 
     const ratingArray = Array.from({ length: 5 }, (_, i) => {
       return i + 1 <= rating || i + 1 <= hovering ? (
@@ -74,12 +85,11 @@ const AddReviewModal = forwardRef<HTMLDivElement, Params>(
           slug: slug || ""
         }).unwrap();
         notifyTemporalSuccess("Review added");
+        handleClose()
       } catch (error) {
         if (isErrorWithMessage(error)) {
           notifyError(error.data.message);
         }
-      } finally {
-        closeModal();
       }
     };
 
@@ -92,10 +102,11 @@ const AddReviewModal = forwardRef<HTMLDivElement, Params>(
             e.stopPropagation();
           }}
         >
-          <button className={styles.modal__closeBtn} onClick={closeModal}>
+          <button className={styles.modal__closeBtn} onClick={handleClose}>
             <AiOutlineClose />
           </button>
           <h2>Leave a review</h2>
+          <hr />
           <form
             className={styles.modal__form}
             onSubmit={handleSubmit(onSubmit)}
@@ -128,6 +139,6 @@ const AddReviewModal = forwardRef<HTMLDivElement, Params>(
       </div>
     );
   }
-);
+
 
 export default AddReviewModal;
