@@ -1,17 +1,17 @@
 import { memo, useState } from "react";
-import { Review as TReview } from "../types/reviews";
-import RatingStars from "./RatingStars";
+import { Review as TReview } from "../../types/reviews";
+import RatingStars from "../UI/RatingStars";
 import styles from "./review.module.scss";
 import { BiDotsVerticalRounded } from "react-icons/bi";
-import ReviewContextMenu from "./Review/ReviewContextMenu";
-import useModal from "../hooks/useModal";
+import ReviewContextMenu from "./ReviewContextMenu";
+import useModal from "../../hooks/useModal";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEditReviewMutation } from "../redux/services/reviewsApi";
-import Loader from "../assets/WhiteLoader.svg";
-import useToast from "../hooks/useToast";
-import { ReviewFormSchema, reviewFormSchema } from "../schemas/reviewSchema";
-import { useAppSelector } from "../redux/hooks";
+import { useEditReviewMutation } from "../../redux/services/reviewsApi";
+import Loader from "../../assets/WhiteLoader.svg";
+import useToast from "../../hooks/useToast";
+import { ReviewFormSchema, reviewFormSchema } from "../../schemas/reviewSchema";
+import { useAppSelector } from "../../redux/hooks";
 
 const Review = ({ review }: { review: TReview }) => {
   const date = new Date(review.createdAt).toLocaleDateString("en-UK");
@@ -69,7 +69,6 @@ const Review = ({ review }: { review: TReview }) => {
         {isOpen ? (
           <ReviewContextMenu
             handleEditing={handleEditing}
-            closeContextMenu={closeModal}
             ref={ref}
             review={review}
           />

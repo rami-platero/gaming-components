@@ -1,0 +1,30 @@
+.breadcrumb {
+  display: flex;
+  list-style-type: none;
+  color: white;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  user-select: none;
+  margin-left: -.5rem;
+
+  li {
+    display: flex;
+    gap: 0.5rem;
+    a {
+      text-decoration: none;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s ease-in-out;
+      &:hover {
+        opacity: 0.6;
+        transition: 0.2s ease-in-out;
+      }
+    }
+  }
+  li:last-child a {
+    font-weight: bold;
+    pointer-events: none;
+  }
+}
