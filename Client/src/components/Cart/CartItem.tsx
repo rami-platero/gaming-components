@@ -1,5 +1,4 @@
 import styles from "./cartItem.module.scss";
-import TestImage from "../../assets/rtx3070.png";
 import {
   addQuantity,
   removeQuantity,
@@ -14,6 +13,7 @@ import {
 } from "../../redux/services/cartApi";
 import { FiTrash2 } from "react-icons/fi";
 import useToast from "../../hooks/useToast";
+import config from "../../config/config";
 
 type Params = {
   item: TCartItem;
@@ -65,7 +65,7 @@ const CartItem = ({ item }: Params) => {
       {/* Loader */}
       {/* Details */}
       <div className={styles.item__details}>
-        <img src={TestImage} />
+        <img src={`${config.CDN_URL}/${item.product.images[0].thumbnail}`} />
         <div className={styles.item__details__wrapper}>
           <h3 className={styles.item__details__wrapper__name}>
             {item.product.name}
