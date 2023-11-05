@@ -2,13 +2,10 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./pages/auth/login";
 import Register from "./pages/auth/register";
 import AuthRoutes from "./components/auth-routes";
-import Layout from "./components/layout";
+import Layout from "./components/GlobalLayout";
 import { Roles } from "./types.d";
 import { ProductsContextProvider } from "./context/ProductsContext";
-import {
-  DashboardLayout,
-  dashboardRoutes,
-} from "./pages/Dashboard/DashboardPage";
+import { DashboardLayout, dashboardRoutes } from "./components/DashboardLayout";
 
 // pages
 import ProductPage from "./pages/Product/ProductPage";
@@ -19,13 +16,6 @@ import CartPage from "./pages/Cart/CartPage";
 import NotFoundPage from "./pages/NotFound/NotFoundPage";
 import ProductsPage from "./pages/Products/ProductsPage";
 import ScrollToTop from "./components/ScrollToTop";
-
-export enum DashboardOptions {
-  dashboard = "Dashboard",
-  settings = "Settings",
-  orders = "Orders",
-  comments = "Comments",
-}
 
 const App = () => {
   return (
