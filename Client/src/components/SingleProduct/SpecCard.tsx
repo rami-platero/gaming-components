@@ -1,14 +1,15 @@
 import stlyes from './specCard.module.scss'
 
 type Params = {
-    spec: any
+  name: string,
+  value: string
 }
 
-const SpecCard = ({spec}: Params) => {
+const SpecCard = ({name, value}: Params) => {
   return (
     <div className={stlyes.card}>
-        <h5>{spec.name}</h5>
-        <h3>{spec.detail}</h3>
+        <h5>{name}</h5>
+        <p>{value}</p>
     </div>
   )
 }
