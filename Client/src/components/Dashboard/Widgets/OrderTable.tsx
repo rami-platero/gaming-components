@@ -1,6 +1,6 @@
 import { Order } from "../../../types/order";
-import Image from "../../../assets/rtx3070.png";
 import styles from "./orderTable.module.scss";
+import config from "../../../config/config";
 
 const OrderTable = ({ order }: { order: Order }) => {
   return (
@@ -20,7 +20,7 @@ const OrderTable = ({ order }: { order: Order }) => {
               <tr key={item.id}>
                 <td>
                   <div>
-                    <img src={Image} />
+                    <img src={`${config.CDN_URL}/${item.product.images[0].thumbnail}`} />
                     {item.product.name}
                   </div>
                 </td>
