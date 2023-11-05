@@ -2,20 +2,20 @@ import { useNavigate, useParams } from "react-router-dom";
 import styles from "./categories.module.scss";
 
 const categories = [
-  { key: "GPU", name: "Graphics Cards" },
-  { key: "CPU", name: "Processors (CPUs)" },
+  { key: "GPUs", name: "Graphics Cards" },
+  { key: "CPUs", name: "Processors (CPUs)" },
   { key: "RAM", name: "Memory (RAM)" },
   { key: "Storage_SSD", name: "Solid State Drives (SSDs)" },
   { key: "Storage_HDD", name: "Hard Disk Drives (HDDs)" },
-  { key: "Motherboard", name: "Motherboards" },
+  { key: "Motherboards", name: "Motherboards" },
   { key: "PSU", name: "Power Supplies (PSUs)" },
   { key: "Case", name: "Cases (Chassis)" },
   { key: "Cooling_CPU", name: "CPU Cooling" },
   { key: "Cooling_Case", name: "Case Cooling" },
   { key: "Networking", name: "Networking" },
   { key: "Accessories", name: "Accessories" },
-  { key: "Monitor", name: "Monitors" },
-  { key: "Keyboard_Mice", name: "Keyboards and Mice" },
+  { key: "Monitors", name: "Monitors" },
+  { key: "Keyboards", name: "Keyboards" },{ key: "Mouse", name: "Mouse" }
 ];
 
 const Categories = () => {
