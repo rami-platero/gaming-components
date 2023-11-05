@@ -35,6 +35,21 @@
       transition: 0.2s ease-in-out;
       border-radius: 15px;
       background-color: $darkPrimary;
+      aspect-ratio: 3/4;
+      margin: 0 auto;
+
+      @media screen and (max-width: 542px) {
+        width: 100%;
+
+        img{
+          max-width: 400px;
+          width: 100%;
+        }
+
+        h3 {
+          font-size: 1.5rem !important;
+        }
+      }
 
       &:hover {
         transition: 0.2s ease-in-out;
