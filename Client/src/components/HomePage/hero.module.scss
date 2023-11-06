@@ -10,6 +10,11 @@
   flex-grow: 1;
   min-height: calc(100vh - 120px);
 
+  p{
+    line-height: 1.7;
+    opacity: .8;
+  }
+
   &__content {
     max-width: 600px;
     display: flex;

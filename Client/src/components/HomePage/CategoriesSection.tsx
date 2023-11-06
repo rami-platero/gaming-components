@@ -39,8 +39,7 @@ const CategoriesSection = () => {
     <section className={styles.categories}>
       <h2>Categories</h2>
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores
-        repudiandae eos sequi corporis necessitatibus quam!
+      Our precise categorization ensures that you can swiftly identify the hardware and accessories that best suit your gaming preferences.
       </p>
       <div className={styles.categories__wrapper}>
         {categories.map((category) => {

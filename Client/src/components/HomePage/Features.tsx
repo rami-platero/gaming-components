@@ -5,7 +5,7 @@ const Features = () => {
   return (
     <section className={styles.features}>
         <h2>Keep track of your orders</h2>
-        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dicta illum, blanditiis unde optio perferendis fugit nulla, veniam tempora inventore autem, mollitia ducimus officiis adipisci in asperiores consectetur ipsa magnam distinctio.</p>
+        <p>Our user-friendly dashboard empowers you to have complete control and visibility over your purchases, from order placement to delivery and beyond.</p>
         <img src={OrderImage} alt="order" />
     </section>
   )

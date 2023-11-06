@@ -8,10 +8,7 @@ const Hero = () => {
       <div className={styles.hero__content}>
         <h1>Gaming Components</h1>
         <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum,
-          enim! Aliquid ut at modi ad tempore nostrum pariatur, libero expedita
-          explicabo quisquam provident maiores voluptates molestiae officia
-          quidem inventore culpa!
+        Welcome to Gaming Components, we provide you with the latest gaming components that blend innovation, performance, and style. Our commitment to staying up-to-date with the latest advancements ensures that your gaming setup is always at its best.
         </p>
         <Link to={"/products"}>Start Shopping</Link>
       </div>
