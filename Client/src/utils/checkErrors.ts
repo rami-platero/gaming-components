@@ -26,6 +26,10 @@ type ErrorWithCustomField<FieldName extends string> = {
   }
 }
 
+type ErrorWithStatus = {
+  originalStatus: number
+}
+
 export function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
   return (
     typeof error === "object" &&
@@ -57,4 +61,8 @@ export function isCustomError(error: unknown): boolean {
     "data" in error &&
     typeof error.data === "object"
   );
+}
+
+export const isErrorWithStatus = (error: unknown): error is ErrorWithStatus => {
+  return error !== null && typeof error === "object" && "originalStatus" in error
 }
