@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "./pages/auth/login";
-import Register from "./pages/auth/register";
+import Login from "./pages/auth/LoginPage";
+import Register from "./pages/auth/RegisterPage";
 import AuthRoutes from "./components/auth-routes";
 import Layout from "./components/GlobalLayout";
 import { Roles } from "./types.d";
