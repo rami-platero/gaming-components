@@ -5,17 +5,13 @@ import DeleteReviewModal from "./Modals/DeleteReviewModal";
 import AddReviewModal from "./Modals/AddReviewModal";
 import ChangePassword from "./Modals/ChangePassword";
 
-export const uiAtom = atom({
-  modal: null as Modal | null,
-  review: null as Review | null,
-  id: null as number | null,
-});
-
 export const INITIAL_ATOM = {
   modal: null as Modal | null,
   review: null as Review | null,
   id: null as number | null,
 };
+
+export const uiAtom = atom(INITIAL_ATOM);
 
 export enum Modal {
   DELETE_REVIEW = "DELETE_REVIEW",
