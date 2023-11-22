@@ -1,0 +1,67 @@
+name: Client Deployement Pipeline
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_CLIENT_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_CLIENT_PROJECT_ID }}
+on:
+    push:
+        branches: [main]
+
+jobs:
+
+    avoid_reduncy:
+      runs-on: ubuntu-22.04
+      steps:
+        - name: Cancel Previous Runs
+          uses: styfle/cancel-workflow-action@0.9.1
+          with: 
+            access_token: ${{github.token}}
+
+    lint:
+      runs-on: ubuntu-22.04
+      steps:  
+        - uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+        - uses: actions/setup-node@v3
+          with:
+            node-version: 18
+        - name: Install dependencies
+          run: cd client && npm ci
+        - name: Lint   
+          run: cd client && npm run lint
+
+    build: 
+      runs-on: ubuntu-22.04
+      steps:
+        - uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+        - uses: actions/setup-node@v3
+          with:
+            node-version: 18
+        - name: Install dependencies
+          run: cd client && npm ci
+        - name: Build
+          run: cd client && npm run build 
+        - uses: actions/upload-artifact@v2
+          with:
+            name: dist
+            path: ./Client/dist           
+   
+    deploy:
+        needs: [build]
+        runs-on: ubuntu-22.04  
+        steps:
+          - uses: actions/checkout@v2
+          - name: Install Vercel CLI
+            run: cd client && npm install --global vercel@latest
+          - name: Install dependencies
+            run: cd client && npm ci  
+          - name: Pull Vercel Environment Information
+            run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          - uses: actions/download-artifact@v2
+            with:
+              name: dist
+              path: .next
+          - name: Deploy Project Artifacts to Vercel
+            run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
