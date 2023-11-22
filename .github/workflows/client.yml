@@ -26,9 +26,9 @@ jobs:
           with:
             node-version: 18
         - name: Install dependencies
-          run: cd client && npm ci
+          run: cd Client && npm ci
         - name: Lint   
-          run: cd client && npm run lint
+          run: cd Client && npm run lint
 
     build: 
       runs-on: ubuntu-22.04
@@ -40,9 +40,9 @@ jobs:
           with:
             node-version: 18
         - name: Install dependencies
-          run: cd client && npm ci
+          run: cd Client && npm ci
         - name: Build
-          run: cd client && npm run build 
+          run: cd Client && npm run build 
         - uses: actions/upload-artifact@v2
           with:
             name: dist
@@ -54,14 +54,14 @@ jobs:
         steps:
           - uses: actions/checkout@v2
           - name: Install Vercel CLI
-            run: cd client && npm install --global vercel@latest
+            run: cd Client && npm install --global vercel@latest
           - name: Install dependencies
-            run: cd client && npm ci  
+            run: cd Client && npm ci  
           - name: Pull Vercel Environment Information
             run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
           - uses: actions/download-artifact@v2
             with:
               name: dist
-              path: .next
+              path: dist
           - name: Deploy Project Artifacts to Vercel
             run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
