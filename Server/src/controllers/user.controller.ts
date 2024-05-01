@@ -8,12 +8,12 @@ import {
   createAccessToken,
   setCookieLoggedIn,
 } from "../utils/jwt";
-import { deleteFile, getFileURL, uploadFile } from "../utils/s3";
+import { deleteFile, uploadFile } from "../utils/s3";
 import { AccessToken } from "../../types";
 import { AppError } from "../helpers/AppError";
 import { comparePasswords } from "../services/auth.services";
 dotenv.config({ path: __dirname + "/.env" });
-import bcrypt from 'bcrypt'
+import bcrypt from "bcrypt";
 
 export const createToken = (id: number): string => {
   return jwt.sign({ id }, process.env.JWT_SECRET!, { expiresIn: "10y" });
@@ -51,10 +51,6 @@ export const getUser = async (
           });
           if (user) {
             const accessToken = createAccessToken(user);
-            if (user.avatar) {
-              const avatarURL = await getFileURL(user.avatar);
-              user.avatar = avatarURL;
-            }
             const { password, roles, refreshToken, ...rest } = user;
             // set logged_in cookie in case someone deletes it
             setCookieLoggedIn(res);
@@ -123,57 +119,38 @@ export const uploadAvatar = async (
   const file = req.file;
   const user = res.locals.user as AccessToken["user"];
 
-  if (file) {
-    try {
-      if (file) {
-        if (file.size > 5000000) {
-          throw new AppError(
-            404,
-            JSON.stringify({ message: "File size exceeds 5MB limit!" })
-          );
-        }
-        const foundUser = await User.findOne({ where: { id: user.id } });
-        if (!foundUser)
-          throw new AppError(
-            404,
-            JSON.stringify({ message: "User does not exist." })
-          );
-        if (foundUser.avatar) {
-          const result = await deleteFile(foundUser.avatar);
-        }
-        const result = await uploadFile(file);
-        const updatedUser = await User.createQueryBuilder()
-          .update(User)
-          .where("id=:id", { id: user.id })
-          .set({ avatar: result })
-          .returning("avatar")
-          .execute();
+  if (!file)
+    throw new AppError(
+      404,
+      JSON.stringify({ message: "No files were provided" })
+    );
 
-        const data = updatedUser.raw[0];
-        const avatarURL = await getFileURL(data.avatar);
-        return res.status(200).json({ avatar: avatarURL });
-      }
-    } catch (error) {
-      console.log(error);
-      return next(error);
-    }
-  }
-  throw new AppError(
-    404,
-    JSON.stringify({ message: "No files were provided" })
-  );
-};
-
-export const getAvatarImage = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
   try {
-    const key = req.params.key;
-    const result = await getFileURL(key);
+    if (file.size > 5000000) {
+      throw new AppError(
+        404,
+        JSON.stringify({ message: "File size exceeds 5MB limit!" })
+      );
+    }
+    const foundUser = await User.findOne({ where: { id: user.id } });
+    if (!foundUser)
+      throw new AppError(
+        404,
+        JSON.stringify({ message: "User does not exist." })
+      );
+    if (foundUser.avatar) {
+      await deleteFile(foundUser.avatar);
+    }
+    const result = await uploadFile(file);
+    await User.createQueryBuilder()
+      .update(User)
+      .where("id=:id", { id: user.id })
+      .set({ avatar: result })
+      .execute();
+
     return res.status(200).json({ avatar: result });
   } catch (error) {
+    console.log(error);
     return next(error);
   }
 };
