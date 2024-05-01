@@ -4,7 +4,6 @@ import { Product } from "../entities/Product";
 import { User } from "../entities/User";
 import { AppError } from "../helpers/AppError";
 import { AccessToken } from "../../types";
-import { getFileURL } from "../utils/s3";
 
 export const getReviewsFromProduct = async (req: Request, res: Response) => {
   try {
@@ -178,13 +177,6 @@ export const getReviews = async (
       .limit(5)
       .orderBy("review.createdAt", "DESC")
       .execute()) as (Review & { avatar: string | null; username: string, user_id: string })[];
-
-    for (let review of reviews) {
-      if (review.avatar) {
-        const signedUrl = await getFileURL(review.avatar);
-        review.avatar = signedUrl;
-      }
-    }
 
     const totalReviewsQuery = Review.createQueryBuilder()
       .select("COUNT(*)", "count")
