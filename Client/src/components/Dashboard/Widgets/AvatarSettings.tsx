@@ -6,6 +6,7 @@ import Loader from "../../../assets/Loader.svg";
 import Image from "../../UI/Image";
 import { useEffect } from "react";
 import useToast from "../../../hooks/useToast";
+import config from "../../../config/config";
 
 type Props = {
   avatar?: string;
@@ -47,7 +48,7 @@ const AvatarSettings = ({ avatar }: Props) => {
           ) : (
             <>
               {avatar ? (
-                <Image src={avatar} />
+                <Image src={`${config.CDN_URL}/avatar/${avatar}`} />
               ) : (
                 <img src={Avatar} alt="avatar" />
               )}

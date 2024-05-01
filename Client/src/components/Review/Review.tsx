@@ -12,6 +12,7 @@ import Loader from "../../assets/WhiteLoader.svg";
 import useToast from "../../hooks/useToast";
 import { ReviewFormSchema, reviewFormSchema } from "../../schemas/reviewSchema";
 import { useAppSelector } from "../../redux/hooks";
+import config from "../../config/config";
 
 const Review = ({ review }: { review: TReview }) => {
   const date = new Date(review.createdAt).toLocaleDateString("en-UK");
@@ -55,7 +56,7 @@ const Review = ({ review }: { review: TReview }) => {
     <div className={styles.review}>
       <div className={styles.review__header}>
         <img
-          src={user && user.id === review.user_id ? user.avatar : review.avatar}
+          src={`${config.CDN_URL}/avatar/${review.avatar}`}
           alt="avatar"
         />
         <h3>{review.username}</h3>
