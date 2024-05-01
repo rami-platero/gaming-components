@@ -1,17 +1,15 @@
 import {
   PutObjectCommand,
   S3Client,
-  GetObjectCommand,
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 import * as dotenv from "dotenv";
 dotenv.config();
 import crypto from "crypto";
 import sharp from "sharp";
 
-const bucketName = process.env.AWS_BUCKET_NAME!;
+const usersBucketName = process.env.AWS_USERS_BUCKET_NAME!;
 const productBucketName = process.env.AWS_PRODUCTS_BUCKET_NAME!;
 const region = process.env.AWS_BUCKET_REGION!;
 const accessKeyId = process.env.AWS_ACCESS_KEY_ID!;
@@ -35,9 +33,9 @@ export const uploadFile = async (file: Express.Multer.File) => {
   const imageName = randomImageName();
 
   const params = {
-    Bucket: bucketName,
+    Bucket: usersBucketName,
     Body: buffer,
-    Key: imageName,
+    Key: 'avatar/' + imageName,
     ContentType: file.mimetype,
   };
 
@@ -63,19 +61,9 @@ export const uploadProductFile = async (file: Express.Multer.File) => {
   return imageName
 };
 
-export const getFileURL = async (fileKey: string) => {
-  const getObjectParams = {
-    Bucket: bucketName,
-    Key: fileKey,
-  };
-
-  const command = new GetObjectCommand(getObjectParams);
-  return await getSignedUrl(s3, command, { expiresIn: 24 * 60 * 60 });
-};
-
 export const deleteFile = async (fileKey: string) => {
   const params = {
-    Bucket: bucketName,
+    Bucket: usersBucketName,
     Key: fileKey,
   };
 
