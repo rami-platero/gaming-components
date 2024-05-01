@@ -5,7 +5,6 @@ import {
   viewProfile,
   updateUser,
   uploadAvatar,
-  getAvatarImage,
   changePassword,
 } from "../controllers/user.controller";
 import passport from "passport";
@@ -59,7 +58,6 @@ router.post(
   upload.single("image"),
   uploadAvatar
 );
-router.get("/api/avatar/:key", getAvatarImage);
 router.patch(
   "/api/auth/changePassword",
   validateChangePassword,
