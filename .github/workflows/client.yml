@@ -43,7 +43,7 @@ jobs:
           run: cd Client && npm ci
         - name: Build
           run: cd Client && npm run build 
-        - uses: actions/upload-artifact@v2
+        - uses: actions/upload-artifact@v4
           with:
             name: dist
             path: ./Client/dist           
@@ -59,7 +59,7 @@ jobs:
             run: cd Client && npm ci  
           - name: Pull Vercel Environment Information
             run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-          - uses: actions/download-artifact@v2
+          - uses: actions/download-artifact@v4
             with:
               name: dist
               path: dist
