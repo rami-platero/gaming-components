@@ -8,7 +8,12 @@
   @include centerFlex(column);
   color: white;
   /* background-color: black; */
-  background: radial-gradient(60% 50% at center 0%, rgba(0, 0, 0, 0.2) 3%, rgba(0, 0, 0, .5) 70%, rgba(0, 0, 0, 1) 100%);;
+  background: radial-gradient(
+    60% 50% at center 0%,
+    rgba(0, 0, 0, 0.2) 3%,
+    rgba(0, 0, 0, 0.5) 70%,
+    rgba(0, 0, 0, 1) 100%
+  );
 
   &__content {
     margin: 0 auto;
@@ -27,9 +32,14 @@
       flex-direction: column;
       gap: 0.5rem;
 
-      h3{
+      h3 {
         font-weight: 500;
-        font-size: 1rem;
+        font-size: 1.2rem;
+      }
+
+      p {
+        font-weight: 300;
+        opacity: 0.8;;
       }
 
       &:nth-child(1) {
