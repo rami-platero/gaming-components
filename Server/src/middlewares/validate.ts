@@ -22,9 +22,14 @@ export const validateBody =
   ) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      if ("specifications" in req.body && typeof req.body.specifications === "string") {
+        req.body.specifications = JSON.parse(req.body.specifications);
+      }
+      console.log(req.body);
       await schema.parseAsync(req.body);
       return next();
     } catch (error) {
+      console.log(error);
       let err = error;
       if (err instanceof z.ZodError) {
         err = err.issues.map((e) => ({
@@ -93,7 +98,6 @@ export const validateProductsSchema = async (
       );
     }
   
-
     switch (product?.category) {
       case Category.GPUs:
         await GPUSpecsSchema.parseAsync(req.body);
