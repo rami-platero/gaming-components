@@ -8,12 +8,12 @@ import {
   createAccessToken,
   setCookieLoggedIn,
 } from "../utils/jwt";
-import { deleteFile, uploadFile } from "../utils/s3";
 import { AccessToken } from "../../types";
 import { AppError } from "../helpers/AppError";
 import { comparePasswords } from "../services/auth.services";
 dotenv.config({ path: __dirname + "/.env" });
 import bcrypt from "bcrypt";
+import { deleteImageFile, uploadFileAvatar } from "../services/cloudinary.services";
 
 export const createToken = (id: number): string => {
   return jwt.sign({ id }, process.env.JWT_SECRET!, { expiresIn: "10y" });
@@ -139,18 +139,17 @@ export const uploadAvatar = async (
         JSON.stringify({ message: "User does not exist." })
       );
     if (foundUser.avatar) {
-      await deleteFile(foundUser.avatar);
+      await deleteImageFile(foundUser.avatar);
     }
-    const result = await uploadFile(file);
+    const {publicId} = await uploadFileAvatar(file);
     await User.createQueryBuilder()
       .update(User)
       .where("id=:id", { id: user.id })
-      .set({ avatar: result })
+      .set({ avatar: publicId })
       .execute();
 
-    return res.status(200).json({ avatar: result });
+    return res.status(200).json({ avatar: publicId });
   } catch (error) {
-    console.log(error);
     return next(error);
   }
 };
