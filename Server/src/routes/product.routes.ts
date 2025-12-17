@@ -11,19 +11,32 @@ import {
   updateImages,
 } from "../controllers/product.controller";
 import multer from "multer";
-import { validateCreateProduct, validateGetProduct, validateProductsSchema } from "../middlewares/validate";
+import {
+  validateCreateProduct,
+  validateGetProduct,
+  validateProductsSchema,
+} from "../middlewares/validate";
 
 const router = Router();
 
-const storage = multer.memoryStorage()
-const upload = multer({storage: storage})
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
-router.post("/api/product", validateCreateProduct, upload.array('files', 4), createProduct);
+router.post(
+  "/api/products",
+  upload.array("files", 4),
+  validateCreateProduct,
+  createProduct
+);
 router.get("/api/products", getProducts);
 router.get("/api/products/:category", getProductsWithCategory);
 router.route("/api/products/:id").patch(updateBrand).delete(deleteProduct);
 router.get("/api/product/:slug", validateGetProduct, getProduct);
-router.patch("/api/product/:id/images", updateImages)
-router.patch("/api/products/specs/:id", validateProductsSchema, setProductsSpecs)
+router.patch("/api/product/:id/images", updateImages);
+router.patch(
+  "/api/products/specs/:id",
+  validateProductsSchema,
+  setProductsSpecs
+);
 
 export default router;
