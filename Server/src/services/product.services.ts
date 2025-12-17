@@ -62,11 +62,11 @@ export const filterProductsByPage = (products: Product[], page: string) => {
 import * as dotenv from "dotenv";
 dotenv.config();
 import Stripe from "stripe";
-const stripe = new Stripe(process.env.STRIPE_KEY!, {
-  apiVersion: "2023-08-16",
-});
 
 export const createStripeProduct = async (product: Product) => {
+  const stripe = new Stripe(process.env.STRIPE_KEY!, {
+    apiVersion: "2023-08-16",
+  });
   const { default_price } = await stripe.products.create({
     name: product.name,
     description: product.description,
@@ -81,5 +81,5 @@ export const createStripeProduct = async (product: Product) => {
     await product.save();
   }
 
-  return default_price
-}
+  return default_price;
+};

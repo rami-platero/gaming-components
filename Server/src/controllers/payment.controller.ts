@@ -16,15 +16,14 @@ import { Product } from "../entities/Product";
 import { clearCartCookie } from "../utils/jwt";
 dotenv.config();
 
-const stripe = new Stripe(process.env.STRIPE_KEY!, {
-  apiVersion: "2023-08-16",
-});
-
 export const createCheckoutSession = async (
   _req: Request,
   res: Response,
   next: NextFunction
 ) => {
+  const stripe = new Stripe(process.env.STRIPE_KEY!, {
+    apiVersion: "2023-08-16",
+  });
   const user = res.locals.user as AccessToken["user"];
   const cart = res.locals.cart as CartUpdatedItem[];
 
@@ -65,6 +64,8 @@ export const createCheckoutSession = async (
 
     const expiresAt = getUnixExpirationTime();
 
+    console.log("se llega hasta aca", cart);
+
     const session = await stripe.checkout.sessions.create({
       line_items: products,
       customer: customer.id,
@@ -79,7 +80,7 @@ export const createCheckoutSession = async (
     createOrder(session.id);
 
     // clear cart
-    clearCartCookie(res)
+    clearCartCookie(res);
 
     return res.status(200).json({ url: session.url });
   } catch (error) {
@@ -93,6 +94,9 @@ export const stripeWebhook = async (
   res: Response,
   next: NextFunction
 ) => {
+  const stripe = new Stripe(process.env.STRIPE_KEY!, {
+    apiVersion: "2023-08-16",
+  });
   const sig = req.headers["stripe-signature"] as string;
   let event;
 
@@ -189,6 +193,9 @@ export const getCheckoutSession = async (
   next: NextFunction
 ) => {
   try {
+    const stripe = new Stripe(process.env.STRIPE_KEY!, {
+      apiVersion: "2023-08-16",
+    });
     const { session_id } = req.params;
 
     const session = await stripe.checkout.sessions.retrieve(session_id);
@@ -213,6 +220,9 @@ export const getOrderID = async (
   next: NextFunction
 ) => {
   try {
+    const stripe = new Stripe(process.env.STRIPE_KEY!, {
+      apiVersion: "2023-08-16",
+    });
     const { session_id } = req.params;
 
     const session = await stripe.checkout.sessions.retrieve(session_id);
