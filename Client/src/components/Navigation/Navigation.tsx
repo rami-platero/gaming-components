@@ -67,7 +67,7 @@ const Navigation = () => {
               <li>
                 <Link to={"/dashboard"} className={styles.avatar}>
                   {avatar ? (
-                    <Image src={`${config.CDN_URL}/avatar/${avatar}`} />
+                    <Image src={`${config.CDN_URL}/${avatar}`} />
                   ) : (
                     <img src={DefaultAvatar} alt="profile_picture" />
                   )}

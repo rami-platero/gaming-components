@@ -33,7 +33,7 @@ const AvatarSettings = ({ avatar }: Props) => {
     const formData = new FormData();
     if (file) {
       formData.append("image", file);
-      upload(formData);
+      await upload(formData);
     }
   };
   return (
@@ -48,7 +48,7 @@ const AvatarSettings = ({ avatar }: Props) => {
           ) : (
             <>
               {avatar ? (
-                <Image src={`${config.CDN_URL}/avatar/${avatar}`} />
+                <Image src={`${config.CDN_URL}/${avatar}`} />
               ) : (
                 <img src={Avatar} alt="avatar" />
               )}
