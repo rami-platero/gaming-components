@@ -47,7 +47,7 @@ const ProductInfo = ({ product }: Params) => {
                       styles.info__media__images__current
                     }`}
                     key={image.thumbnail}
-                    src={`${config.CDN_URL}/${image.thumbnail}`}
+                    src={`${config.CDN_URL}/${image.xl}`}
                   />
                 );
               })}

@@ -65,7 +65,7 @@ const CartItem = ({ item }: Params) => {
       {/* Loader */}
       {/* Details */}
       <div className={styles.item__details}>
-        <img src={`${config.CDN_URL}/${item.product.images[0].thumbnail}`} />
+        <img src={`${config.CDN_URL}/${item.product.images[0].xl}`} />
         <div className={styles.item__details__wrapper}>
           <h3 className={styles.item__details__wrapper__name}>
             {item.product.name}
