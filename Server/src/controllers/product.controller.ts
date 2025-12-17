@@ -16,7 +16,7 @@ export const createProduct = async (
 ) => {
   const files = req.files;
   try {
-    const { category, description, price, stock, name, brand } = req.body;
+    const { category, description, price, stock, name, brand, specifications } = req.body;
 
     if (files && Array.isArray(files)) {
       const images = [] as ProductImage[];
@@ -33,12 +33,14 @@ export const createProduct = async (
         images,
         name,
         brand,
+        specifications
       });
 
       // save product to get id
       await product.save();
 
       const default_price = await createStripeProduct(product);
+      console.log(default_price);
       product.stripe_price = default_price as string;
       await product.save();
 
