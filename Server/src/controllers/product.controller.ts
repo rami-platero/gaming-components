@@ -21,9 +21,9 @@ export const createProduct = async (
     if (files && Array.isArray(files)) {
       const images = [] as ProductImage[];
       for (const file of files) {
-        const imageKey = await uploadProductFile(file);
-        const thumbnailKey = `thumbnail/${imageKey}-thumbnail`;
-        images.push({ thumbnail: thumbnailKey, xl: imageKey });
+        const { publicId } = await uploadProductImage(file);
+        const thumbnailKey = `thumbnail/${publicId}-thumbnail`;
+        images.push({ thumbnail: thumbnailKey, xl: publicId });
       }
       const product = Product.create({
         category,
@@ -336,6 +336,7 @@ import Stripe from "stripe";
 import { Review } from "../entities/Review";
 import { AccessToken } from "../../types";
 import { uploadProductFile } from "../utils/s3";
+import { uploadProductImage } from "../services/cloudinary.services";
 const stripe = new Stripe(process.env.STRIPE_KEY!, {
   apiVersion: "2023-08-16",
 });
@@ -371,7 +372,7 @@ export const updateImages = async (
 ) => {
   try {
     const { id } = req.params;
-    const { images }: {images: ProductImage[]} = req.body
+    const { images }: { images: ProductImage[] } = req.body;
 
     await Product.createQueryBuilder("product")
       .update()
@@ -379,7 +380,7 @@ export const updateImages = async (
       .where("product.id = :id", { id })
       .execute();
 
-    return res.status(200).json({message: "success"})  
+    return res.status(200).json({ message: "success" });
   } catch (error) {
     return next(error);
   }
@@ -391,17 +392,17 @@ export const setProductsSpecs = async (
   next: NextFunction
 ) => {
   try {
-    const body = req.body as Specs
-    const {id} = req.params
+    const body = req.body as Specs;
+    const { id } = req.params;
 
     await Product.createQueryBuilder("product")
       .update()
-      .set({ specifications: body})
+      .set({ specifications: body })
       .where("product.id = :id", { id })
       .execute();
 
-    return res.status(200).json({message: "success"})
+    return res.status(200).json({ message: "success" });
   } catch (error) {
-    return next(error)
+    return next(error);
   }
-}
+};
