@@ -49,8 +49,8 @@ export type GPUSpecs = z.infer<typeof GPUSpecsSchema>;
 
 export const productSchema = {
   description: z.string().nonempty("This field must be filled."),
-  price: z.number(),
-  stock: z.number(),
+  price: z.coerce.number(),
+  stock: z.coerce.number(),
   name: z.string().nonempty("This field must be filled."),
   brand: z.string().nonempty("This field must be filled."),
 };
