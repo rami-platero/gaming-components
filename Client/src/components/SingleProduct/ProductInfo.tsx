@@ -5,6 +5,10 @@ import { useState } from "react";
 import Rating from "../Rating";
 import { formatPrice } from "../../utils/format";
 import config from "../../config/config";
+import { useAppSelector } from "../../redux/hooks";
+import { isProductInCart } from "../../redux/features/cart/cartSlice";
+import { useAddItemToCartMutation } from "../../redux/services/cartApi";
+import useToast from "../../hooks/useToast";
 
 type Params = {
   product: TProduct;
@@ -12,12 +16,28 @@ type Params = {
 
 const ProductInfo = ({ product }: Params) => {
   const [currentImage, setCurrentImage] = useState(0);
+  const [addItemToCart] = useAddItemToCartMutation();
+
+  const { notifyError } = useToast();
 
   const handleImage = (index: number) => {
     setCurrentImage(index);
   };
 
   const formattedPrice = formatPrice(product.price);
+
+  const isInCart = useAppSelector(isProductInCart(product.id));
+
+  const handleAddItem = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.stopPropagation();
+    if (product.stock >= 1) {
+      addItemToCart(product);
+    } else {
+      notifyError("This product is out of stock!");
+    }
+  };
 
   return (
     <div className={styles.info}>
@@ -28,7 +48,7 @@ const ProductInfo = ({ product }: Params) => {
               <img
                 key={image.xl}
                 src={`${config.CDN_URL}/${image.xl}`}
-                style={{translate: `${(-100*currentImage)}%`}}
+                style={{ translate: `${(-100 * currentImage)}%` }}
               />
             );
           })}
@@ -42,10 +62,9 @@ const ProductInfo = ({ product }: Params) => {
                     onClick={() => {
                       handleImage(index);
                     }}
-                    className={`${
-                      currentImage === index &&
+                    className={`${currentImage === index &&
                       styles.info__media__images__current
-                    }`}
+                      }`}
                     key={image.thumbnail}
                     src={`${config.CDN_URL}/${image.xl}`}
                   />
@@ -67,8 +86,8 @@ const ProductInfo = ({ product }: Params) => {
           {product.description}
         </div>
         <div className={styles.info__data__actions}>
-          <button>
-            <AiOutlineShoppingCart /> Add to cart
+          <button onClick={handleAddItem} disabled={isInCart}>
+            <AiOutlineShoppingCart /> {!isInCart ? "Add to cart" : "In cart"}
           </button>
           <button>Buy Now</button>
         </div>
