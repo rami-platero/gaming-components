@@ -8,13 +8,15 @@ import {AiOutlineMail} from 'react-icons/ai'
 
 const Footer = () => {
 
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className={styles.footer}>
       <div className={styles.footer__content}>
         <div className={styles.footer__content__col}>
           <h3>Gaming Components</h3>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos saepe pariatur deleniti labore fugit consequatur obcaecati voluptatem quas explicabo facilis ut et doloremque quidem ad dolorem atque illo, odio dicta.
+            We provide you with the latest gaming components that blend innovation, performance, and style. Our commitment to staying up-to-date with the latest advancements ensures that your gaming setup is always at its best.
           </p>
         </div>
         <div className={styles.footer__content__col}>
@@ -59,7 +61,7 @@ const Footer = () => {
         </div>
       </div>
       <div className={styles.footer__rights}>
-        © 2023 Gaming Components. All Rights Reserved.
+        © {currentYear} Gaming Components. All Rights Reserved.
       </div>
     </footer>
   );
